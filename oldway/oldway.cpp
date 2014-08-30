@@ -18,7 +18,7 @@ class Source
 
         void run(void)
         {
-           m_output = m_counter++; 
+            m_output = m_counter++; 
         }
 
         int getOutput(void) { return m_output; }
@@ -88,7 +88,7 @@ class Sink
            cout << "Sink got " << m_input << endl;
         }
 
-        int setInput(int input) { m_input = input; }
+        void setInput(int input) { m_input = input; }
 
     private:
         int m_input;
