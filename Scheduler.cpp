@@ -135,6 +135,7 @@ void Scheduler::dumpGraph(void)
 
 void Scheduler::run(void)
 {
+#if 0
     /* Call work on all blocks */
     for (boost::tie(i, end) = vertices(m_graph); i != end; ++i)
     {
@@ -159,4 +160,5 @@ void Scheduler::run(void)
             }
         }       
     }
+#endif
 }
