@@ -35,10 +35,12 @@ class Scheduler
 {
     public:
         void addConnection(Connection *c);
+        void checkGraph(void);
         void dumpGraph(void);
         void run(void);
 
     private:
+    	bool m_needCheck = true;
         NoodleGraph m_graph;
 };
 

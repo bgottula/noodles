@@ -102,6 +102,52 @@ void Scheduler::addConnection(Connection *c)
     }
     
     dumpGraph();
+    
+    m_needCheck = true;
+}
+
+void Scheduler::checkGraph(void)
+{
+    printf("checkGraph: checking graph validity\n");
+    
+    int errors = 0;
+    
+    /* ensure that no input is connected to more than one output
+     * (no two edges should have the same sink block AND sink index) */
+    auto e_it = edges(m_graph);
+    for (auto it1 = e_it.first; it1 != e_it.second; ++it1)
+    {
+        edge_t e1 = *it1;
+        
+        Block *sinkBlock1 = m_graph[target(e1, m_graph)];
+        int sinkIndex1 = m_graph[e1].second;
+        
+        for (auto it2 = e_it.first; it2 != e_it.second; ++it2)
+        {
+            if (it1 == it2) continue;
+            
+            edge_t e2 = *it2;
+            
+            Block *sinkBlock2 = m_graph[target(e2, m_graph)];
+            int sinkIndex2 = m_graph[e2].second;
+            
+            if (sinkBlock1 == sinkBlock2 && sinkIndex1 == sinkIndex2)
+            {
+                printf("- sink [ %p idx %d ] has more than one source "
+                    "connected!\n", sinkBlock1, sinkIndex1);
+                ++errors;
+            }
+        }
+    }
+    
+    printf("- %d errors\n", errors);
+    if (errors != 0)
+    {
+        throw new runtime_error("Graph validation failed");
+        abort();
+    }
+    
+    m_needCheck = false;
 }
 
 void Scheduler::dumpGraph(void)
@@ -135,6 +181,11 @@ void Scheduler::dumpGraph(void)
 
 void Scheduler::run(void)
 {
+    if (m_needCheck)
+    {
+        checkGraph();
+    }
+    
 #if 0
     /* Call work on all blocks */
     for (boost::tie(i, end) = vertices(m_graph); i != end; ++i)
