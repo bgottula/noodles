@@ -78,9 +78,13 @@ class Block
 class SourceBlock : public Block
 {
     public:
-        SourceBlock(int numOutputs = 1)
-            : Block(0, numOutputs)
-        {}
+        SourceBlock(int numOutputs = 1, int outputsPerWork = 1)
+            : Block(0, numOutputs), m_outputsPerWork(outputsPerWork)
+        {
+            assert(outputsPerWork > 0);
+        }
+    protected:
+        const int m_outputsPerWork;
 };
 
 class SinkBlock : public Block
@@ -141,7 +145,10 @@ class Source : public SourceBlock
 
         void work(void)
         {
-            m_output[0].push(m_counter++); 
+            for (int i = 0; i < m_outputsPerWork; i++)
+            {
+                m_output[0].push(m_counter++); 
+            }
         }
 
     private:
