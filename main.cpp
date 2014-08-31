@@ -104,13 +104,16 @@ int main()
     //s.addConnection(&c1);
     //s.addConnection(&c2);
     
-    // use bogus indices here just so we can see them in the graph summary dump
+    /* do a dump of the graph's init state (0 vertices & 0 edges) */
+    s.dumpGraph();
+    
+    /* use bogus indices here just so we can see them in the graph dump */
     s.addConnection(&source, &decim, 1, 2);
     s.addConnection(&decim, &interp, 3, 4);
     s.addConnection(&interp, &sink, 5, 6);
     s.addConnection(&interp, &sink, 7, 8);
     
-    // be dumb on purpose!
+    /* intentionally try to add a duplicate edge to see if it gets caught */
     s.addConnection(&interp, &sink, 5, 6);
 
     for (int i = 0; i < 10; i++)

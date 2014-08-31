@@ -4,15 +4,16 @@
 using namespace std;
 using namespace boost;
 
+/* TODO: restore class Connection (I guess...) */
 void Scheduler::addConnection(Block *sourceBlock, Block *sinkBlock, int sourceIndex, int sinkIndex)
 {
-    printf("addConnection: [ source %p idx %d ] -> [ sink %p idx %d]\n",
+    printf("addConnection: source [ %p idx %d ] -> sink [ %p idx %d]\n",
         sourceBlock, sourceIndex, sinkBlock, sinkIndex);
     
+    vertex_t vert_source, vert_sink;
     bool found_source = false, found_sink = false;
-    vertex_t vert_source;
-    vertex_t vert_sink;
     
+    /* see if the source or sink vertex (or both) is already in the graph */
     auto v_it = vertices(m_graph);
     for (auto it = v_it.first; it != v_it.second; ++it)
     {
@@ -20,41 +21,42 @@ void Scheduler::addConnection(Block *sourceBlock, Block *sinkBlock, int sourceIn
         
         if (m_graph[v] == sourceBlock)
         {
-            printf("source block %p is already in the graph.\n", sourceBlock);
+            printf("- source block %p is already in the graph.\n", sourceBlock);
+            
             vert_source = v;
             found_source = true;
         }
         if (m_graph[v] == sinkBlock)
         {
-            printf("sink block %p is already in the graph.\n", sinkBlock);
+            printf("- sink block %p is already in the graph.\n", sinkBlock);
+            
             vert_sink = v;
             found_sink = true;
         }
         
-        if (found_source && found_sink)
-        {
-            break;
-        }
+        if (found_source && found_sink) break;
     }
     
+    /* if source and/or sink were not found, add new vertex(es) to the graph */
     if (!found_source)
     {
-        printf("source block %p is not in the graph; adding now.\n",
-            sourceBlock);
+        printf("- source block %p is not in the graph; creating.\n", sourceBlock);
+        
         vert_source = add_vertex(m_graph);
         m_graph[vert_source] = sourceBlock;
     }
     if (!found_sink)
     {
-        printf("sink block %p is not in the graph; adding now.\n",
-            sinkBlock);
+        printf("- sink block %p is not in the graph; creating.\n", sinkBlock);
+        
         vert_sink = add_vertex(m_graph);
         m_graph[vert_sink] = sinkBlock;
     }
     
+    edge_t edge;
     bool found_edge = false;
-    edge_t edge; bool b;
     
+    /* see if the edge is already in the graph */
     auto e_it = edges(m_graph);
     for (auto it = e_it.first; it != e_it.second; ++it)
     {
@@ -67,33 +69,52 @@ void Scheduler::addConnection(Block *sourceBlock, Block *sinkBlock, int sourceIn
         if (m_graph[v1] == sourceBlock && m_graph[v2] == sinkBlock &&
             conn.first == sourceIndex && conn.second == sinkIndex)
         {
-            printf("edge is already in the graph!\n");
+            printf("- edge is already in the graph!\n");
+            
             edge = e;
             found_edge = true;
+            
             break;
         }
     }
     
+    /* if edge was not found, add new edge to the graph */
     if (!found_edge)
     {
-        printf("edge does not exist in the graph; adding now.\n");
+        printf("- edge does not exist in the graph; creating.\n");
+        
+        bool b;
         tie(edge, b) = add_edge(vert_source, vert_sink, m_graph);
         m_graph[edge] = pair<int, int>(sourceIndex, sinkIndex);
+        
+        /* bool b is supposed to be set false if the graph is configured to
+         * disallow parallel edges (see documentation for add_edge);
+         * currently this is not how our graph is set up.
+         * if this can be set, then we don't need to hunt for duplicate edges */
     }
     else
     {
-        printf("why on earth do you want to add the same edge twice?\n"
-            "...not adding this edge. don't be dumb.\n");
+        /* probably want to throw an exception here instead of this nonsense */
+        printf("- refusing to add a duplicate edge\n");
     }
     
-    printf("============ m_graph summary ============\n");
-    v_it = vertices(m_graph);
+    dumpGraph();
+}
+
+void Scheduler::dumpGraph(void)
+{
+    printf("\n====================== m_graph summary ======================\n");
+    
+    printf("%d vertices\n", num_vertices(m_graph));
+    auto v_it = vertices(m_graph);
     for (auto it = v_it.first; it != v_it.second; ++it)
     {
         vertex_t v = *it;
-        printf("vert: %p\n", m_graph[v]);
+        printf(" + vert: %p\n", m_graph[v]);
     }
-    e_it = edges(m_graph);
+    
+    printf("\n%d edges\n", num_edges(m_graph));
+    auto e_it = edges(m_graph);
     for (auto it = e_it.first; it != e_it.second; ++it)
     {
         edge_t e = *it;
@@ -102,19 +123,15 @@ void Scheduler::addConnection(Block *sourceBlock, Block *sinkBlock, int sourceIn
         vertex_t v1 = source(e, m_graph);
         vertex_t v2 = target(e, m_graph);
         
-        printf("edge: [ %p %d ] -> [ %p %d ]\n",
+        printf(" + edge: [ %p idx %d ] -> [ %p idx %d ]\n",
             m_graph[v1], conn.first, m_graph[v2], conn.second);
     }
-    printf("========================================\n\n");
+    
+    printf("=============================================================\n\n");
 }
 
 void Scheduler::run(void)
 {
-    printf("m_graph has %d vertices\n", num_vertices(m_graph));
-    printf("m_graph has %d edges\n", num_edges(m_graph));
-    printf("we're done here.\n");
-    exit(0);
-    
 #if 0
     /* Call work on all blocks */
     for (boost::tie(i, end) = vertices(m_graph); i != end; ++i)
