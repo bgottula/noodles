@@ -96,10 +96,13 @@ int main()
 
     Scheduler s;
 
-    s.addBlock(&source);
-    s.addBlock(&decim);
-    s.addBlock(&interp);
-    s.addBlock(&sink);
+    Connection c0(&source, &decim);
+    Connection c1(&decim, &interp);
+    Connection c2(&interp, &sink);
+
+    s.addConnection(&c0);
+    s.addConnection(&c1);
+    s.addConnection(&c2);
 
     for (int i = 0; i < 10; i++)
     {
