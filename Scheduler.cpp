@@ -64,13 +64,13 @@ void Scheduler::addConnection(Connection *c)
     for (auto it = e_it.first; it != e_it.second; ++it)
     {
         edge_t e = *it;
-        auto conn = m_graph[e];
+        pair<int, int> indices = m_graph[e];
         
         vertex_t v1 = source(e, m_graph);
         vertex_t v2 = target(e, m_graph);
         
         if (m_graph[v1] == c->m_sourceBlock && m_graph[v2] == c->m_sinkBlock &&
-            conn.first == c->m_sourceIndex && conn.second == c->m_sinkIndex)
+            indices.first == c->m_sourceIndex && indices.second == c->m_sinkIndex)
         {
             printf("- edge is already in the graph!\n");
             
@@ -135,10 +135,10 @@ void Scheduler::dumpGraph(void)
 
 void Scheduler::run(void)
 {
-#if 0
     /* Call work on all blocks */
     for (boost::tie(i, end) = vertices(m_graph); i != end; ++i)
     {
+        printf("run: calling work on %p\n", *i);
         (*i)->work();
     }
 
@@ -154,9 +154,9 @@ void Scheduler::run(void)
             for (boost::tie(ai, a_end) = adjacent_vertices(*i, m_graph);
                 ai != a_end; ++ai)
             {
+                printf("");
                 (*ai)->pushInput(sample);
             }
         }       
     }
-#endif
 }
