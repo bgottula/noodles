@@ -104,11 +104,10 @@ class Source : public SourceBlock
         int m_counter;
 };
 
-
-class Process : public Block
+class Decimator : public Block
 {
     public:
-        Process()
+        Decimator()
         {
             reset();
         }
@@ -125,7 +124,7 @@ class Process : public Block
         {
             if (m_counter % 2 == 0)
             {
-                m_output = 2 * m_input;
+                m_output = m_input;
                 m_outputValid = true;
             }
             else
@@ -145,6 +144,48 @@ class Process : public Block
         int m_input;
         int m_output;
         bool m_outputValid;
+};
+
+class Interpolator : public Block
+{
+    public:
+        Interpolator()
+        {
+            reset();
+        }
+
+        void reset(void)
+        {
+            m_counter = 0;
+            m_input = 0;
+            m_output = 0;
+            m_needsInput = false;
+        }
+
+        void work(void)
+        {
+            m_output = m_input;
+            if (m_counter % 2 == 0)
+            {
+                m_needsInput = true;
+            }
+            else
+            {
+                m_needsInput = false;
+            }
+            m_counter++;
+        }
+
+        void setInput(int input) { m_input = input; }
+        bool needsInput(void) { return m_needsInput; }
+        int getOutput(void) { return m_output; }
+        bool outputValid(void) { return true; }
+
+    private:
+        int m_counter;
+        int m_input;
+        int m_output;
+        bool m_needsInput;
 };
 
 class Sink : public SinkBlock
@@ -176,13 +217,15 @@ class Sink : public SinkBlock
 int main()
 {
     Source source;
-    Process process;
+    Decimator decim;
+    Interpolator interp;
     Sink sink;
 
     Scheduler s;
 
     s.addBlock(&source);
-    s.addBlock(&process);
+    s.addBlock(&interp);
+    //s.addBlock(&decim);
     s.addBlock(&sink);
 
     for (int i = 0; i < 10; i++)
