@@ -96,13 +96,22 @@ int main()
 
     Scheduler s;
 
-    Connection c0(&source, &decim);
-    Connection c1(&decim, &interp);
-    Connection c2(&interp, &sink);
+    //Connection c0(&source, &decim);
+    //Connection c1(&decim, &interp);
+    //Connection c2(&interp, &sink);
 
-    s.addConnection(&c0);
-    s.addConnection(&c1);
-    s.addConnection(&c2);
+    //s.addConnection(&c0);
+    //s.addConnection(&c1);
+    //s.addConnection(&c2);
+    
+    // use bogus indices here just so we can see them in the graph summary dump
+    s.addConnection(&source, &decim, 1, 2);
+    s.addConnection(&decim, &interp, 3, 4);
+    s.addConnection(&interp, &sink, 5, 6);
+    s.addConnection(&interp, &sink, 7, 8);
+    
+    // be dumb on purpose!
+    s.addConnection(&interp, &sink, 5, 6);
 
     for (int i = 0; i < 10; i++)
     {
