@@ -20,14 +20,16 @@ void Scheduler::addConnection(Connection *c)
         
         if (m_graph[v] == c->m_sourceBlock)
         {
-            printf("- source block %p is already in the graph.\n", c->m_sourceBlock);
+            printf("- source block %p is already in the graph.\n",
+                c->m_sourceBlock);
             
             vert_source = v;
             found_source = true;
         }
         if (m_graph[v] == c->m_sinkBlock)
         {
-            printf("- sink block %p is already in the graph.\n", c->m_sinkBlock);
+            printf("- sink block %p is already in the graph.\n",
+                c->m_sinkBlock);
             
             vert_sink = v;
             found_sink = true;
@@ -39,14 +41,16 @@ void Scheduler::addConnection(Connection *c)
     /* if source and/or sink were not found, add new vertex(es) to the graph */
     if (!found_source)
     {
-        printf("- source block %p is not in the graph; creating.\n", c->m_sourceBlock);
+        printf("- source block %p is not in the graph; creating.\n",
+            c->m_sourceBlock);
         
         vert_source = add_vertex(m_graph);
         m_graph[vert_source] = c->m_sourceBlock;
     }
     if (!found_sink)
     {
-        printf("- sink block %p is not in the graph; creating.\n", c->m_sinkBlock);
+        printf("- sink block %p is not in the graph; creating.\n",
+            c->m_sinkBlock);
         
         vert_sink = add_vertex(m_graph);
         m_graph[vert_sink] = c->m_sinkBlock;
