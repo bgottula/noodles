@@ -96,26 +96,23 @@ int main()
 
     Scheduler s;
 
-    //Connection c0(&source, &decim);
-    //Connection c1(&decim, &interp);
-    //Connection c2(&interp, &sink);
-
-    //s.addConnection(&c0);
-    //s.addConnection(&c1);
-    //s.addConnection(&c2);
+    /* use bogus indices here just so we can see them in the graph dump */
+    Connection c0(&source, &decim, 1, 2);
+    Connection c1(&decim, &interp, 3, 4);
+    Connection c2(&interp, &sink, 5, 6);
+    Connection c3(&interp, &sink, 7, 8);
     
     /* do a dump of the graph's init state (0 vertices & 0 edges) */
     s.dumpGraph();
-    
-    /* use bogus indices here just so we can see them in the graph dump */
-    s.addConnection(&source, &decim, 1, 2);
-    s.addConnection(&decim, &interp, 3, 4);
-    s.addConnection(&interp, &sink, 5, 6);
-    s.addConnection(&interp, &sink, 7, 8);
+
+    s.addConnection(&c0);
+    s.addConnection(&c1);
+    s.addConnection(&c2);
+    s.addConnection(&c3);
     
     /* intentionally try to add a duplicate edge to see if it gets caught */
-    s.addConnection(&interp, &sink, 5, 6);
-
+    s.addConnection(&c3);
+    
     for (int i = 0; i < 10; i++)
     {
         s.run();
