@@ -1,7 +1,7 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include <set>
+#include <boost/graph/adjacency_list.hpp>
 #include "Block.h"
 
 class Connection
@@ -28,8 +28,7 @@ class Scheduler
         void run(void);
 
     private:
-        std::set<Block *> m_blocks;
-        std::set<Connection *> m_connections;
+        boost::adjacency_list <> m_graph;
 };
 
 #endif
