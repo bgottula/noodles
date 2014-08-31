@@ -108,7 +108,7 @@ void Scheduler::dumpGraph(void)
 {
     printf("\n====================== m_graph summary ======================\n");
     
-    printf("%d vertices\n", num_vertices(m_graph));
+    printf("%lu vertices\n", num_vertices(m_graph));
     auto v_it = vertices(m_graph);
     for (auto it = v_it.first; it != v_it.second; ++it)
     {
@@ -116,7 +116,7 @@ void Scheduler::dumpGraph(void)
         printf(" + vert: %p\n", m_graph[v]);
     }
     
-    printf("\n%d edges\n", num_edges(m_graph));
+    printf("\n%lu edges\n", num_edges(m_graph));
     auto e_it = edges(m_graph);
     for (auto it = e_it.first; it != e_it.second; ++it)
     {
