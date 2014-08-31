@@ -144,7 +144,6 @@ void Scheduler::checkGraph(void)
     if (errors != 0)
     {
         throw new runtime_error("Graph validation failed");
-        abort();
     }
     
     m_needCheck = false;
