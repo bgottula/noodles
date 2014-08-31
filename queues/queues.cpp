@@ -129,9 +129,13 @@ class Scheduler
 class Source : public SourceBlock
 {
     public:
+        Source(void)
+        {
+            reset();
+        }
+
         void reset(void)
         {
-            Block::reset();
             m_counter = 0;
         }
 
@@ -147,9 +151,13 @@ class Source : public SourceBlock
 class Decimator : public Block
 {
     public:
+        Decimator(void)
+        {
+            reset();
+        }
+
         void reset(void)
         {
-            Block::reset();
             m_counter = 0;
         }
 
@@ -173,11 +181,6 @@ class Decimator : public Block
 class Interpolator : public Block
 {
     public:
-        void reset(void)
-        {
-            Block::reset();
-        }
-
         void work(void)
         {
             while (!m_input[0].empty())
