@@ -186,30 +186,48 @@ void Scheduler::run(void)
         checkGraph();
     }
     
-#if 0
     /* Call work on all blocks */
-    for (boost::tie(i, end) = vertices(m_graph); i != end; ++i)
+    auto v_it = vertices(m_graph);
+    for (auto it = v_it.first; it != v_it.second; ++it)
     {
-        printf("run: calling work on %p\n", *i);
-        (*i)->work();
+        vertex_t v = *it;
+        printf("run: calling work on %p\n", m_graph[v]);
+        m_graph[v]->work();
     }
 
-    /* Move samples from source blocks to sink blocks */
-    graph_traits < adjacency_list <> >::vertex_iterator i, end;
-    for (boost::tie(i, end) = vertices(m_graph); i != end; ++i)
+
+    /* Pass samples between blocks. As currently written, no attempt is made 
+     * to handle blocks with multiple inputs or multiple outputs. */
+    v_it = vertices(m_graph);
+    for (auto it = v_it.first; it != v_it.second; ++it)
     {
-        while (!(*i)->outputEmpty())
+        vertex_t v = *it;
+        printf("run: on vertex %p\n", m_graph[v]);
+        
+        /* iterator over all outbound edges */
+        auto e_it = out_edges(v, m_graph);
+
+        /* This means there are no outbound edges */
+        if (e_it.first == e_it.second)
         {
-            int sample = (*i)->popOutput();
-            /* Iterate over all sinks attached to this block */
-            graph_traits < adjacency_list <> >::adjacency_iterator ai, a_end;
-            for (boost::tie(ai, a_end) = adjacent_vertices(*i, m_graph);
-                ai != a_end; ++ai)
+            continue;
+        }
+
+        while (!m_graph[v]->outputEmpty())
+        {
+            int sample = m_graph[v]->popOutput();
+            
+            /* Iterate over all outbound edges. */
+            for (auto ei = e_it.first; ei != e_it.second; ++ei)
             {
-                printf("");
-                (*ai)->pushInput(sample);
+                vertex_t v_sink = target(*ei, m_graph);
+                auto conn = m_graph[*ei];
+                printf("-- pushing sample %d to vertex %p input %d"
+                    " (but actually input 0 for now)\n", 
+                    sample, m_graph[v_sink], conn.second);
+                m_graph[v_sink]->pushInput(sample/*, conn.second*/);
             }
-        }       
+        }   
+           
     }
-#endif
 }

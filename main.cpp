@@ -113,7 +113,7 @@ int main()
     s.addConnection(&c2);
     
     /* test the graph checking code */
-    s.addConnection(&c3);
+    //s.addConnection(&c3);
     
     for (int i = 0; i < 10; i++)
     {
