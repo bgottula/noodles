@@ -70,7 +70,8 @@ void Scheduler::addConnection(Connection *c)
         vertex_t v2 = target(e, m_graph);
         
         if (m_graph[v1] == c->m_sourceBlock && m_graph[v2] == c->m_sinkBlock &&
-            indices.first == c->m_sourceIndex && indices.second == c->m_sinkIndex)
+            indices.first == c->m_sourceIndex &&
+            indices.second == c->m_sinkIndex)
         {
             printf("- edge is already in the graph!\n");
             
@@ -143,8 +144,7 @@ void Scheduler::checkGraph(void)
     printf("- %d errors\n", errors);
     if (errors != 0)
     {
-        throw new runtime_error("Graph validation failed");
-        abort();
+        throw runtime_error("Graph validation failed");
     }
     
     m_needCheck = false;
@@ -167,13 +167,13 @@ void Scheduler::dumpGraph(void)
     for (auto it = e_it.first; it != e_it.second; ++it)
     {
         edge_t e = *it;
-        auto conn = m_graph[e];
+        std::pair<int, int> indices = m_graph[e];
         
         vertex_t v1 = source(e, m_graph);
         vertex_t v2 = target(e, m_graph);
         
         printf(" + edge: [ %p idx %d ] -> [ %p idx %d ]\n",
-            m_graph[v1], conn.first, m_graph[v2], conn.second);
+            m_graph[v1], indices.first, m_graph[v2], indices.second);
     }
     
     printf("=============================================================\n\n");
