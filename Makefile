@@ -4,7 +4,7 @@ noodles: main.o Block.o Scheduler.o
 std.h.gch: std.h
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -x c++-header $<
 
-%.o: %.cpp std.h.gch
+%.o: %.cpp std.h.gch *.h
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -c $<
 
 .PHONY: clean
