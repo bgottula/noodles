@@ -1,5 +1,5 @@
+#include "std.h"
 #include "Scheduler.h"
-#include <cstdio>
 
 using namespace std;
 using namespace boost;

@@ -1,7 +1,6 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include <boost/graph/adjacency_list.hpp>
 #include "Block.h"
 
 class Connection
