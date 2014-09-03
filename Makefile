@@ -19,8 +19,9 @@ GCC_FLAGS:=-std=gnu++11 -Wall -Wextra -g -Og -I include
 all: noodles test
 # 'make noodles' -> build bin/noodles
 noodles: bin/noodles
-# 'make test' -> build bin/test
+# 'make test' -> build bin/test and run it
 test: bin/test
+	bin/test
 
 # clean up build products
 clean:
