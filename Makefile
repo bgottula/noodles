@@ -9,7 +9,7 @@ OBJ_TEST:=$(OBJ_COMMON) obj/unit/BlockTest.o
 HEADERS:=include/*.h
 
 # g++ options
-GCC_FLAGS:=-std=gnu++11 -Wall -Wextra -g -Og -I include
+GCC_FLAGS:=-std=gnu++11 -Wall -Wextra -g -Og -I obj -I include
 
 
 # phony targets: these rules don't generate the files they name
@@ -25,7 +25,7 @@ test: bin/test
 
 # clean up build products
 clean:
-	-rm -vrf bin obj include/std.h.gch
+	-rm -vrf bin obj
 
 
 # binary linking
@@ -37,10 +37,11 @@ bin/test: $(OBJ_TEST) Makefile
 	g++ $(GCC_FLAGS) -lboost_unit_test_framework -o $@ $(OBJ_TEST)
 
 # source compilation
-obj/%.o: src/%.cpp include/std.h.gch $(HEADERS) Makefile
+obj/%.o: src/%.cpp obj/std.h.gch $(HEADERS) Makefile
 	-mkdir -p $(@D)
 	g++ $(GCC_FLAGS) -c -o $@ $<
 
 # precompiled header generation
-include/std.h.gch: include/std.h Makefile
+obj/std.h.gch: include/std.h Makefile
+	-mkdir -p $(@D)
 	g++ $(GCC_FLAGS) -x c++-header -o $@ $<
