@@ -34,7 +34,7 @@ bin/noodles: $(OBJ_NOODLES) Makefile
 	g++ $(GCC_FLAGS) -o $@ $(OBJ_NOODLES)
 bin/test: $(OBJ_TEST) Makefile
 	-mkdir -p $(@D)
-	g++ $(GCC_FLAGS) -o $@ $(OBJ_TEST)
+	g++ $(GCC_FLAGS) -lboost_unit_test_framework -o $@ $(OBJ_TEST)
 
 # source compilation
 obj/%.o: src/%.cpp include/std.h.gch $(HEADERS) Makefile
