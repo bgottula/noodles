@@ -19,20 +19,20 @@ test: bin/test
 
 # clean up (ignore failure)
 clean:
-	-rm -vf bin/* obj/*.o obj/unit/*.o
+	-rm -vrf bin obj include/std.h.gch
 
 
 # binaries
 bin/noodles: $(OBJ_NOODLES) Makefile
-	-mkdir -vp bin
+	-mkdir -vp $(@D)
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -o $@ $(OBJ_NOODLES)
 bin/test: $(OBJ_TEST) Makefile
-	-mkdir -vp bin
+	-mkdir -vp $(@D)
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -o $@ $(OBJ_TEST)
 
 # source compilation
 obj/%.o: src/%.cpp include/std.h.gch $(HEADERS) Makefile
-	-mkdir -vp obj/unit
+	-mkdir -vp $(@D)
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -I include/ -c $< -o $@
 
 # precompiled header generation
