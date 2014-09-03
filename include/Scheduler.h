@@ -34,7 +34,7 @@ class Scheduler
 {
     public:
         void addConnection(Connection *c);
-        void checkGraph(void);
+        int checkGraph(void);
         void dumpGraph(void);
         void run(void);
 

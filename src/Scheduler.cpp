@@ -106,7 +106,7 @@ void Scheduler::addConnection(Connection *c)
     m_needCheck = true;
 }
 
-void Scheduler::checkGraph(void)
+int Scheduler::checkGraph(void)
 {
     printf("checkGraph: checking graph validity\n");
     
@@ -141,13 +141,13 @@ void Scheduler::checkGraph(void)
         }
     }
     
-    printf("- %d errors\n", errors);
-    if (errors != 0)
+    if (errors == 0)
     {
-        throw runtime_error("Graph validation failed");
+        m_needCheck = false;
     }
     
-    m_needCheck = false;
+    printf("- %d errors\n", errors);
+    return errors;
 }
 
 void Scheduler::dumpGraph(void)
@@ -183,7 +183,10 @@ void Scheduler::run(void)
 {
     if (m_needCheck)
     {
-        checkGraph();
+        if (checkGraph() != 0)
+        {
+            throw runtime_error("Graph validation failed");
+        }
     }
     
     /* Call work on all blocks */
