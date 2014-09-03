@@ -21,8 +21,8 @@ class Connection
 };
 
 /* NoodleGraph is an adjacency list where the vertices are of type Block *, and
- * the edges are of type std::pair <int,int> */
-typedef boost::adjacency_list<boost::listS, boost::vecS, boost::directedS,
+ * the edges are of type std::pair <int,int>; use std::vector for storage */
+typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
 	Block *, std::pair <int, int> > NoodleGraph;
 
 /* vertex_t and edge_t are essentially reference types for vertices and edges.
