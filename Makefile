@@ -8,16 +8,14 @@ OBJ_TEST:=src/Block.o src/Scheduler.o src/unit/BlockTest.o
 
 
 # phony targets: these rules don't generate the files they name
-.PHONY: noodles test dirs clean
+.PHONY: all noodles test clean
 
-# 'make' or 'make noodles' -> builds bin/noodles
+# 'make' or 'make all' -> build all binaries
+all: noodles test
+# 'make noodles' -> build bin/noodles
 noodles: bin/noodles
-# 'make test' -> builds bin/test
+# 'make test' -> build bin/test
 test: bin/test
-
-# make output directories (ignore failure)
-dirs:
-	-mkdir -vp bin
 
 # clean up (ignore failure)
 clean:
@@ -25,9 +23,11 @@ clean:
 
 
 # binaries
-bin/noodles: $(OBJ_NOODLES) dirs Makefile
+bin/noodles: $(OBJ_NOODLES) Makefile
+	-mkdir -vp bin
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -o $@ $(OBJ_NOODLES)
-bin/test: $(OBJ_TEST) dirs Makefile
+bin/test: $(OBJ_TEST) Makefile
+	-mkdir -vp bin
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -o $@ $(OBJ_TEST)
 
 # source compilation
