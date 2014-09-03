@@ -2,9 +2,9 @@
 HEADERS:=$(shell find include/ -iname '*.h')
 
 # object files used to link bin/noodles
-OBJ_NOODLES:=src/Block.o src/Scheduler.o src/main.o
+OBJ_NOODLES:=obj/Block.o obj/Scheduler.o obj/main.o
 # object files used to link bin/test
-OBJ_TEST:=src/Block.o src/Scheduler.o src/unit/BlockTest.o
+OBJ_TEST:=obj/Block.o obj/Scheduler.o obj/unit/BlockTest.o
 
 
 # phony targets: these rules don't generate the files they name
@@ -19,7 +19,7 @@ test: bin/test
 
 # clean up (ignore failure)
 clean:
-	-rm -vf bin/* src/*.o src/unit/*.o
+	-rm -vf bin/* obj/*.o obj/unit/*.o
 
 
 # binaries
@@ -31,7 +31,8 @@ bin/test: $(OBJ_TEST) Makefile
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -o $@ $(OBJ_TEST)
 
 # source compilation
-%.o: %.cpp include/std.h.gch $(HEADERS) Makefile
+obj/%.o: src/%.cpp include/std.h.gch $(HEADERS) Makefile
+	-mkdir -vp obj/unit
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -I include/ -c $< -o $@
 
 # precompiled header generation
