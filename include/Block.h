@@ -1,9 +1,6 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-#include <queue>
-#include <cassert>
-
 class Block
 {
     public:
