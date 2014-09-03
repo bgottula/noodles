@@ -19,12 +19,12 @@ noodles: bin/noodles
 # 'make test' -> build bin/test
 test: bin/test
 
-# clean up (ignore failure)
+# clean up build products
 clean:
 	-rm -vrf bin obj include/std.h.gch
 
 
-# binaries
+# binary linking
 bin/noodles: $(OBJ_NOODLES) Makefile
 	-mkdir -p $(@D)
 	g++ $(GCC_FLAGS) -o $@ $(OBJ_NOODLES)
