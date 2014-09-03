@@ -1,12 +1,13 @@
-noodles: main.o Block.o Scheduler.o
+bin/noodles: obj/main.o obj/Block.o obj/Scheduler.o
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -o $@ $^
 
-std.h.gch: std.h
-	g++ -std=gnu++11 -Wall -Wextra -g -Og -x c++-header $<
+obj/std.h.gch: include/std.h
+	g++ -std=gnu++11 -Wall -Wextra -g -Og -x c++-header $< -o $@
 
-%.o: %.cpp std.h.gch *.h
-	g++ -std=gnu++11 -Wall -Wextra -g -Og -c $<
+obj/%.o: src/%.cpp obj/std.h.gch include/*.h
+	g++ -std=gnu++11 -Wall -Wextra -g -Og -I include/ -c $< -o $@
 
 .PHONY: clean
 clean:
-	rm -vf noodles *.o *.gch
+	rm -vf bin/* obj/* obj/unit/*
+
