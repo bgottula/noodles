@@ -1,6 +1,5 @@
 # all header files
-HEADERS:=$(shell find include/ -iname '*.h')
-
+HEADERS:=include/*.h
 # object files used to link bin/noodles
 OBJ_NOODLES:=obj/Block.o obj/Scheduler.o obj/main.o
 # object files used to link bin/test
