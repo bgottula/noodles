@@ -5,6 +5,9 @@ OBJ_NOODLES:=obj/Block.o obj/Scheduler.o obj/main.o
 # object files used to link bin/test
 OBJ_TEST:=obj/Block.o obj/Scheduler.o obj/unit/BlockTest.o
 
+# g++ options
+GCC_FLAGS:=-std=gnu++11 -Wall -Wextra -g -Og -I include
+
 
 # phony targets: these rules don't generate the files they name
 .PHONY: all noodles test clean
@@ -24,16 +27,16 @@ clean:
 # binaries
 bin/noodles: $(OBJ_NOODLES) Makefile
 	-mkdir -p $(@D)
-	g++ -std=gnu++11 -Wall -Wextra -g -Og -o $@ $(OBJ_NOODLES)
+	g++ $(GCC_FLAGS) -o $@ $(OBJ_NOODLES)
 bin/test: $(OBJ_TEST) Makefile
 	-mkdir -p $(@D)
-	g++ -std=gnu++11 -Wall -Wextra -g -Og -o $@ $(OBJ_TEST)
+	g++ $(GCC_FLAGS) -o $@ $(OBJ_TEST)
 
 # source compilation
 obj/%.o: src/%.cpp include/std.h.gch $(HEADERS) Makefile
 	-mkdir -p $(@D)
-	g++ -std=gnu++11 -Wall -Wextra -g -Og -I include/ -c $< -o $@
+	g++ $(GCC_FLAGS) -c -o $@ $<
 
 # precompiled header generation
 include/std.h.gch: include/std.h Makefile
-	g++ -std=gnu++11 -Wall -Wextra -g -Og -x c++-header $< -o $@
+	g++ $(GCC_FLAGS) -x c++-header -o $@ $<
