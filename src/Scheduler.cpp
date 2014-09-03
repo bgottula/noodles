@@ -98,8 +98,7 @@ void Scheduler::addConnection(Connection *c)
     }
     else
     {
-        /* probably want to throw an exception here instead of this nonsense */
-        printf("- refusing to add a duplicate edge\n");
+        throw runtime_error("Exact duplicate connections are not allowed");
     }
     
     dumpGraph();
