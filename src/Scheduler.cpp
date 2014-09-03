@@ -124,7 +124,8 @@ void Scheduler::checkGraph(void)
         
         for (auto it2 = e_it.first; it2 != e_it.second; ++it2)
         {
-            if (it1 == it2) continue;
+            /* check pairs in triangle fashion since the test is symmetrical */
+            if (it1 == it2) break;
             
             edge_t e2 = *it2;
             
