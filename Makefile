@@ -9,7 +9,7 @@ OBJ_TEST:=$(OBJ_COMMON) obj/unit/BlockTest.o
 HEADERS:=include/*.h
 
 # g++ options
-GCC_FLAGS:=-std=gnu++11 -Wall -Wextra -g -Og -I obj -I include
+GCC_FLAGS:=-std=gnu++0x -Wall -Wextra -g -Og -I obj -I include
 
 
 # phony targets: these rules don't generate the files they name
