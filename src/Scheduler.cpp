@@ -134,7 +134,7 @@ void Scheduler::checkGraph(void)
             
             if (sinkBlock1 == sinkBlock2 && sinkIndex1 == sinkIndex2)
             {
-                printf("- sink [ %p idx %d ] has more than one source "
+                printf("- error: sink [ %p idx %d ] has more than one source "
                     "connected!\n", sinkBlock1, sinkIndex1);
                 ++errors;
             }
