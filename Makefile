@@ -1,9 +1,12 @@
+# object files used to link all binaries
+OBJ_COMMON:=obj/Block.o obj/Scheduler.o
+# object files used to link bin/noodles
+OBJ_NOODLES:=$(OBJ_COMMON) obj/main.o
+# object files used to link bin/test
+OBJ_TEST:=$(OBJ_COMMON) obj/unit/BlockTest.o
+
 # all header files
 HEADERS:=include/*.h
-# object files used to link bin/noodles
-OBJ_NOODLES:=obj/Block.o obj/Scheduler.o obj/main.o
-# object files used to link bin/test
-OBJ_TEST:=obj/Block.o obj/Scheduler.o obj/unit/BlockTest.o
 
 # g++ options
 GCC_FLAGS:=-std=gnu++11 -Wall -Wextra -g -Og -I include
