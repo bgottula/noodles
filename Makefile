@@ -23,15 +23,15 @@ clean:
 
 # binaries
 bin/noodles: $(OBJ_NOODLES) Makefile
-	-mkdir -vp $(@D)
+	-mkdir -p $(@D)
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -o $@ $(OBJ_NOODLES)
 bin/test: $(OBJ_TEST) Makefile
-	-mkdir -vp $(@D)
+	-mkdir -p $(@D)
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -o $@ $(OBJ_TEST)
 
 # source compilation
 obj/%.o: src/%.cpp include/std.h.gch $(HEADERS) Makefile
-	-mkdir -vp $(@D)
+	-mkdir -p $(@D)
 	g++ -std=gnu++11 -Wall -Wextra -g -Og -I include/ -c $< -o $@
 
 # precompiled header generation
