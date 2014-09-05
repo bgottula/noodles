@@ -1,8 +1,6 @@
 #ifndef BOOST_TEST_H
 #define BOOST_TEST_H
 
-#define BOOST_TEST_MAIN
-
 #if USE_BOOST_UTF_DYNAMIC
 	#define BOOST_TEST_DYN_LINK
 	#include <boost/test/unit_test.hpp>
