@@ -1,6 +1,6 @@
 #include "std.h"
 #include "boost_test.h"
-#include "Scheduler.h"
+#include "Noodles.h"
 #include "Block.h"
 
 class MockBlock : public Block
@@ -8,12 +8,12 @@ class MockBlock : public Block
 	void work(void) {}
 };
 
-BOOST_AUTO_TEST_CASE( schedulerTest )
+BOOST_AUTO_TEST_CASE( noodlesTest )
 {
 	MockBlock block1;
 	MockBlock block2;
 	MockBlock block3;
-	Scheduler dut;
+	Noodles dut;
 
 	/* No connections yet */
 	BOOST_CHECK(dut.checkGraph() >= 1);

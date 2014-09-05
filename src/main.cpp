@@ -1,6 +1,6 @@
 #include "std.h"
 #include "Block.h"
-#include "Scheduler.h"
+#include "Noodles.h"
 
 using namespace std;
 
@@ -94,7 +94,7 @@ int main()
     Interpolator interp;
     Sink sink;
 
-    Scheduler s;
+    Noodles s;
 
     /* use bogus indices here just so we can see them in the graph dump */
     Connection c0(&source, &decim, 1, 2);

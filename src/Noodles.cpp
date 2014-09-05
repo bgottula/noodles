@@ -1,10 +1,10 @@
 #include "std.h"
-#include "Scheduler.h"
+#include "Noodles.h"
 
 using namespace std;
 using namespace boost;
 
-void Scheduler::addConnection(Connection *c)
+void Noodles::addConnection(Connection *c)
 {
     printf("addConnection: source [ %p idx %d ] -> sink [ %p idx %d]\n",
         c->m_sourceBlock, c->m_sourceIndex, c->m_sinkBlock, c->m_sinkIndex);
@@ -106,7 +106,7 @@ void Scheduler::addConnection(Connection *c)
     m_needCheck = true;
 }
 
-int Scheduler::checkGraph(void)
+int Noodles::checkGraph(void)
 {
     printf("checkGraph: checking graph validity\n");
     
@@ -150,7 +150,7 @@ int Scheduler::checkGraph(void)
     return errors;
 }
 
-void Scheduler::dumpGraph(void)
+void Noodles::dumpGraph(void)
 {
     printf("\n====================== m_graph summary ======================\n");
     
@@ -179,7 +179,7 @@ void Scheduler::dumpGraph(void)
     printf("=============================================================\n\n");
 }
 
-void Scheduler::run(void)
+void Noodles::run(void)
 {
     if (m_needCheck)
     {
