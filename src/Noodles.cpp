@@ -1,4 +1,5 @@
 #include "std.h"
+#include "debug.h"
 #include "Noodles.h"
 
 using namespace std;
@@ -6,7 +7,7 @@ using namespace boost;
 
 void Noodles::addConnection(Connection *c)
 {
-    printf("addConnection: source [ %p idx %d ] -> sink [ %p idx %d]\n",
+    debug("addConnection: source [ %p idx %d ] -> sink [ %p idx %d]\n",
         c->m_sourceBlock, c->m_sourceIndex, c->m_sinkBlock, c->m_sinkIndex);
     
     vertex_t vert_source, vert_sink;
@@ -20,7 +21,7 @@ void Noodles::addConnection(Connection *c)
         
         if (m_graph[v] == c->m_sourceBlock)
         {
-            printf("- source block %p is already in the graph.\n",
+            debug("- source block %p is already in the graph.\n",
                 c->m_sourceBlock);
             
             vert_source = v;
@@ -28,7 +29,7 @@ void Noodles::addConnection(Connection *c)
         }
         if (m_graph[v] == c->m_sinkBlock)
         {
-            printf("- sink block %p is already in the graph.\n",
+            debug("- sink block %p is already in the graph.\n",
                 c->m_sinkBlock);
             
             vert_sink = v;
@@ -41,7 +42,7 @@ void Noodles::addConnection(Connection *c)
     /* if source and/or sink were not found, add new vertex(es) to the graph */
     if (!found_source)
     {
-        printf("- source block %p is not in the graph; creating.\n",
+        debug("- source block %p is not in the graph; creating.\n",
             c->m_sourceBlock);
         
         vert_source = add_vertex(m_graph);
@@ -49,7 +50,7 @@ void Noodles::addConnection(Connection *c)
     }
     if (!found_sink)
     {
-        printf("- sink block %p is not in the graph; creating.\n",
+        debug("- sink block %p is not in the graph; creating.\n",
             c->m_sinkBlock);
         
         vert_sink = add_vertex(m_graph);
@@ -73,7 +74,7 @@ void Noodles::addConnection(Connection *c)
             indices.first == c->m_sourceIndex &&
             indices.second == c->m_sinkIndex)
         {
-            printf("- edge is already in the graph!\n");
+            debug("- edge is already in the graph!\n");
             
             edge = e;
             found_edge = true;
@@ -85,7 +86,7 @@ void Noodles::addConnection(Connection *c)
     /* if edge was not found, add new edge to the graph */
     if (!found_edge)
     {
-        printf("- edge does not exist in the graph; creating.\n");
+        debug("- edge does not exist in the graph; creating.\n");
         
         bool b;
         tie(edge, b) = add_edge(vert_source, vert_sink, m_graph);
@@ -108,7 +109,7 @@ void Noodles::addConnection(Connection *c)
 
 int Noodles::checkGraph(void)
 {
-    printf("checkGraph: checking graph validity\n");
+    debug("checkGraph: checking graph validity\n");
     
     int errors = 0;
     
@@ -134,7 +135,7 @@ int Noodles::checkGraph(void)
             
             if (sinkBlock1 == sinkBlock2 && sinkIndex1 == sinkIndex2)
             {
-                printf("- error: sink [ %p idx %d ] has more than one source "
+                debug("- error: sink [ %p idx %d ] has more than one source "
                     "connected!\n", sinkBlock1, sinkIndex1);
                 ++errors;
             }
@@ -146,23 +147,26 @@ int Noodles::checkGraph(void)
         m_needCheck = false;
     }
     
-    printf("- %d errors\n", errors);
+    debug("- %d errors\n", errors);
     return errors;
 }
 
 void Noodles::dumpGraph(void)
 {
-    printf("\n====================== m_graph summary ======================\n");
+    /* don't waste time accessing stuff that we won't print */
+    if (!verbose) return;
     
-    printf("%lu vertices\n", num_vertices(m_graph));
+    debug("\n====================== m_graph summary ======================\n");
+    
+    debug("%lu vertices\n", num_vertices(m_graph));
     auto v_it = vertices(m_graph);
     for (auto it = v_it.first; it != v_it.second; ++it)
     {
         vertex_t v = *it;
-        printf(" + vert: %p\n", m_graph[v]);
+        debug(" + vert: %p\n", m_graph[v]);
     }
     
-    printf("\n%lu edges\n", num_edges(m_graph));
+    debug("\n%lu edges\n", num_edges(m_graph));
     auto e_it = edges(m_graph);
     for (auto it = e_it.first; it != e_it.second; ++it)
     {
@@ -172,11 +176,11 @@ void Noodles::dumpGraph(void)
         vertex_t v1 = source(e, m_graph);
         vertex_t v2 = target(e, m_graph);
         
-        printf(" + edge: [ %p idx %d ] -> [ %p idx %d ]\n",
+        debug(" + edge: [ %p idx %d ] -> [ %p idx %d ]\n",
             m_graph[v1], indices.first, m_graph[v2], indices.second);
     }
     
-    printf("=============================================================\n\n");
+    debug("=============================================================\n\n");
 }
 
 void Noodles::run(void)
@@ -194,7 +198,7 @@ void Noodles::run(void)
     for (auto it = v_it.first; it != v_it.second; ++it)
     {
         vertex_t v = *it;
-        printf("run: calling work on %p\n", m_graph[v]);
+        debug("run: calling work on %p\n", m_graph[v]);
         m_graph[v]->work();
     }
 
@@ -205,7 +209,7 @@ void Noodles::run(void)
     for (auto it = v_it.first; it != v_it.second; ++it)
     {
         vertex_t v = *it;
-        printf("run: on vertex %p\n", m_graph[v]);
+        debug("run: on vertex %p\n", m_graph[v]);
         
         /* iterator over all outbound edges */
         auto e_it = out_edges(v, m_graph);
@@ -225,7 +229,7 @@ void Noodles::run(void)
             {
                 vertex_t v_sink = target(*ei, m_graph);
                 auto conn = m_graph[*ei];
-                printf("-- pushing sample %d to vertex %p input %d"
+                debug("-- pushing sample %d to vertex %p input %d"
                     " (but actually input 0 for now)\n", 
                     sample, m_graph[v_sink], conn.second);
                 m_graph[v_sink]->pushInput(sample/*, conn.second*/);
