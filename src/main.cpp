@@ -1,4 +1,5 @@
 #include "std.h"
+#include "debug.h"
 #include "Block.h"
 #include "Scheduler.h"
 
@@ -86,9 +87,21 @@ class Sink : public SinkBlock
         }
 };
 
-
-int main()
+int main(int argc, char **argv)
 {
+    for (int i = 1; i < argc; ++i)
+    {
+        if (strcmp(argv[i], "-v") == 0)
+        {
+            verbose = true;
+        }
+        else
+        {
+            fprintf(stderr, "unrecognized command-line param: '%s'\n", argv[i]);
+            return 1;
+        }
+    }
+    
     Source source;
     Decimator decim;
     Interpolator interp;
