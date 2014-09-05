@@ -7,7 +7,7 @@ using namespace boost;
 
 void Noodles::addConnection(Connection *c)
 {
-    debug("addConnection: source [ %p idx %d ] -> sink [ %p idx %d]\n",
+    debug("addConnection: [ %p(%d) -> %p(%d) ]\n",
         c->m_sourceBlock, c->m_sourceIndex, c->m_sinkBlock, c->m_sinkIndex);
     
     vertex_t vert_source, vert_sink;
@@ -42,7 +42,7 @@ void Noodles::addConnection(Connection *c)
     /* if source and/or sink were not found, add new vertex(es) to the graph */
     if (!found_source)
     {
-        debug("- source block %p is not in the graph; creating.\n",
+        debug("- source block %p is not in the graph; adding now.\n",
             c->m_sourceBlock);
         
         vert_source = add_vertex(m_graph);
@@ -50,7 +50,7 @@ void Noodles::addConnection(Connection *c)
     }
     if (!found_sink)
     {
-        debug("- sink block %p is not in the graph; creating.\n",
+        debug("- sink block %p is not in the graph; adding now.\n",
             c->m_sinkBlock);
         
         vert_sink = add_vertex(m_graph);
@@ -156,17 +156,17 @@ void Noodles::dumpGraph(void)
     /* don't waste time accessing stuff that we won't print */
     if (!verbose) return;
     
-    debug("\n====================== m_graph summary ======================\n");
+    debug("\n======================= graph summary =======================\n");
     
-    debug("%lu vertices\n", num_vertices(m_graph));
+    debug("%lu blocks\n", num_vertices(m_graph));
     auto v_it = vertices(m_graph);
     for (auto it = v_it.first; it != v_it.second; ++it)
     {
         vertex_t v = *it;
-        debug(" + vert: %p\n", m_graph[v]);
+        debug(" + block: %p\n", m_graph[v]);
     }
     
-    debug("\n%lu edges\n", num_edges(m_graph));
+    debug("\n%lu noodles\n", num_edges(m_graph));
     auto e_it = edges(m_graph);
     for (auto it = e_it.first; it != e_it.second; ++it)
     {
@@ -176,7 +176,7 @@ void Noodles::dumpGraph(void)
         vertex_t v1 = source(e, m_graph);
         vertex_t v2 = target(e, m_graph);
         
-        debug(" + edge: [ %p idx %d ] -> [ %p idx %d ]\n",
+        debug(" + noodle: [ %p(%d) -> %p(%d) ]\n",
             m_graph[v1], indices.first, m_graph[v2], indices.second);
     }
     
@@ -209,7 +209,7 @@ void Noodles::run(void)
     for (auto it = v_it.first; it != v_it.second; ++it)
     {
         vertex_t v = *it;
-        debug("run: on vertex %p\n", m_graph[v]);
+        debug("run: on block %p\n", m_graph[v]);
         
         /* iterator over all outbound edges */
         auto e_it = out_edges(v, m_graph);
@@ -229,7 +229,7 @@ void Noodles::run(void)
             {
                 vertex_t v_sink = target(*ei, m_graph);
                 auto conn = m_graph[*ei];
-                debug("-- pushing sample %d to vertex %p input %d"
+                debug("-- pushing sample %d to block %p input %d"
                     " (but actually input 0 for now)\n", 
                     sample, m_graph[v_sink], conn.second);
                 m_graph[v_sink]->pushInput(sample/*, conn.second*/);
