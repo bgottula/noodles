@@ -57,10 +57,8 @@ void Noodles::addConnection(Connection *c)
         m_graph[vert_sink] = c->m_sinkBlock;
     }
     
-    edge_t edge;
-    bool found_edge = false;
-    
-    /* see if the edge is already in the graph */
+    /* see if the edge is already in the graph; also, prevent outputs from
+     * having multiple inputs connected to them */
     auto e_it = edges(m_graph);
     for (auto it = e_it.first; it != e_it.second; ++it)
     {
@@ -70,37 +68,37 @@ void Noodles::addConnection(Connection *c)
         vertex_t v1 = source(e, m_graph);
         vertex_t v2 = target(e, m_graph);
         
-        if (m_graph[v1] == c->m_sourceBlock && m_graph[v2] == c->m_sinkBlock &&
-            indices.first == c->m_sourceIndex &&
-            indices.second == c->m_sinkIndex)
+        bool source_match = (m_graph[v1] == c->m_sourceBlock &&
+            indices.first == c->m_sourceIndex);
+        bool sink_match = (m_graph[v2] == c->m_sinkBlock &&
+            indices.second == c->m_sinkIndex);
+        
+        if (source_match && sink_match)
         {
-            debug("- edge is already in the graph!\n");
-            
-            edge = e;
-            found_edge = true;
-            
-            break;
+            debug("- noodle [ %p(%d) -> %p(%d) ] is already in the graph!\n",
+                c->m_sourceBlock, c->m_sourceIndex,
+                c->m_sinkBlock, c->m_sinkIndex);
+            throw runtime_error("Exact duplicate noodles are not allowed");
+        }
+        else if (sink_match)
+        {      
+            debug("- noodles [ %p(%d) -> %p(%d) ] and [ %p(%d) -> %p(%d) ]\n"
+                "  specify the exact same sink block and input index!\n",
+                c->m_sourceBlock, c->m_sourceIndex,
+                c->m_sinkBlock, c->m_sinkIndex,
+                m_graph[v1], indices.first, m_graph[v2], indices.second);
+            throw runtime_error("Inputs can only be connected to one output");
         }
     }
     
-    /* if edge was not found, add new edge to the graph */
-    if (!found_edge)
-    {
-        debug("- edge does not exist in the graph; creating.\n");
-        
-        bool b;
-        tie(edge, b) = add_edge(vert_source, vert_sink, m_graph);
-        m_graph[edge] = pair<int, int>(c->m_sourceIndex, c->m_sinkIndex);
-        
-        /* bool b is supposed to be set false if the graph is configured to
-         * disallow parallel edges (see documentation for add_edge);
-         * currently this is not how our graph is set up.
-         * if this can be set, then we don't need to hunt for duplicate edges */
-    }
-    else
-    {
-        throw runtime_error("Exact duplicate connections are not allowed");
-    }
+    debug("- noodle is not in the graph; adding now.\n");
+    
+    edge_t edge;
+    bool result;
+    
+    tie(edge, result) = add_edge(vert_source, vert_sink, m_graph);
+    assert(result);
+    m_graph[edge] = pair<int, int>(c->m_sourceIndex, c->m_sinkIndex);
     
     dumpGraph();
     
@@ -113,34 +111,15 @@ int Noodles::checkGraph(void)
     
     int errors = 0;
     
-    /* ensure that no input is connected to more than one output
-     * (no two edges should have the same sink block AND sink index) */
     auto e_it = edges(m_graph);
-    for (auto it1 = e_it.first; it1 != e_it.second; ++it1)
+    if (e_it.first == e_it.second)
     {
-        edge_t e1 = *it1;
-        
-        Block *sinkBlock1 = m_graph[target(e1, m_graph)];
-        int sinkIndex1 = m_graph[e1].second;
-        
-        for (auto it2 = e_it.first; it2 != e_it.second; ++it2)
-        {
-            /* check pairs in triangle fashion since the test is symmetrical */
-            if (it1 == it2) break;
-            
-            edge_t e2 = *it2;
-            
-            Block *sinkBlock2 = m_graph[target(e2, m_graph)];
-            int sinkIndex2 = m_graph[e2].second;
-            
-            if (sinkBlock1 == sinkBlock2 && sinkIndex1 == sinkIndex2)
-            {
-                debug("- error: sink [ %p idx %d ] has more than one source "
-                    "connected!\n", sinkBlock1, sinkIndex1);
-                ++errors;
-            }
-        }
+        debug("- error: no noodles in graph!");
+        ++errors;
     }
+    
+    // TODO: check for nodes with no edges (error) [is this possible?]
+    // TODO: warn about nodes with unconnected inputs or outputs
     
     if (errors == 0)
     {
