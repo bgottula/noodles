@@ -132,5 +132,7 @@ int main(int argc, char **argv)
     {
         s.run();
     }
+    
+    return 0;
 }
 
