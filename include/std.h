@@ -5,6 +5,7 @@
 
 /* C standard library */
 #include <cassert>
+#include <cstdarg>
 #include <cstdio>
 
 /* C++ standard library */
