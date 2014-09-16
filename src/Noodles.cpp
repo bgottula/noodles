@@ -5,10 +5,10 @@
 using namespace std;
 using namespace boost;
 
-void Noodles::addConnection(Connection *c)
+void Noodles::addNoodle(Noodle *n)
 {
-    debug("addConnection: [ %p(%d) -> %p(%d) ]\n",
-        c->m_sourceBlock, c->m_sourceIndex, c->m_sinkBlock, c->m_sinkIndex);
+    debug("addNoodle: [ %p(%d) -> %p(%d) ]\n",
+        n->m_sourceBlock, n->m_sourceIndex, n->m_sinkBlock, n->m_sinkIndex);
     
     vertex_t vert_source, vert_sink;
     bool found_source = false, found_sink = false;
@@ -19,18 +19,18 @@ void Noodles::addConnection(Connection *c)
     {
         vertex_t v = *it;
         
-        if (m_graph[v] == c->m_sourceBlock)
+        if (m_graph[v] == n->m_sourceBlock)
         {
             debug("- source block %p is already in the graph.\n",
-                c->m_sourceBlock);
+                n->m_sourceBlock);
             
             vert_source = v;
             found_source = true;
         }
-        if (m_graph[v] == c->m_sinkBlock)
+        if (m_graph[v] == n->m_sinkBlock)
         {
             debug("- sink block %p is already in the graph.\n",
-                c->m_sinkBlock);
+                n->m_sinkBlock);
             
             vert_sink = v;
             found_sink = true;
@@ -43,18 +43,18 @@ void Noodles::addConnection(Connection *c)
     if (!found_source)
     {
         debug("- source block %p is not in the graph; adding now.\n",
-            c->m_sourceBlock);
+            n->m_sourceBlock);
         
         vert_source = add_vertex(m_graph);
-        m_graph[vert_source] = c->m_sourceBlock;
+        m_graph[vert_source] = n->m_sourceBlock;
     }
     if (!found_sink)
     {
         debug("- sink block %p is not in the graph; adding now.\n",
-            c->m_sinkBlock);
+            n->m_sinkBlock);
         
         vert_sink = add_vertex(m_graph);
-        m_graph[vert_sink] = c->m_sinkBlock;
+        m_graph[vert_sink] = n->m_sinkBlock;
     }
     
     /* see if the edge is already in the graph; also, prevent outputs from
@@ -68,24 +68,24 @@ void Noodles::addConnection(Connection *c)
         vertex_t v1 = source(e, m_graph);
         vertex_t v2 = target(e, m_graph);
         
-        bool source_match = (m_graph[v1] == c->m_sourceBlock &&
-            indices.first == c->m_sourceIndex);
-        bool sink_match = (m_graph[v2] == c->m_sinkBlock &&
-            indices.second == c->m_sinkIndex);
+        bool source_match = (m_graph[v1] == n->m_sourceBlock &&
+            indices.first == n->m_sourceIndex);
+        bool sink_match = (m_graph[v2] == n->m_sinkBlock &&
+            indices.second == n->m_sinkIndex);
         
         if (source_match && sink_match)
         {
             debug("- noodle [ %p(%d) -> %p(%d) ] is already in the graph!\n",
-                c->m_sourceBlock, c->m_sourceIndex,
-                c->m_sinkBlock, c->m_sinkIndex);
+                n->m_sourceBlock, n->m_sourceIndex,
+                n->m_sinkBlock, n->m_sinkIndex);
             throw runtime_error("Exact duplicate noodles are not allowed");
         }
         else if (sink_match)
         {      
             debug("- noodles [ %p(%d) -> %p(%d) ] and [ %p(%d) -> %p(%d) ]\n"
                 "  specify the exact same sink block and input index!\n",
-                c->m_sourceBlock, c->m_sourceIndex,
-                c->m_sinkBlock, c->m_sinkIndex,
+                n->m_sourceBlock, n->m_sourceIndex,
+                n->m_sinkBlock, n->m_sinkIndex,
                 m_graph[v1], indices.first, m_graph[v2], indices.second);
             throw runtime_error("Inputs can only be connected to one output");
         }
@@ -98,7 +98,7 @@ void Noodles::addConnection(Connection *c)
     
     tie(edge, result) = add_edge(vert_source, vert_sink, m_graph);
     assert(result);
-    m_graph[edge] = pair<int, int>(c->m_sourceIndex, c->m_sinkIndex);
+    m_graph[edge] = pair<int, int>(n->m_sourceIndex, n->m_sinkIndex);
     
     dumpGraph();
     

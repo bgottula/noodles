@@ -2,7 +2,7 @@
 #define NOODLES_H
 
 #include "Block.h"
-#include "Connection.h"
+#include "Noodle.h"
 
 /* NoodleGraph is an adjacency list where the vertices are of type Block *, and
  * the edges are of type std::pair <int,int>; use std::vector for storage */
@@ -17,7 +17,7 @@ typedef boost::graph_traits <NoodleGraph>::edge_descriptor edge_t;
 class Noodles
 {
     public:
-        void addConnection(Connection *c);
+        void addNoodle(Noodle *c);
         int checkGraph(void);
         void dumpGraph(void);
         void run(void);

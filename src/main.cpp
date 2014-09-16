@@ -109,24 +109,20 @@ int main(int argc, char **argv)
 
     Noodles s;
 
-    /* use bogus indices here just so we can see them in the graph dump */
-    Connection c0(&source, &decim, 1, 2);
-    Connection c1(&decim, &interp, 3, 4);
-    Connection c2(&interp, &sink, 5, 6);
-    Connection c3(&source, &sink, 1, 6);
+    //Noodle n0(&source, &decim);
+    //Noodle n1(&decim, &interp);
+    //Noodle n2(&interp, &sink);
     
     /* do a dump of the graph's init state (0 vertices & 0 edges) */
     s.dumpGraph();
 
-    s.addConnection(&c0);
-    s.addConnection(&c1);
-    s.addConnection(&c2);
+    //s.addNoodle(&n0);
+    //s.addNoodle(&n1);
+    //s.addNoodle(&n2);
     
-    /* intentionally try to add a duplicate edge to see if it gets caught */
-    s.addConnection(&c2);
-    
-    /* test the graph checking code */
-    //s.addConnection(&c3);
+    s.addNoodle(new Noodle(&source, &sink, 0, 0));
+    s.addNoodle(new Noodle(&source, &sink, 1, 1));
+    s.addNoodle(new Noodle(&source, &sink, 1, 1));
     
     for (int i = 0; i < 10; i++)
     {
