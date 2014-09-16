@@ -3,7 +3,7 @@ OBJ_COMMON:=obj/debug.o obj/Block.o obj/Noodle.o obj/Noodles.o
 # object files used to link bin/noodles
 OBJ_NOODLES:=$(OBJ_COMMON) obj/main.o
 # object files used to link bin/test
-OBJ_TEST:=$(OBJ_COMMON) obj/unit/unit.o obj/unit/BlockTest.o obj/unit/ConnectionTest.o obj/unit/NoodlesTest.o
+OBJ_TEST:=$(OBJ_COMMON) obj/unit/unit.o obj/unit/BlockTest.o obj/unit/NoodleTest.o obj/unit/NoodlesTest.o
 
 # libraries used to link bin/noodles
 LINK_NOODLES:=
