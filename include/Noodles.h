@@ -17,7 +17,7 @@ typedef boost::graph_traits <NoodleGraph>::edge_descriptor edge_t;
 class Noodles
 {
     public:
-        void addNoodle(Noodle *c);
+        void addNoodle(Noodle *n);
         int checkGraph(void);
         void dumpGraph(void);
         void run(void);
