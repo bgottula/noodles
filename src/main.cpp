@@ -1,7 +1,5 @@
 #include "all.h"
 
-using namespace std;
-
 class Source : public SourceBlock
 {
     public:

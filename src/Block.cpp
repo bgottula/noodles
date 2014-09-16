@@ -1,7 +1,5 @@
 #include "all.h"
 
-using namespace std;
-
 Block::Block(int numInputs, int numOutputs)
     : m_numInputs(numInputs), m_numOutputs(numOutputs)
 {

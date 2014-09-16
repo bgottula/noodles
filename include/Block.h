@@ -12,9 +12,9 @@ class Block
         int popOutput(int outputIndex = 0);
 
     protected:
-        std::queue<int> *m_input;
+        queue<int> *m_input;
         const int m_numInputs;
-        std::queue<int> *m_output;
+        queue<int> *m_output;
         const int m_numOutputs;
 };
 

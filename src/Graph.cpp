@@ -1,8 +1,5 @@
 #include "all.h"
 
-using namespace std;
-using namespace boost;
-
 void Graph::addNoodle(Noodle *n)
 {
     debug("addNoodle: [ %p(%d) -> %p(%d) ]\n",
@@ -148,7 +145,7 @@ void Graph::dumpGraph(void)
     for (auto it = e_it.first; it != e_it.second; ++it)
     {
         edge_t e = *it;
-        std::pair<int, int> indices = m_graph[e];
+        pair<int, int> indices = m_graph[e];
         
         vertex_t v1 = source(e, m_graph);
         vertex_t v2 = target(e, m_graph);

@@ -3,6 +3,9 @@
 #ifndef ALL_H
 #define ALL_H
 
+using namespace std;
+using namespace boost;
+
 /* non-class headers */
 #include "debug.h"
 
