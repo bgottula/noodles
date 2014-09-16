@@ -1,7 +1,5 @@
-#include "std.h"
+#include "all.h"
 #include "boost_test.h"
-#include "Graph.h"
-#include "Block.h"
 
 class MockBlock : public Block
 {

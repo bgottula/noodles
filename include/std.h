@@ -1,4 +1,4 @@
-/* precompiled header: only #include this from .cpp files, not from .h files */
+/* precompiled header */
 
 #ifndef STD_H
 #define STD_H

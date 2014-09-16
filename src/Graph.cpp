@@ -1,6 +1,4 @@
-#include "std.h"
-#include "debug.h"
-#include "Graph.h"
+#include "all.h"
 
 using namespace std;
 using namespace boost;

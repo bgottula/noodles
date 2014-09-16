@@ -1,3 +1,2 @@
-#include "std.h"
-#include "Noodle.h"
+#include "all.h"
 

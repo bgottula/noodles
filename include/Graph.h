@@ -1,9 +1,6 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include "Block.h"
-#include "Noodle.h"
-
 /* NoodleGraph is an adjacency list where the vertices are of type Block *, and
  * the edges are of type std::pair <int,int>; use std::vector for storage */
 typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,

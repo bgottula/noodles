@@ -1,7 +1,4 @@
-#include "std.h"
-#include "debug.h"
-#include "Block.h"
-#include "Graph.h"
+#include "all.h"
 
 using namespace std;
 

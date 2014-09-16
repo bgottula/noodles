@@ -1,4 +1,4 @@
-#include "std.h"
+#include "all.h"
 
 bool verbose = false;
 

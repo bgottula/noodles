@@ -1,5 +1,4 @@
-#include "std.h"
-#include "Block.h"
+#include "all.h"
 
 using namespace std;
 

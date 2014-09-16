@@ -1,8 +1,6 @@
 #ifndef NOODLE_H
 #define NOODLE_H
 
-#include "Block.h"
-
 class Noodle
 {
 	public:
