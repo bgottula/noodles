@@ -1,11 +1,11 @@
 #include "std.h"
 #include "debug.h"
-#include "Noodles.h"
+#include "Graph.h"
 
 using namespace std;
 using namespace boost;
 
-void Noodles::addNoodle(Noodle *n)
+void Graph::addNoodle(Noodle *n)
 {
     debug("addNoodle: [ %p(%d) -> %p(%d) ]\n",
         n->m_sourceBlock, n->m_sourceIndex, n->m_sinkBlock, n->m_sinkIndex);
@@ -105,7 +105,7 @@ void Noodles::addNoodle(Noodle *n)
     m_needCheck = true;
 }
 
-int Noodles::checkGraph(void)
+int Graph::checkGraph(void)
 {
     debug("checkGraph: checking graph validity\n");
     
@@ -130,7 +130,7 @@ int Noodles::checkGraph(void)
     return errors;
 }
 
-void Noodles::dumpGraph(void)
+void Graph::dumpGraph(void)
 {
     /* don't waste time accessing stuff that we won't print */
     if (!verbose) return;
@@ -162,7 +162,7 @@ void Noodles::dumpGraph(void)
     debug("=============================================================\n\n");
 }
 
-void Noodles::run(void)
+void Graph::run(void)
 {
     if (m_needCheck)
     {

@@ -1,7 +1,7 @@
 #include "std.h"
 #include "debug.h"
 #include "Block.h"
-#include "Noodles.h"
+#include "Graph.h"
 
 using namespace std;
 
@@ -107,26 +107,26 @@ int main(int argc, char **argv)
     Interpolator interp;
     Sink sink;
 
-    Noodles s;
+    Graph g;
 
     //Noodle n0(&source, &decim);
     //Noodle n1(&decim, &interp);
     //Noodle n2(&interp, &sink);
     
     /* do a dump of the graph's init state (0 vertices & 0 edges) */
-    s.dumpGraph();
+    g.dumpGraph();
 
-    //s.addNoodle(&n0);
-    //s.addNoodle(&n1);
-    //s.addNoodle(&n2);
+    //g.addNoodle(&n0);
+    //g.addNoodle(&n1);
+    //g.addNoodle(&n2);
     
-    s.addNoodle(new Noodle(&source, &sink, 0, 0));
-    s.addNoodle(new Noodle(&source, &sink, 1, 1));
-    s.addNoodle(new Noodle(&source, &sink, 1, 1));
+    g.addNoodle(new Noodle(&source, &sink, 0, 0));
+    g.addNoodle(new Noodle(&source, &sink, 1, 1));
+    g.addNoodle(new Noodle(&source, &sink, 1, 1));
     
     for (int i = 0; i < 10; i++)
     {
-        s.run();
+        g.run();
     }
     
     return 0;

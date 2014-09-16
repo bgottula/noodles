@@ -1,5 +1,5 @@
-#ifndef NOODLES_H
-#define NOODLES_H
+#ifndef GRAPH_H
+#define GRAPH_H
 
 #include "Block.h"
 #include "Noodle.h"
@@ -14,7 +14,7 @@ typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
 typedef boost::graph_traits <NoodleGraph>::vertex_descriptor vertex_t;
 typedef boost::graph_traits <NoodleGraph>::edge_descriptor edge_t;
 
-class Noodles
+class Graph
 {
     public:
         void addNoodle(Noodle *n);
