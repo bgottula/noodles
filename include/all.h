@@ -1,10 +1,7 @@
-/* all headers */
+/* all project headers */
 
 #ifndef ALL_H
 #define ALL_H
-
-/* precompiled header */
-#include "std.h"
 
 /* non-class headers */
 #include "debug.h"
