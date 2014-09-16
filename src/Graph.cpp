@@ -76,7 +76,7 @@ void Graph::addNoodle(Noodle *n)
             debug("- noodle [ %p(%d) -> %p(%d) ] is already in the graph!\n",
                 n->m_sourceBlock, n->m_sourceIndex,
                 n->m_sinkBlock, n->m_sinkIndex);
-            throw runtime_error("Exact duplicate noodles are not allowed");
+            throw DuplicateNoodleException();
         }
         else if (sink_match)
         {      
@@ -85,7 +85,7 @@ void Graph::addNoodle(Noodle *n)
                 n->m_sourceBlock, n->m_sourceIndex,
                 n->m_sinkBlock, n->m_sinkIndex,
                 m_graph[v1], indices.first, m_graph[v2], indices.second);
-            throw runtime_error("Inputs can only be connected to one output");
+            throw InputMultipleNoodleException();
         }
     }
     
@@ -112,7 +112,7 @@ int Graph::checkGraph(void)
     auto e_it = edges(m_graph);
     if (e_it.first == e_it.second)
     {
-        debug("- error: no noodles in graph!");
+        throw EmptyGraphException();
         ++errors;
     }
     
@@ -166,7 +166,7 @@ void Graph::run(void)
     {
         if (checkGraph() != 0)
         {
-            throw runtime_error("Graph validation failed");
+            throw GraphInvalidException();
         }
     }
     
