@@ -34,16 +34,6 @@ class EmptyGraphException : public runtime_error
 public: EmptyGraphException(void) :
 	runtime_error("Graphs must contain at least one noodle") {};
 };
-class DuplicateNoodleException : public runtime_error
-{
-public: DuplicateNoodleException(void) :
-	runtime_error("Exact duplicate noodles are not allowed") {};
-};
-class InputMultipleNoodleException : public runtime_error
-{
-public: InputMultipleNoodleException(void) :
-	runtime_error("Input ports cannot be connected to multiple noodles") {};
-};
 class GraphInvalidException : public runtime_error
 {
 public: GraphInvalidException(void) :

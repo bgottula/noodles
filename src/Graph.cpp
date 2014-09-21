@@ -53,45 +53,15 @@ void Graph::addNoodle(Endpoint from, Endpoint to)
 		m_graph[vert_to] = to.block;
 	}
 	
-	/* see if this noodle is already in the graph; also, prevent outputs from
-	 * having multiple inputs connected to them */
-	auto e_it = edges(m_graph);
-	for (auto it = e_it.first; it != e_it.second; ++it)
-	{
-		edge_t e = *it;
-		Noodle *n = m_graph[e];
-		
-		vertex_t v1 = source(e, m_graph);
-		vertex_t v2 = target(e, m_graph);
-		
-		Block *b1 = m_graph[v1];
-		Block *b2 = m_graph[v2];
-		
-		bool match_from = (b1 == from.block && n->m_fromPort == from.port);
-		bool match_to = (b2 == to.block && n->m_toPort == to.port);
-		
-		if (match_from && match_to)
-		{
-			debug("- noodle is already in the graph!\n"
-				"  %s[%s] -> %s[%s]\n",
-				from.block->name(), from.port,
-				to.block->name(), to.port);
-			throw DuplicateNoodleException();
-		}
-		else if (match_to)
-		{
-			debug("- noodles specify the exact same block and input index!\n"
-				"  %s[%s] -> %s[%s]\n"
-				"  %s[%s] -> %s[%s]\n",
-				from.block->name(), from.port, to.block->name(), to.port,
-				b1->name(), n->m_fromPort, b2->name(), n->m_toPort);
-			throw InputMultipleNoodleException();
-		}
-	}
+	debug("- attempting to connect noodle.\n");
 	
-	debug("- noodle is not in the graph; adding now.\n");
-	
+	/* the connect functions will ensure that this is not a duplicate noodle and
+	 * that inputs are not connected to multiple noodles */
 	Noodle *noodle = new Noodle(from.port, to.port);
+	from.block->outputs.connect(from.port, noodle);
+	to.block->inputs.connect(to.port, noodle);
+	
+	debug("- adding noodle to the graph.\n");
 	
 	edge_t edge;
 	bool result;
@@ -99,9 +69,6 @@ void Graph::addNoodle(Endpoint from, Endpoint to)
 	tie(edge, result) = add_edge(vert_from, vert_to, m_graph);
 	assert(result);
 	m_graph[edge] = noodle;
-	
-	from.block->outputs.connect(from.port, noodle);
-	to.block->inputs.connect(to.port, noodle);
 	
 	dumpGraph();
 	
