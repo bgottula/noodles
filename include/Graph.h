@@ -12,15 +12,15 @@ typedef graph_traits<NoodleGraph>::edge_descriptor edge_t;
 
 class Graph
 {
-    public:
-        void addNoodle(Noodle *n);
-        int checkGraph(void);
-        void dumpGraph(void);
-        void run(void);
-
-    private:
-    	bool m_needCheck = true;
-        NoodleGraph m_graph;
+	public:
+		void addNoodle(Noodle *n);
+		int checkGraph(void);
+		void dumpGraph(void);
+		void run(void);
+		
+	private:
+		bool m_needCheck = true;
+		NoodleGraph m_graph;
 };
 
 class EmptyGraphException : public runtime_error
