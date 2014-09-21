@@ -1,10 +1,11 @@
 #include "all.h"
 
-class Source : public SourceBlock
+class Source : public Block
 {
 public:
 	Source(void)
 	{
+		outputs.add("output");
 		reset();
 	}
 	
@@ -17,11 +18,12 @@ public:
 	{
 		for (int i = 0; i < m_outputsPerWork; i++)
 		{
-			m_output[0].push(m_counter++); 
+			outputs.put("output", m_counter++);
 		}
 	}
 	
 private:
+	int m_outputsPerWork = 1;
 	int m_counter;
 };
 
@@ -30,6 +32,8 @@ class Decimator : public Block
 public:
 	Decimator(void)
 	{
+		inputs.add("input");
+		outputs.add("output");
 		reset();
 	}
 	
@@ -40,13 +44,14 @@ public:
 	
 	void work(void)
 	{
-		while (!m_input[0].empty())
+		int sample;
+		
+		while (inputs.get("input", &sample))
 		{
 			if (m_counter % 2 == 0)
 			{
-				m_output[0].push(m_input[0].front());
+				outputs.put("output", sample);
 			}
-			m_input[0].pop();
 			m_counter++;
 		}
 	}
@@ -58,26 +63,45 @@ private:
 class Interpolator : public Block
 {
 public:
+	Interpolator(void)
+	{
+		inputs.add("input");
+		outputs.add("output");
+		reset();
+	}
+	
+	void reset(void) {}
+	
 	void work(void)
 	{
-		while (!m_input[0].empty())
+		int sample;
+		
+		while (inputs.get("input", &sample))
 		{
-			m_output[0].push(m_input[0].front());
-			m_output[0].push(m_input[0].front());
-			m_input[0].pop();
+			outputs.put("output", sample);
+			outputs.put("output", sample);
 		}
 	}
 };
 
-class Sink : public SinkBlock
+class Sink : public Block
 {
 public:
+	Sink(void)
+	{
+		inputs.add("input");
+		reset();
+	}
+	
+	void reset(void) {}
+	
 	void work(void)
 	{
-		while (!m_input[0].empty())
+		int sample;
+		
+		while (inputs.get("input", &sample))
 		{
-			cout << "Sink got " << m_input[0].front() << endl;
-			m_input[0].pop();
+			printf("Sink got %d\n", sample);
 		}
 	}
 };
@@ -104,20 +128,12 @@ int main(int argc, char **argv)
 	
 	Graph g;
 	
-	//Noodle n0(&source, &decim);
-	//Noodle n1(&decim, &interp);
-	//Noodle n2(&interp, &sink);
-	
 	/* do a dump of the graph's init state (0 vertices & 0 edges) */
 	g.dumpGraph();
 	
-	//g.addNoodle(&n0);
-	//g.addNoodle(&n1);
-	//g.addNoodle(&n2);
-	
-	g.addNoodle(new Noodle(&source, &sink, 0, 0));
-	g.addNoodle(new Noodle(&source, &sink, 1, 1));
-	g.addNoodle(new Noodle(&source, &sink, 1, 1));
+	g.addNoodle({&source, "output"}, {&decim, "input"});
+	g.addNoodle({&decim, "output"}, {&interp, "input"});
+	g.addNoodle({&interp, "output"}, {&sink, "input"});
 	
 	for (int i = 0; i < 10; i++)
 	{
