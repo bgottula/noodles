@@ -3,6 +3,7 @@
 
 class MockBlock : public Block
 {
+	void reset(void) {}
 	void work(void) {}
 };
 

@@ -12,10 +12,17 @@ class Noodle
 			m_sinkIndex(sinkIndex)
 		{}
 
+		void push(int sample) { m_queue.push(sample); }
+		int peek(void) { return m_queue.front(); }
+		int pop(void);
+
 		Block * const m_sourceBlock;
 		Block * const m_sinkBlock;
 		const int m_sourceIndex;
 		const int m_sinkIndex;
+
+	private:
+		queue<int> m_queue;
 };
 
 #endif

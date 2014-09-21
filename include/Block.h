@@ -5,16 +5,11 @@ class Block
 {
     public:
         Block(int numInputs = 1, int numOutputs = 1);
-        void reset(void);
+        virtual void reset(void) = 0;
         virtual void work(void) = 0;
-        void pushInput(int input, int inputIndex = 0);
-        bool outputEmpty(int outputIndex = 0);
-        int popOutput(int outputIndex = 0);
 
     protected:
-        queue<int> *m_input;
         const int m_numInputs;
-        queue<int> *m_output;
         const int m_numOutputs;
 };
 

@@ -176,7 +176,7 @@ void Graph::run(void)
         m_graph[v]->work();
     }
 
-
+#if 0
     /* Pass samples between blocks. As currently written, no attempt is made 
      * to handle blocks with multiple inputs or multiple outputs. */
     v_it = vertices(m_graph);
@@ -211,4 +211,5 @@ void Graph::run(void)
         }   
            
     }
+#endif
 }
