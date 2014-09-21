@@ -22,7 +22,7 @@ void Inputs::connect(const char *name, Noodle *noodle)
 	
 	int index = m_names[name];
 	
-	if (m_ports[index]->count > 0)
+	if (m_ports[index]->size() > 0)
 	{
 		throw InputMultipleNoodleException();
 	}
@@ -41,7 +41,7 @@ bool Inputs::get(const char *name, int *sample)
 	int index = m_names[name];
 	auto noodles = m_ports[index];
 	
-	if (noodles->count == 0)
+	if (noodles->size() == 0)
 	{
 		throw InputNotConnectedException();
 	}
@@ -82,7 +82,7 @@ void Outputs::put(const char *name, int sample)
 	int index = m_names[name];
 	auto noodles = m_ports[index];
 	
-	if (noodles->count == 0)
+	if (noodles->size() == 0)
 	{
 		throw OutputNotConnectedException();
 	}
