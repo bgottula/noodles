@@ -125,6 +125,7 @@ int main(int argc, char **argv)
 	Decimator decim;
 	Interpolator interp;
 	Sink sink;
+	Sink sink2;
 	
 	Graph g;
 	
@@ -134,6 +135,7 @@ int main(int argc, char **argv)
 	g.addNoodle({&source, "output"}, {&decim, "input"});
 	g.addNoodle({&decim, "output"}, {&interp, "input"});
 	g.addNoodle({&interp, "output"}, {&sink, "input"});
+	g.addNoodle({&source, "output"}, {&sink2, "input"});
 	
 	for (int i = 0; i < 10; i++)
 	{
