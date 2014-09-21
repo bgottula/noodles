@@ -112,7 +112,45 @@ void Graph::dumpGraph(void)
 	{
 		vertex_t v = *it;
 		Block *b = m_graph[v];
-		debug("+ block: %s(@%p)\n", b->name(), b);
+		debug("\n+ block: %s(@%p)\n", b->name(), b);
+		
+		auto names = b->inputs.debug_get_names();
+		for (auto in_it = names.first; in_it != names.second; ++in_it)
+		{
+			pair<const char *, int> name = *in_it;
+			debug("\n  - input: '%s'\n", name.first);
+			
+			auto input = b->inputs.debug_get_port(name.second);
+			for (auto n_it = input->cbegin(); n_it != input->cend(); ++n_it)
+			{
+				Noodle *n = *n_it;
+				
+				#warning how do we get the from-endpoint block ptr?
+				Block *b = nullptr;
+				
+				debug("    > connected to: %s[%s](@%p)\n",
+					b->name(), n->m_fromPort, b);
+			}
+		}
+		
+		names = b->outputs.debug_get_names();
+		for (auto out_it = names.first; out_it != names.second; ++out_it)
+		{
+			pair<const char *, int> name = *out_it;
+			debug("\n  - output: '%s'\n", name.first);
+			
+			auto output = b->outputs.debug_get_port(name.second);
+			for (auto n_it = output->cbegin(); n_it != output->cend(); ++n_it)
+			{
+				Noodle *n = *n_it;
+				
+				#warning how do we get the to-endpoint block ptr?
+				Block *b = nullptr;
+				
+				debug("    > connected to: %s[%s](@%p)\n",
+					b->name(), n->m_toPort, b);
+			}
+		}
 	}
 	
 	debug("\n%lu noodles\n", num_edges(m_graph));

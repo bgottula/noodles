@@ -21,6 +21,18 @@ void Ports::add(const char *name)
 	m_ports.push_back(new vector<Noodle *>());
 }
 
+pair<std::unordered_map<const char *, int>::const_iterator,
+	std::unordered_map<const char *, int>::const_iterator>
+	Ports::debug_get_names(void)
+{
+	return make_pair(m_names.cbegin(), m_names.cend());
+}
+
+const vector<Noodle *> *Ports::debug_get_port(int index)
+{
+	return m_ports.at(index);
+}
+
 void Inputs::connect(const char *name, Noodle *noodle)
 {
 	if (m_names.count(name) == 0)

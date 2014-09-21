@@ -15,6 +15,11 @@ public:
 	void add(const char *name);
 	virtual void connect(const char *name, Noodle *noodle) = 0;
 	
+	pair<std::unordered_map<const char *, int>::const_iterator,
+		std::unordered_map<const char *, int>::const_iterator>
+		debug_get_names(void);
+	const vector<Noodle *> *debug_get_port(int index);
+	
 protected:
 	std::unordered_map<const char *, int> m_names;
 	vector<vector<Noodle *> *> m_ports;
