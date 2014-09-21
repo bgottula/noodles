@@ -14,6 +14,8 @@
 
 /* STL */
 #include <queue>
+#include <unordered_map>
+#include <vector>
 
 /* Boost */
 #include <boost/graph/adjacency_list.hpp>
