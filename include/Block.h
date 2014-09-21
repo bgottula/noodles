@@ -1,52 +1,42 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
+#if 0
 struct Sample
 {
 	
 };
+#endif
 
-class Port
+class Ports
 {
 public:
-	Port(void);
+	void add(const char *name);
+	void connect(const char *name, Noodle *noodle);
+	
+protected:
+	std::unordered_map<const char *, int> m_names;
+	vector<Noodle *> m_noodles;
+};
+class Inputs : public Ports
+{
+public:
+	bool get(const char *name, int *sample);
+};
+class Outputs : public Ports
+{
+public:
+	void put(const char *name, int sample);
 };
 
 class Block
 {
 public:
-	Block(int numInputs = 1, int numOutputs = 1);
-	void reset(void);
+	virtual void reset(void) = 0;
 	virtual void work(void) = 0;
-	void pushInput(int input, int inputIndex = 0);
-	bool outputEmpty(int outputIndex = 0);
-	int popOutput(int outputIndex = 0);
 	
-protected:
-	const int m_numInputs;
-	const int m_numOutputs;
-	vector<Port *> m_inputs;
-	vector<Port *> m_outputs;
-};
-
-class SourceBlock : public Block
-{
-public:
-	SourceBlock(int numOutputs = 1, int outputsPerWork = 1)
-		: Block(0, numOutputs), m_outputsPerWork(outputsPerWork)
-	{
-		assert(outputsPerWork > 0);
-	}
-protected:
-	const int m_outputsPerWork;
-};
-
-class SinkBlock : public Block
-{
-public:
-	SinkBlock(int numInputs = 1)
-		: Block(numInputs, 0)
-	{}
+	Inputs inputs;
+	Outputs outputs;
 };
 
 #endif
