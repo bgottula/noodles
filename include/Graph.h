@@ -12,36 +12,36 @@ typedef graph_traits<NoodleGraph>::edge_descriptor edge_t;
 
 class Graph
 {
-	public:
-		void addNoodle(Noodle *n);
-		int checkGraph(void);
-		void dumpGraph(void);
-		void run(void);
-		
-	private:
-		bool m_needCheck = true;
-		NoodleGraph m_graph;
+public:
+	void addNoodle(Noodle *n);
+	int checkGraph(void);
+	void dumpGraph(void);
+	void run(void);
+	
+private:
+	bool m_needCheck = true;
+	NoodleGraph m_graph;
 };
 
 class EmptyGraphException : public runtime_error
 {
-	public: EmptyGraphException(void) :
-		runtime_error("Graphs must contain at least one noodle") {};
+public: EmptyGraphException(void) :
+	runtime_error("Graphs must contain at least one noodle") {};
 };
 class DuplicateNoodleException : public runtime_error
 {
-	public: DuplicateNoodleException(void) :
-		runtime_error("Exact duplicate noodles are not allowed") {};
+public: DuplicateNoodleException(void) :
+	runtime_error("Exact duplicate noodles are not allowed") {};
 };
 class InputMultipleNoodleException : public runtime_error
 {
-	public: InputMultipleNoodleException(void) :
-		runtime_error("Input ports cannot be connected to multiple noodles") {};
+public: InputMultipleNoodleException(void) :
+	runtime_error("Input ports cannot be connected to multiple noodles") {};
 };
 class GraphInvalidException : public runtime_error
 {
-	public: GraphInvalidException(void) :
-		runtime_error("Graph validation failed") {};
+public: GraphInvalidException(void) :
+	runtime_error("Graph validation failed") {};
 };
 
 #endif
