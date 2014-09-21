@@ -89,7 +89,6 @@ int Graph::checkGraph(void)
 	}
 	
 	// TODO: check for nodes with no edges (error) [is this possible?]
-	// TODO: warn about nodes with unconnected inputs or outputs
 	
 	if (errors == 0)
 	{
