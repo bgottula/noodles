@@ -155,40 +155,4 @@ void Graph::run(void)
 		debug("run: calling work on block %s(@%p)\n", b->name(), b);
 		b->work();
 	}
-	
-#if 0
-	/* Pass samples between blocks. As currently written, no attempt is made 
-	 * to handle blocks with multiple inputs or multiple outputs. */
-	v_it = vertices(m_graph);
-	for (auto it = v_it.first; it != v_it.second; ++it)
-	{
-		vertex_t v = *it;
-		debug("run: on block %p\n", m_graph[v]);
-		
-		/* iterator over all outbound edges */
-		auto e_it = out_edges(v, m_graph);
-		
-		/* This means there are no outbound edges */
-		if (e_it.first == e_it.second)
-		{
-			continue;
-		}
-		
-		while (!m_graph[v]->outputEmpty())
-		{
-			int sample = m_graph[v]->popOutput();
-			
-			/* Iterate over all outbound edges. */
-			for (auto ei = e_it.first; ei != e_it.second; ++ei)
-			{
-				vertex_t v_sink = target(*ei, m_graph);
-				auto conn = m_graph[*ei];
-				debug("-- pushing sample %d to block %p input %d"
-					" (but actually input 0 for now)\n", 
-					sample, m_graph[v_sink], conn.second);
-				m_graph[v_sink]->pushInput(sample/*, conn.second*/);
-			}
-		}
-	}
-#endif
 }
