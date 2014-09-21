@@ -42,4 +42,30 @@ public:
 	Outputs outputs;
 };
 
+class DuplicatePortException : public runtime_error
+{
+public: DuplicatePortException(void) :
+	runtime_error("Port names must be unique") {};
+};
+class NonexistentPortException : public runtime_error
+{
+public: NonexistentPortException(void) :
+	runtime_error("Port with that name has not been added") {};
+};
+class InputMultipleNoodleException : public runtime_error
+{
+public: InputMultipleNoodleException(void) :
+	runtime_error("Input ports cannot be connected to multiple noodles") {};
+};
+class InputNotConnectedException : public runtime_error
+{
+public: InputNotConnectedException(void) :
+	runtime_error("Input port is not connected to a noodle") {};
+};
+class OutputNotConnectedException : public runtime_error
+{
+public: OutputNotConnectedException(void) :
+	runtime_error("Output port is not connected to any noodles") {};
+};
+
 #endif

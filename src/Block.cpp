@@ -4,7 +4,10 @@ void Ports::add(const char *name)
 {
 	int index = m_ports.size();
 	
-	// TODO: prevent duplicate names
+	if (m_names.count(name) != 0)
+	{
+		throw DuplicatePortException();
+	}
 	
 	m_names.insert({name, index});
 	m_ports.push_back(new vector<Noodle *>());
@@ -12,49 +15,83 @@ void Ports::add(const char *name)
 
 void Inputs::connect(const char *name, Noodle *noodle)
 {
-	// TODO: ensure that an input with this name exists
+	if (m_names.count(name) == 0)
+	{
+		throw NonexistentPortException();
+	}
+	
 	int index = m_names[name];
 	
-	// TODO: ensure that the index isn't out of bounds
-	// TODO: ensure that this port isn't already connected
-	m_ports[index]->push_back(noodle);
+	if (m_ports[index]->count > 0)
+	{
+		throw InputMultipleNoodleException();
+	}
+	
+	/* use vector::at instead of vector::operator[] so we get bounds checking */
+	m_ports.at(index)->push_back(noodle);
 }
 
 bool Inputs::get(const char *name, int *sample)
 {
-	// TODO: ensure that an input with this name exists
+	if (m_names.count(name) == 0)
+	{
+		throw NonexistentPortException();
+	}
+	
 	int index = m_names[name];
 	auto noodles = m_ports[index];
 	
-	if ((*noodles)[0]->empty())
+	if (noodles->count == 0)
+	{
+		throw InputNotConnectedException();
+	}
+	
+	Noodle *n = noodles->at(0);
+	
+	if (n->empty())
 	{
 		return false;
 	}
 	else
 	{
-		*sample = (*noodles)[0]->pop();
+		*sample = n->pop();
 		return true;
 	}
 }
 
 void Outputs::connect(const char *name, Noodle *noodle)
 {
-	// TODO: ensure that an output with this name exists
+	if (m_names.count(name) == 0)
+	{
+		throw NonexistentPortException();
+	}
+	
 	int index = m_names[name];
 	
-	// TODO: ensure that the index isn't out of bounds
-	m_ports[index]->push_back(noodle);
+	/* use vector::at instead of vector::operator[] so we get bounds checking */
+	m_ports.at(index)->push_back(noodle);
 }
 
 void Outputs::put(const char *name, int sample)
 {
-	// TODO: ensure that an output with this name exists
+	if (m_names.count(name) == 0)
+	{
+		throw NonexistentPortException();
+	}
+	
 	int index = m_names[name];
 	auto noodles = m_ports[index];
 	
+	if (noodles->count == 0)
+	{
+		throw OutputNotConnectedException();
+	}
+	
 	for (auto it = noodles->begin(); it != noodles->end(); ++it)
 	{
-		(*it)->push(sample);
+		Noodle *n = *it;
+		
+		n->push(sample);
 	}
 }
 
