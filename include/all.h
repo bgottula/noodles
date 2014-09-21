@@ -10,8 +10,8 @@ using namespace boost;
 #include "debug.h"
 
 /* class headers (order matters) */
-#include "Block.h"
 #include "Noodle.h"
+#include "Block.h"
 #include "Graph.h"
 
 #endif
