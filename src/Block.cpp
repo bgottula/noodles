@@ -2,47 +2,60 @@
 
 void Ports::add(const char *name)
 {
-	int index = m_noodles.size();
+	int index = m_ports.size();
 	
 	// TODO: prevent duplicate names
 	
 	m_names.insert({name, index});
-	m_noodles.push_back(nullptr);
+	m_ports.push_back(new vector<Noodle *>());
 }
 
-void Ports::connect(const char *name, Noodle *noodle)
+void Inputs::connect(const char *name, Noodle *noodle)
 {
-	// TODO: ensure that an input/output with this name exists
+	// TODO: ensure that an input with this name exists
 	int index = m_names[name];
 	
 	// TODO: ensure that the index isn't out of bounds
-	m_noodles[index] = noodle;
-	
-	// TODO: ensure that this port isn't already connected (for inputs only)
+	// TODO: ensure that this port isn't already connected
+	m_ports[index]->push_back(noodle);
 }
 
 bool Inputs::get(const char *name, int *sample)
 {
 	// TODO: ensure that an input with this name exists
 	int index = m_names[name];
+	auto noodles = m_ports[index];
 	
-	if (m_noodles[index]->empty())
+	if ((*noodles)[0]->empty())
 	{
 		return false;
 	}
 	else
 	{
-		*sample = m_noodles[index]->pop();
+		*sample = (*noodles)[0]->pop();
 		return true;
 	}
+}
+
+void Outputs::connect(const char *name, Noodle *noodle)
+{
+	// TODO: ensure that an output with this name exists
+	int index = m_names[name];
+	
+	// TODO: ensure that the index isn't out of bounds
+	m_ports[index]->push_back(noodle);
 }
 
 void Outputs::put(const char *name, int sample)
 {
 	// TODO: ensure that an output with this name exists
 	int index = m_names[name];
+	auto noodles = m_ports[index];
 	
-	m_noodles[index]->push(sample);
+	for (auto it = noodles->begin(); it != noodles->end(); ++it)
+	{
+		(*it)->push(sample);
+	}
 }
 
 const char *Block::name(void)

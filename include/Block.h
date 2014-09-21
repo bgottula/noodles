@@ -12,20 +12,22 @@ class Ports
 {
 public:
 	void add(const char *name);
-	void connect(const char *name, Noodle *noodle);
+	virtual void connect(const char *name, Noodle *noodle) = 0;
 	
 protected:
 	std::unordered_map<const char *, int> m_names;
-	vector<Noodle *> m_noodles;
+	vector<vector<Noodle *> *> m_ports;
 };
 class Inputs : public Ports
 {
 public:
+	void connect(const char *name, Noodle *noodle);
 	bool get(const char *name, int *sample);
 };
 class Outputs : public Ports
 {
 public:
+	void connect(const char *name, Noodle *noodle);
 	void put(const char *name, int sample);
 };
 
