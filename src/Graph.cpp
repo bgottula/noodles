@@ -1,99 +1,107 @@
 #include "all.h"
 
-void Graph::addNoodle(Block *fromBlock, Block *toBlock, Noodle *n)
+void Graph::addNoodle(Endpoint from, Endpoint to)
 {
-	debug("addNoodle: [ %p(%d) -> %p(%d) ]\n",
-		n->m_sourceBlock, n->m_sourceIndex, n->m_sinkBlock, n->m_sinkIndex);
+	debug("addNoodle: %s[%s](@%p) -> %s[%s](@%p)\n",
+		from.block->name(), from.port, from.block,
+		to.block->name(), to.port, to.block);
 	
-	vertex_t vert_source, vert_sink;
-	bool found_source = false, found_sink = false;
+	vertex_t vert_from, vert_to;
+	bool found_from = false, found_to = false;
 	
-	/* see if the source or sink vertex (or both) is already in the graph */
+	/* see if the from or to vertex (or both) is already in the graph */
 	auto v_it = vertices(m_graph);
 	for (auto it = v_it.first; it != v_it.second; ++it)
 	{
 		vertex_t v = *it;
 		
-		if (m_graph[v] == n->m_sourceBlock)
+		if (m_graph[v] == from.block)
 		{
-			debug("- source block %p is already in the graph.\n",
-				n->m_sourceBlock);
+			debug("- block %s(@%p) is already in the graph.\n",
+				from.block->name(), from.block);
 			
-			vert_source = v;
-			found_source = true;
+			vert_from = v;
+			found_from = true;
 		}
-		if (m_graph[v] == n->m_sinkBlock)
+		if (m_graph[v] == to.block)
 		{
-			debug("- sink block %p is already in the graph.\n",
-				n->m_sinkBlock);
+			debug("- block %s(@%p) is already in the graph.\n",
+				to.block->name(), to.block);
 			
-			vert_sink = v;
-			found_sink = true;
+			vert_to = v;
+			found_to = true;
 		}
 		
-		if (found_source && found_sink) break;
+		if (found_from && found_to) break;
 	}
 	
-	/* if source and/or sink were not found, add new vertex(es) to the graph */
-	if (!found_source)
+	/* add new vertex(es) to the graph if necessary */
+	if (!found_from)
 	{
-		debug("- source block %p is not in the graph; adding now.\n",
-			n->m_sourceBlock);
+		debug("- block %s(@%p) is not in the graph; adding now.\n",
+				from.block->name(), from.block);
 		
-		vert_source = add_vertex(m_graph);
-		m_graph[vert_source] = n->m_sourceBlock;
+		vert_from = add_vertex(m_graph);
+		m_graph[vert_from] = from.block;
 	}
-	if (!found_sink)
+	if (!found_to)
 	{
-		debug("- sink block %p is not in the graph; adding now.\n",
-			n->m_sinkBlock);
+		debug("- block %s(@%p) is not in the graph; adding now.\n",
+				to.block->name(), to.block);
 		
-		vert_sink = add_vertex(m_graph);
-		m_graph[vert_sink] = n->m_sinkBlock;
+		vert_to = add_vertex(m_graph);
+		m_graph[vert_to] = to.block;
 	}
 	
-	/* see if the edge is already in the graph; also, prevent outputs from
+	/* see if this noodle is already in the graph; also, prevent outputs from
 	 * having multiple inputs connected to them */
 	auto e_it = edges(m_graph);
 	for (auto it = e_it.first; it != e_it.second; ++it)
 	{
 		edge_t e = *it;
-		pair<int, int> indices = m_graph[e];
+		Noodle *n = m_graph[e];
 		
 		vertex_t v1 = source(e, m_graph);
 		vertex_t v2 = target(e, m_graph);
 		
-		bool source_match = (m_graph[v1] == n->m_sourceBlock &&
-			indices.first == n->m_sourceIndex);
-		bool sink_match = (m_graph[v2] == n->m_sinkBlock &&
-			indices.second == n->m_sinkIndex);
+		Block *b1 = m_graph[v1];
+		Block *b2 = m_graph[v2];
 		
-		if (source_match && sink_match)
+		bool match_from = (b1 == from.block && n->m_fromPort == from.port);
+		bool match_to = (b2 == to.block && n->m_toPort == to.port);
+		
+		if (match_from && match_to)
 		{
-			debug("- noodle [ %p(%d) -> %p(%d) ] is already in the graph!\n",
-				n->m_sourceBlock, n->m_sourceIndex,
-				n->m_sinkBlock, n->m_sinkIndex);
+			debug("- noodle is already in the graph!\n"
+				"  %s[%s] -> %s[%s]\n",
+				from.block->name(), from.port,
+				to.block->name(), to.port);
 			throw DuplicateNoodleException();
 		}
-		else if (sink_match)
-		{      
-			debug("- noodles [ %p(%d) -> %p(%d) ] and [ %p(%d) -> %p(%d) ]\n"
-				"  specify the exact same sink block and input index!\n",
-				n->m_sourceBlock, n->m_sourceIndex,
-				n->m_sinkBlock, n->m_sinkIndex,
-				m_graph[v1], indices.first, m_graph[v2], indices.second);
+		else if (match_to)
+		{
+			debug("- noodles specify the exact same block and input index!\n"
+				"  %s[%s] -> %s[%s]\n"
+				"  %s[%s] -> %s[%s]\n",
+				from.block->name(), from.port, to.block->name(), to.port,
+				b1->name(), n->m_fromPort, b2->name(), n->m_toPort);
 			throw InputMultipleNoodleException();
 		}
 	}
 	
 	debug("- noodle is not in the graph; adding now.\n");
 	
+	Noodle *noodle = new Noodle(from.port, to.port);
+	
 	edge_t edge;
 	bool result;
 	
-	tie(edge, result) = add_edge(vert_source, vert_sink, m_graph);
+	tie(edge, result) = add_edge(vert_from, vert_to, m_graph);
 	assert(result);
-	m_graph[edge] = pair<int, int>(n->m_sourceIndex, n->m_sinkIndex);
+	m_graph[edge] = noodle;
+	
+	from.block->outputs.connect(from.port, noodle);
+	to.block->inputs.connect(to.port, noodle);
 	
 	dumpGraph();
 	
@@ -137,7 +145,8 @@ void Graph::dumpGraph(void)
 	for (auto it = v_it.first; it != v_it.second; ++it)
 	{
 		vertex_t v = *it;
-		debug(" + block: %p\n", m_graph[v]);
+		Block *b = m_graph[v];
+		debug("+ block: %s(@%p)\n", b->name(), b);
 	}
 	
 	debug("\n%lu noodles\n", num_edges(m_graph));
@@ -145,13 +154,17 @@ void Graph::dumpGraph(void)
 	for (auto it = e_it.first; it != e_it.second; ++it)
 	{
 		edge_t e = *it;
-		pair<int, int> indices = m_graph[e];
+		Noodle *n = m_graph[e];
 		
 		vertex_t v1 = source(e, m_graph);
 		vertex_t v2 = target(e, m_graph);
 		
-		debug(" + noodle: [ %p(%d) -> %p(%d) ]\n",
-			m_graph[v1], indices.first, m_graph[v2], indices.second);
+		Block *b1 = m_graph[v1];
+		Block *b2 = m_graph[v2];
+		
+		debug("+ noodle: %s[%s](@%p) -> %s[%s](@%p)\n",
+			b1->name(), n->m_fromPort, b1,
+			b2->name(), n->m_toPort, b2);
 	}
 	
 	debug("=============================================================\n\n");
@@ -172,10 +185,12 @@ void Graph::run(void)
 	for (auto it = v_it.first; it != v_it.second; ++it)
 	{
 		vertex_t v = *it;
-		debug("run: calling work on %p\n", m_graph[v]);
-		m_graph[v]->work();
+		Block *b = m_graph[v];
+		debug("run: calling work on block %s(@%p)\n", b->name(), b);
+		b->work();
 	}
 	
+#if 0
 	/* Pass samples between blocks. As currently written, no attempt is made 
 	 * to handle blocks with multiple inputs or multiple outputs. */
 	v_it = vertices(m_graph);
@@ -209,4 +224,5 @@ void Graph::run(void)
 			}
 		}
 	}
+#endif
 }
