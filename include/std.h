@@ -11,6 +11,10 @@
 /* C++ standard library */
 #include <iostream>
 #include <stdexcept>
+#include <typeinfo>
+
+/* exotic C++ ABI stuff */
+#include <cxxabi.h>
 
 /* STL */
 #include <queue>

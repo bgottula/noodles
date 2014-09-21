@@ -44,3 +44,15 @@ void Outputs::put(const char *name, int sample)
 	
 	m_noodles[index]->push(sample);
 }
+
+const char *Block::name(void)
+{
+	int status;
+	const char *name = abi::__cxa_demangle(typeid(*this).name(),
+		nullptr, nullptr, &status);
+	
+	assert(status == 0);
+	
+	/* this pointer should be free'd by the caller to avoid leaking memory */
+	return name;
+}

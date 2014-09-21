@@ -34,6 +34,7 @@ class Block
 public:
 	virtual void reset(void) = 0;
 	virtual void work(void) = 0;
+	const char *name(void);
 	
 	Inputs inputs;
 	Outputs outputs;
