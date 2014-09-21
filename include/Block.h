@@ -18,7 +18,6 @@ public:
 	pair<std::unordered_map<const char *, int>::const_iterator,
 		std::unordered_map<const char *, int>::const_iterator>
 		debug_get_names(void);
-	const vector<Noodle *> *debug_get_port(int index);
 	
 protected:
 	std::unordered_map<const char *, int> m_names;

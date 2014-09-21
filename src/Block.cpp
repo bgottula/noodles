@@ -28,11 +28,6 @@ pair<std::unordered_map<const char *, int>::const_iterator,
 	return make_pair(m_names.cbegin(), m_names.cend());
 }
 
-const vector<Noodle *> *Ports::debug_get_port(int index)
-{
-	return m_ports.at(index);
-}
-
 void Inputs::connect(const char *name, Noodle *noodle)
 {
 	if (m_names.count(name) == 0)
