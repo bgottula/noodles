@@ -1,5 +1,13 @@
 #include "all.h"
 
+Ports::~Ports(void)
+{
+	for (auto it = m_ports.begin(); it != m_ports.end(); ++it)
+	{
+		delete *it;
+	}
+}
+
 void Ports::add(const char *name)
 {
 	int index = m_ports.size();

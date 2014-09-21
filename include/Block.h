@@ -11,6 +11,7 @@ struct Sample
 class Ports
 {
 public:
+	~Ports(void);
 	void add(const char *name);
 	virtual void connect(const char *name, Noodle *noodle) = 0;
 	
