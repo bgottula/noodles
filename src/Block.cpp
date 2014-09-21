@@ -28,7 +28,7 @@ pair<std::unordered_map<const char *, int>::const_iterator,
 	return make_pair(m_names.cbegin(), m_names.cend());
 }
 
-void Inputs::connect(const char *name, Noodle *noodle)
+void InputPorts::connect(const char *name, Noodle *noodle)
 {
 	if (m_names.count(name) == 0)
 	{
@@ -46,7 +46,7 @@ void Inputs::connect(const char *name, Noodle *noodle)
 	m_ports.at(index)->push_back(noodle);
 }
 
-bool Inputs::get(const char *name, int *sample)
+bool InputPorts::get(const char *name, int *sample)
 {
 	if (m_names.count(name) == 0)
 	{
@@ -74,7 +74,7 @@ bool Inputs::get(const char *name, int *sample)
 	}
 }
 
-void Outputs::connect(const char *name, Noodle *noodle)
+void OutputPorts::connect(const char *name, Noodle *noodle)
 {
 	if (m_names.count(name) == 0)
 	{
@@ -87,7 +87,7 @@ void Outputs::connect(const char *name, Noodle *noodle)
 	m_ports.at(index)->push_back(noodle);
 }
 
-void Outputs::put(const char *name, int sample)
+void OutputPorts::put(const char *name, int sample)
 {
 	if (m_names.count(name) == 0)
 	{

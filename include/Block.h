@@ -23,13 +23,13 @@ protected:
 	std::unordered_map<const char *, int> m_names;
 	vector<vector<Noodle *> *> m_ports;
 };
-class Inputs : public Ports
+class InputPorts : public Ports
 {
 public:
 	void connect(const char *name, Noodle *noodle);
 	bool get(const char *name, int *sample);
 };
-class Outputs : public Ports
+class OutputPorts : public Ports
 {
 public:
 	void connect(const char *name, Noodle *noodle);
@@ -43,8 +43,8 @@ public:
 	virtual void work(void) = 0;
 	const char *name(void);
 	
-	Inputs inputs;
-	Outputs outputs;
+	InputPorts inputs;
+	OutputPorts outputs;
 };
 
 class DuplicatePortException : public runtime_error
