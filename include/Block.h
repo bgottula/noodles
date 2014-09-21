@@ -11,7 +11,6 @@ struct Sample
 class Ports
 {
 public:
-	~Ports(void);
 	void add(const char *name);
 	virtual void connect(const char *name, Noodle *noodle) = 0;
 	
@@ -21,7 +20,7 @@ public:
 	
 protected:
 	std::unordered_map<const char *, int> m_names;
-	vector<vector<Noodle *> *> m_ports;
+	vector<vector<Noodle *> > m_ports;
 };
 class InputPorts : public Ports
 {
