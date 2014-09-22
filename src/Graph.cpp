@@ -84,13 +84,13 @@ void Graph::dumpGraph(void)
 		"=================================\n\n");
 	
 	debug("# %lu blocks\n", m_blocks.size());
-	for (auto it = m_blocks.begin(); it != m_blocks.end(); ++it)
+	for (auto it = m_blocks.cbegin(); it != m_blocks.cend(); ++it)
 	{
 		Block *b = *it;
 		debug("\n  + block %s(%p)\n", b->name(), b);
 		
-		auto in_begin = b->inputs.m_names.begin();
-		auto in_end = b->inputs.m_names.end();
+		auto in_begin = b->inputs.m_names.cbegin();
+		auto in_end = b->inputs.m_names.cend();
 		for (auto in_it = in_begin; in_it != in_end; ++in_it)
 		{
 			pair<const char *, int> name = *in_it;
@@ -101,8 +101,8 @@ void Graph::dumpGraph(void)
 				name.first, num_noodles, (num_noodles == 1 ? "" : "s"));
 		}
 		
-		auto out_begin = b->outputs.m_names.begin();
-		auto out_end = b->outputs.m_names.end();
+		auto out_begin = b->outputs.m_names.cbegin();
+		auto out_end = b->outputs.m_names.cend();
 		for (auto out_it = out_begin; out_it != out_end; ++out_it)
 		{
 			pair<const char *, int> name = *out_it;
@@ -115,7 +115,7 @@ void Graph::dumpGraph(void)
 	}
 	
 	debug("\n\n# %lu noodles\n", m_noodles.size());
-	for (auto it = m_noodles.begin(); it != m_noodles.end(); ++it)
+	for (auto it = m_noodles.cbegin(); it != m_noodles.cend(); ++it)
 	{
 		Noodle *n = *it;
 		
