@@ -43,7 +43,12 @@ public:
 	virtual void reset(void) = 0;
 	virtual void work(void) = 0;
 	const char *name(void);
+	void connect_input(const char *name, Noodle *noodle)
+		{ inputs.connect(name, noodle); }
+	void connect_output(const char *name, Noodle *noodle)
+		{ outputs.connect(name, noodle); }
 	
+protected:
 	InputPorts inputs;
 	OutputPorts outputs;
 };

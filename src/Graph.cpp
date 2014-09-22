@@ -39,8 +39,8 @@ void Graph::addNoodle(Endpoint from, Endpoint to)
 	/* the connect functions will ensure that this is not a duplicate noodle and
 	 * that inputs are not connected to multiple noodles */
 	Noodle *noodle = new Noodle(from, to);
-	from.block->outputs.connect(from.port, noodle);
-	to.block->inputs.connect(to.port, noodle);
+	from.block->connect_output(from.port, noodle);
+	to.block->connect_input(to.port, noodle);
 	
 	debug("- adding noodle to the graph.\n");
 	
