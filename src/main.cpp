@@ -101,7 +101,7 @@ public:
 		
 		while (inputs.get("input", &sample))
 		{
-			printf("Sink(@%p) got %d\n", this, sample);
+			printf("Sink(%p) got %d\n", this, sample);
 		}
 	}
 };
