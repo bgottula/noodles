@@ -4,7 +4,7 @@
 #define ALL_H
 
 using namespace std;
-using namespace boost;
+//using namespace boost;
 
 /* non-class headers */
 #include "debug.h"

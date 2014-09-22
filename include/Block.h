@@ -14,20 +14,22 @@ public:
 	void add(const char *name);
 	virtual void connect(const char *name, Noodle *noodle) = 0;
 	
-	pair<std::unordered_map<const char *, int>::const_iterator,
-		std::unordered_map<const char *, int>::const_iterator>
+	pair<unordered_map<const char *, int>::const_iterator,
+		unordered_map<const char *, int>::const_iterator>
 		debug_get_names(void);
 	
 protected:
-	std::unordered_map<const char *, int> m_names;
+	unordered_map<const char *, int> m_names;
 	vector<vector<Noodle *> > m_ports;
 };
+
 class InputPorts : public Ports
 {
 public:
 	void connect(const char *name, Noodle *noodle);
 	bool get(const char *name, int *sample);
 };
+
 class OutputPorts : public Ports
 {
 public:

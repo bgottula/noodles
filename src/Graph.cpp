@@ -6,69 +6,46 @@ void Graph::addNoodle(Endpoint from, Endpoint to)
 		from.block->name(), from.port, from.block,
 		to.block->name(), to.port, to.block);
 	
-	vertex_t vert_from, vert_to;
-	bool found_from = false, found_to = false;
-	
-	/* see if the from or to vertex (or both) is already in the graph */
-	auto v_it = vertices(m_graph);
-	for (auto it = v_it.first; it != v_it.second; ++it)
-	{
-		vertex_t v = *it;
-		
-		if (m_graph[v] == from.block)
-		{
-			debug("- block %s(@%p) is already in the graph.\n",
-				from.block->name(), from.block);
-			
-			vert_from = v;
-			found_from = true;
-		}
-		if (m_graph[v] == to.block)
-		{
-			debug("- block %s(@%p) is already in the graph.\n",
-				to.block->name(), to.block);
-			
-			vert_to = v;
-			found_to = true;
-		}
-		
-		if (found_from && found_to) break;
-	}
-	
-	/* add new vertex(es) to the graph if necessary */
-	if (!found_from)
+	if (m_blocks.find(from.block) == m_blocks.end())
 	{
 		debug("- block %s(@%p) is not in the graph; adding now.\n",
-				from.block->name(), from.block);
+			from.block->name(), from.block);
 		
-		vert_from = add_vertex(m_graph);
-		m_graph[vert_from] = from.block;
+		bool result = m_blocks.insert(from.block).second;
+		assert(result);
 	}
-	if (!found_to)
+	else
+	{
+		debug("- block %s(@%p) is already in the graph.\n",
+			from.block->name(), from.block);
+	}
+	
+	if (m_blocks.find(to.block) == m_blocks.end())
 	{
 		debug("- block %s(@%p) is not in the graph; adding now.\n",
-				to.block->name(), to.block);
+			to.block->name(), to.block);
 		
-		vert_to = add_vertex(m_graph);
-		m_graph[vert_to] = to.block;
+		bool result = m_blocks.insert(to.block).second;
+		assert(result);
+	}
+	else
+	{
+		debug("- block %s(@%p) is already in the graph.\n",
+			to.block->name(), to.block);
 	}
 	
 	debug("- attempting to connect noodle.\n");
 	
 	/* the connect functions will ensure that this is not a duplicate noodle and
 	 * that inputs are not connected to multiple noodles */
-	Noodle *noodle = new Noodle(from.port, to.port);
+	Noodle *noodle = new Noodle(from, to);
 	from.block->outputs.connect(from.port, noodle);
 	to.block->inputs.connect(to.port, noodle);
 	
 	debug("- adding noodle to the graph.\n");
 	
-	edge_t edge;
-	bool result;
-	
-	tie(edge, result) = add_edge(vert_from, vert_to, m_graph);
+	bool result = m_noodles.insert(noodle).second;
 	assert(result);
-	m_graph[edge] = noodle;
 	
 	dumpGraph();
 	
@@ -81,8 +58,7 @@ int Graph::checkGraph(void)
 	
 	int errors = 0;
 	
-	auto e_it = edges(m_graph);
-	if (e_it.first == e_it.second)
+	if (m_noodles.empty())
 	{
 		throw EmptyGraphException();
 		++errors;
@@ -101,17 +77,16 @@ int Graph::checkGraph(void)
 
 void Graph::dumpGraph(void)
 {
+#if 0
 	/* don't waste time accessing stuff that we won't print */
 	if (!verbose) return;
 	
 	debug("\n======================= graph summary =======================\n");
 	
-	debug("%lu blocks\n", num_vertices(m_graph));
-	auto v_it = vertices(m_graph);
-	for (auto it = v_it.first; it != v_it.second; ++it)
+	debug("%lu blocks\n", m_blocks.size());
+	for (auto it = m_blocks.begin(); it != m_blocks.end(); ++it)
 	{
-		vertex_t v = *it;
-		Block *b = m_graph[v];
+		Block *b = *it;
 		debug("\n+ block: %s(@%p)\n", b->name(), b);
 		
 		auto names = b->inputs.debug_get_names();
@@ -129,25 +104,18 @@ void Graph::dumpGraph(void)
 		}
 	}
 	
-	debug("\n%lu noodles\n", num_edges(m_graph));
-	auto e_it = edges(m_graph);
-	for (auto it = e_it.first; it != e_it.second; ++it)
+	debug("\n%lu noodles\n", m_noodles.size());
+	for (auto it = m_noodles.begin(); it != m_noodles.end(); ++it)
 	{
-		edge_t e = *it;
-		Noodle *n = m_graph[e];
-		
-		vertex_t v1 = source(e, m_graph);
-		vertex_t v2 = target(e, m_graph);
-		
-		Block *b1 = m_graph[v1];
-		Block *b2 = m_graph[v2];
+		Noodle *n = *it;
 		
 		debug("+ noodle: %s[%s](@%p) -> %s[%s](@%p)\n",
-			b1->name(), n->m_fromPort, b1,
-			b2->name(), n->m_toPort, b2);
+			n->m_from.block->name(), n->m_from.port, n->m_from.block,
+			n->m_to.block->name(), n->m_to.port, n->m_to.block);
 	}
 	
 	debug("=============================================================\n\n");
+#endif
 }
 
 void Graph::run(void)
@@ -160,12 +128,10 @@ void Graph::run(void)
 		}
 	}
 	
-	/* Call work on all blocks */
-	auto v_it = vertices(m_graph);
-	for (auto it = v_it.first; it != v_it.second; ++it)
+	/* call work on all blocks */
+	for (auto it = m_blocks.begin(); it != m_blocks.end(); ++it)
 	{
-		vertex_t v = *it;
-		Block *b = m_graph[v];
+		Block *b = *it;
 		debug("run: calling work on block %s(@%p)\n", b->name(), b);
 		b->work();
 	}

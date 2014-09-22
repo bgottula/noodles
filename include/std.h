@@ -7,6 +7,8 @@
 #include <cassert>
 #include <cstdarg>
 #include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 /* C++ standard library */
 #include <iostream>
@@ -20,9 +22,9 @@
 #include <list>
 #include <queue>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 /* Boost */
-#include <boost/graph/adjacency_list.hpp>
 
 #endif

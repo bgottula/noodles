@@ -13,8 +13,8 @@ void Ports::add(const char *name)
 	m_ports.push_back(vector<Noodle *>());
 }
 
-pair<std::unordered_map<const char *, int>::const_iterator,
-	std::unordered_map<const char *, int>::const_iterator>
+pair<unordered_map<const char *, int>::const_iterator,
+	unordered_map<const char *, int>::const_iterator>
 	Ports::debug_get_names(void)
 {
 	return make_pair(m_names.cbegin(), m_names.cend());
