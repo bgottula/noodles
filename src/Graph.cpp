@@ -77,7 +77,6 @@ int Graph::checkGraph(void)
 
 void Graph::dumpGraph(void)
 {
-#if 0
 	/* don't waste time accessing stuff that we won't print */
 	if (!verbose) return;
 	
@@ -89,14 +88,14 @@ void Graph::dumpGraph(void)
 		Block *b = *it;
 		debug("\n+ block: %s(@%p)\n", b->name(), b);
 		
-		auto names = b->inputs.debug_get_names();
+		auto names = b->debug_get_input_names();
 		for (auto in_it = names.first; in_it != names.second; ++in_it)
 		{
 			pair<const char *, int> name = *in_it;
 			debug("  >> input:  \"%s\"\n", name.first);
 		}
 		
-		names = b->outputs.debug_get_names();
+		names = b->debug_get_output_names();
 		for (auto out_it = names.first; out_it != names.second; ++out_it)
 		{
 			pair<const char *, int> name = *out_it;
@@ -109,13 +108,15 @@ void Graph::dumpGraph(void)
 	{
 		Noodle *n = *it;
 		
+		const Endpoint *from = n->debug_get_from_endpoint();
+		const Endpoint *to = n->debug_get_to_endpoint();
+		
 		debug("+ noodle: %s[%s](@%p) -> %s[%s](@%p)\n",
-			n->m_from.block->name(), n->m_from.port, n->m_from.block,
-			n->m_to.block->name(), n->m_to.port, n->m_to.block);
+			from->block->name(), from->port, from->block,
+			to->block->name(), to->port, to->block);
 	}
 	
 	debug("=============================================================\n\n");
-#endif
 }
 
 void Graph::run(void)

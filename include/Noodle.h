@@ -22,6 +22,9 @@ public:
 	int peek(void) { return m_queue.front(); }
 	int pop(void);
 	
+	const Endpoint *debug_get_from_endpoint(void) { return &m_from; };
+	const Endpoint *debug_get_to_endpoint(void) { return &m_to; };
+	
 private:
 	Endpoint m_from;
 	Endpoint m_to;

@@ -43,10 +43,18 @@ public:
 	virtual void reset(void) = 0;
 	virtual void work(void) = 0;
 	const char *name(void);
+	
 	void connect_input(const char *name, Noodle *noodle)
 		{ inputs.connect(name, noodle); }
 	void connect_output(const char *name, Noodle *noodle)
 		{ outputs.connect(name, noodle); }
+	
+	pair<unordered_map<const char *, int>::const_iterator,
+		unordered_map<const char *, int>::const_iterator>
+		debug_get_input_names(void) { return inputs.debug_get_names(); };
+	pair<unordered_map<const char *, int>::const_iterator,
+		unordered_map<const char *, int>::const_iterator>
+		debug_get_output_names(void) { return outputs.debug_get_names(); };
 	
 protected:
 	InputPorts inputs;
