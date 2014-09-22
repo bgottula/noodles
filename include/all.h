@@ -13,6 +13,7 @@ using namespace std;
 #include "Endpoint.h"
 #include "Graph.h"
 #include "Noodle.h"
+#include "Ports.h"
 #include "Block.h"
 
 #endif
