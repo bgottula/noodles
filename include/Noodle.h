@@ -11,7 +11,6 @@ public:
 	
 	bool empty(void) { return m_queue.empty(); }
 	void push(int sample) { m_queue.push(sample); }
-	int peek(void) { return m_queue.front(); }
 	int pop(void);
 	
 private:
