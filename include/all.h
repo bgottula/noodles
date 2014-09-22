@@ -10,8 +10,9 @@ using namespace std;
 #include "debug.h"
 
 /* class headers (order matters) */
+#include "Endpoint.h"
+#include "Graph.h"
 #include "Noodle.h"
 #include "Block.h"
-#include "Graph.h"
 
 #endif

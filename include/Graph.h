@@ -1,6 +1,10 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+/* forward declarations so we can declare class pointers here */
+class Block;
+class Noodle;
+
 class Graph
 {
 public:
