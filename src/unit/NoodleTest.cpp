@@ -39,4 +39,7 @@ BOOST_AUTO_TEST_CASE( noodleTest )
 	{
 		BOOST_CHECK_EQUAL(n.pop(), samples[i]);
 	}
+	
+	/* should be empty yet again */
+	BOOST_CHECK(n.empty());
 }
