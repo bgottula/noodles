@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_CASE( noodleTest )
 	MockBlock b1, b2;
 	
 	Endpoint from = {&b1, "out"};
-	Endpoint to   = {&b1, "in"};
+	Endpoint to   = {&b2, "in"};
 	
 	Noodle n(from, to);
 	
