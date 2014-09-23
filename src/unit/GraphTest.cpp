@@ -8,6 +8,7 @@ class MockBlock : public Block
 
 BOOST_AUTO_TEST_CASE( graphValidityTests )
 {
+#if 0
 	MockBlock block1;
 	MockBlock block2;
 	MockBlock block3;
@@ -35,4 +36,5 @@ BOOST_AUTO_TEST_CASE( graphValidityTests )
 	dut.addNoodle(&n3);
 	dut.addNoodle(&n4);
 	BOOST_CHECK_EQUAL(dut.checkGraph(), 0);
+#endif
 }
