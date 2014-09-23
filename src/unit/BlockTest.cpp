@@ -9,4 +9,5 @@ class MockBlock : public Block
 
 BOOST_AUTO_TEST_CASE( blockTest )
 {
+	BOOST_CHECK(0);
 }

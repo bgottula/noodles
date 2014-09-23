@@ -9,6 +9,7 @@ class MockBlock : public Block
 
 BOOST_AUTO_TEST_CASE( noodleTest )
 {
+	BOOST_CHECK(0);
 #if 0
 	MockBlock b1;
 	MockBlock b2;

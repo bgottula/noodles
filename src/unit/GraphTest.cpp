@@ -8,6 +8,7 @@ class MockBlock : public Block
 
 BOOST_AUTO_TEST_CASE( graphValidityTests )
 {
+	BOOST_CHECK(0);
 #if 0
 	MockBlock block1;
 	MockBlock block2;
