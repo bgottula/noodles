@@ -9,21 +9,34 @@ class MockBlock : public Block
 
 BOOST_AUTO_TEST_CASE( noodleTest )
 {
-	BOOST_CHECK(0);
-#if 0
-	MockBlock b1;
-	MockBlock b2;
+	MockBlock b1, b2;
 	
-	Noodle n1(&b1, &b2);
-	BOOST_CHECK_EQUAL(n1.m_sourceBlock, &b1);
-	BOOST_CHECK_EQUAL(n1.m_sinkBlock, &b2);
-	BOOST_CHECK_EQUAL(n1.m_sourceIndex, 0);
-	BOOST_CHECK_EQUAL(n1.m_sinkIndex, 0);
+	Endpoint from = {&b1, "out"};
+	Endpoint to   = {&b1, "in"};
 	
-	Noodle n2(&b1, &b2, 1, 2);
-	BOOST_CHECK_EQUAL(n2.m_sourceBlock, &b1);
-	BOOST_CHECK_EQUAL(n2.m_sinkBlock, &b2);
-	BOOST_CHECK_EQUAL(n2.m_sourceIndex, 1);
-	BOOST_CHECK_EQUAL(n2.m_sinkIndex, 2);
-#endif
+	Noodle n(from, to);
+	
+	/* should be empty */
+	BOOST_CHECK(n.empty());
+	
+	/* should not be empty */
+	n.push(0);
+	BOOST_CHECK(!n.empty());
+	
+	/* should be empty once again */
+	BOOST_CHECK_EQUAL(n.pop(), 0);
+	BOOST_CHECK(n.empty());
+	
+	/* what goes in one end should come out the other */
+	srand(time(nullptr));
+	int samples[100];
+	for (size_t i = 0; i < 100; ++i)
+	{
+		samples[i] = rand();
+		n.push(samples[i]);
+	}
+	for (size_t i = 0; i < 100; ++i)
+	{
+		BOOST_CHECK_EQUAL(n.pop(), samples[i]);
+	}
 }
