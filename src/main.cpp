@@ -106,6 +106,19 @@ public:
 	}
 };
 
+/* HOWTO: implement block work functions
+ * 1. figure out if you have the proper inputs to be able to do work
+ * 2. figure out if you could store the output in the output queue
+ * 3. if conditions (1) or (2) are false, STOP; don't touch inputs or outputs!
+ * 4. pop input(s)
+ * 5. do work
+ * 6. push output(s)
+ * 
+ * TODO: break the current work() function into smaller pieces (e.g.
+ * can_do_work, do_one_work, whatever) so that it's harder to accidentally get 
+ * this procedure wrong
+ */
+
 int main(int argc, char **argv)
 {
 	for (int i = 1; i < argc; ++i)
