@@ -30,7 +30,7 @@ public:
 	
 private:
 	/* sample buffer queue */
-	queue<int> m_queue;
+	deque<int> m_queue;
 	/* mutex to prevent simultaneous queue modification by multiple threads */
 	mutex m_mutex;
 	
