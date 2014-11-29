@@ -153,8 +153,6 @@ void Graph::dumpGraph(void)
 		
 		debug(" NOODLE %s: %s >>> %s", str_noodle(n),
 			str_endpoint(&n->m_from, false), str_endpoint(&n->m_to, true));
-		/*debug(" NOODLE %s\n   from %s\n     to %s", str_noodle(n),
-			str_endpoint(&n->m_from), str_endpoint(&n->m_to));*/
 		
 		if (n->is_qnoodle())
 		{
