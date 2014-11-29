@@ -97,7 +97,7 @@ void Graph::dumpGraph(void)
 	/* don't waste time accessing stuff that we won't print */
 	if (!verbose) return;
 	
-	debug(AT_BLD AT_ULI "GRAPH SNAPSHOT #%d\n" AT_RST, ++count);
+	debug(AT_BLD AT_ULI "\nGRAPH SNAPSHOT #%d\n" AT_RST, ++count);
 	
 	for (auto it = m_blocks.cbegin(); it != m_blocks.cend(); ++it)
 	{
