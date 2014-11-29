@@ -10,9 +10,11 @@ public:
 	Noodle(Endpoint from, Endpoint to)
 		: m_from(from), m_to(to) {};
 	
-	virtual size_t max(void) = 0;
-	virtual size_t count(void) = 0;
-	virtual size_t free(void) = 0;
+	virtual bool is_qnoodle(void) const = 0;
+	
+	virtual size_t max(void) const = 0;
+	virtual size_t count(void) const = 0;
+	virtual size_t free(void) const = 0;
 	
 	virtual void push(int sample) = 0;
 	virtual int pop(void) = 0;
@@ -37,12 +39,14 @@ public:
 	QNoodle(size_t max, Endpoint from, Endpoint to)
 		: Noodle(from, to), m_max(max) {};
 	
+	bool is_qnoodle(void) const { return true; }
+	
 	/* get queue's max allowed sample count */
-	size_t max(void) { return m_max; }
+	size_t max(void) const { return m_max; }
 	/* get queue's sample count */
-	size_t count(void) { return m_queue.size(); }
+	size_t count(void) const { return m_queue.size(); }
 	/* get queue's free space count */
-	size_t free(void) { return m_max - m_queue.size(); }
+	size_t free(void) const { return m_max - m_queue.size(); }
 	
 	/* get a reference to the queue mutex */
 	mutex& mutex_ref(void) { return m_mutex; }
@@ -76,12 +80,14 @@ public:
 	RNoodle(int init, Endpoint from, Endpoint to)
 		: Noodle(from, to), m_reg(init) {};
 	
+	bool is_qnoodle(void) const { return false; }
+	
 	/* register can always hold just one sample */
-	size_t max(void) { return 1; }
+	size_t max(void) const { return 1; }
 	/* register can always furnish one get */
-	size_t count(void) { return 1; }
+	size_t count(void) const { return 1; }
 	/* register can always furnish one put */
-	size_t free(void) { return 1; }
+	size_t free(void) const { return 1; }
 	
 	/* write to the sample register */
 	void push(int sample) { m_reg = sample; }
