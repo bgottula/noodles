@@ -11,6 +11,7 @@ public:
 	void addNoodle(size_t queue_max, Endpoint from, Endpoint to);
 	int checkGraph(void);
 	void dumpGraph(void);
+	void dumpNoodles(void);
 	void run(void);
 	
 private:

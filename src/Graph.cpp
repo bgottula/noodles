@@ -129,6 +129,35 @@ void Graph::dumpGraph(void)
 		"==============\n\n");
 }
 
+void Graph::dumpNoodles(void)
+{
+	/* don't waste time accessing stuff that we won't print */
+	if (!verbose) return;
+	
+	debug("=================================== noodles "
+		"====================================");
+	
+	for (auto it = m_noodles.cbegin(); it != m_noodles.cend(); ++it)
+	{
+		Noodle *n = *it;
+		
+		debug("\nnoodle(%p)\n  %s[%s](%p) >>>{%zu} %s[%s](%p)\n    {", n,
+			n->m_from.block->name(), n->m_from.port, n->m_from.block, n->m_max,
+			n->m_to.block->name(), n->m_to.port, n->m_to.block);
+		
+		deque<int>& q = n->m_queue;
+		for (auto q_it = q.cbegin(); q_it != q.cend(); ++q_it)
+		{
+			debug(" %d", *q_it);
+		}
+		
+		debug(" }");
+	}
+	
+	debug("\n=================================================================="
+		"==============\n\n");
+}
+
 void Graph::run(void)
 {
 	if (m_needCheck)
@@ -145,5 +174,7 @@ void Graph::run(void)
 		Block *b = *it;
 		debug("run: calling work on block %s(%p)\n", b->name(), b);
 		b->work();
+		
+		dumpNoodles();
 	}
 }
