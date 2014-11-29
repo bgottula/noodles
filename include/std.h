@@ -5,6 +5,7 @@
 
 /* C standard library */
 #include <cassert>
+#include <cinttypes>
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
