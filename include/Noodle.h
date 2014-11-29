@@ -98,7 +98,7 @@ public:
 	
 private:
 	/* register containing the current sample value */
-	int m_reg;
+	atomic_int m_reg;
 };
 
 #endif

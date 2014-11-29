@@ -170,7 +170,7 @@ void Graph::dumpGraph(void)
 		else
 		{
 			auto r = dynamic_cast<RNoodle *>(n);
-			debug("\n    reg " AT_BLD "%d" AT_RST, r->m_reg);
+			debug("\n    reg " AT_BLD "%d" AT_RST, r->m_reg.load());
 		}
 		
 		debug("\n\n");
