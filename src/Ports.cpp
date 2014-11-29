@@ -51,7 +51,7 @@ void OutputPorts::connect(const char *name, Noodle *noodle)
 	p->push_back(noodle);
 }
 
-size_t InputPorts::please(const char *name)
+size_t InputPorts::available(const char *name)
 {
 	auto p = find_port_check(name);
 	auto n = (*p)[0];
@@ -59,7 +59,7 @@ size_t InputPorts::please(const char *name)
 	return n->count();
 }
 
-size_t OutputPorts::please(const char *name)
+size_t OutputPorts::available(const char *name)
 {
 	auto p = find_port_check(name);
 	
@@ -88,7 +88,7 @@ void InputPorts::get_one(const char *name, int *sample)
 		n->lock(mgr);
 		
 		if (n->max() < 1) throw InputGetImpossibleException();
-		if (n->count() < 1) throw InputGetUnsuccessfulException();
+		if (n->count() < 1) throw InputGetUnavailableException();
 		*sample = n->pop();
 	}
 }
@@ -117,7 +117,7 @@ void OutputPorts::put_one(const char *name, int sample)
 			n->lock(mgr);
 			
 			if (n->max() < 1) throw OutputPutImpossibleException();
-			if (n->free() < 1) throw OutputPutUnsuccessfulException();
+			if (n->free() < 1) throw OutputPutUnavailableException();
 			n->push(sample);
 		}
 	}
@@ -138,7 +138,7 @@ void OutputPorts::put_repeat(const char *name, size_t repeat, int sample)
 			n->lock(mgr);
 			
 			if (n->max() < repeat) throw OutputPutImpossibleException();
-			if (n->free() < repeat) throw OutputPutUnsuccessfulException();
+			if (n->free() < repeat) throw OutputPutUnavailableException();
 			
 			while (repeat-- > 0)
 			{

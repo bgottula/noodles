@@ -13,7 +13,7 @@ public:
 	/* associate a named port with a noodle */
 	virtual void connect(const char *name, Noodle *noodle) = 0;
 	
-	virtual size_t please(const char *name) = 0;
+	virtual size_t available(const char *name) = 0;
 	
 protected:
 	/* get a pointer to the port with the given name */
@@ -35,7 +35,7 @@ public:
 	
 	/* return the number of samples waiting in the given input port;
 	 * this value is guaranteed not to decrease unless get() is called */
-	size_t please(const char *name);
+	size_t available(const char *name);
 	
 	/* get one sample from the input port queue */
 	void get_one(const char *name, int *sample);
@@ -59,7 +59,7 @@ public:
 	
 	/* return the number of samples that could fit in the given output port;
 	 * this value is guaranteed not to decrease unless put() is called */
-	size_t please(const char *name);
+	size_t available(const char *name);
 	
 	/* put one sample onto the output port queue */
 	void put_one(const char *name, int sample);
@@ -84,7 +84,8 @@ public: DuplicatePortException(void) :
 	runtime_error("Port names must be unique") {};
 };
 
-/* thrown in Ports::connect, Ports::please, InputPorts::get, OutputPorts::put */
+/* thrown in Ports::connect, Ports::available,
+ * InputPorts::get, OutputPorts::put */
 class NonexistentPortException : public runtime_error
 {
 public: NonexistentPortException(void) :
@@ -110,9 +111,9 @@ public: InputGetImpossibleException(void) :
 	runtime_error("Input port could not possibly have that many samples "
 		"available") {};
 };
-class InputGetUnsuccessfulException : public runtime_error
+class InputGetUnavailableException : public runtime_error
 {
-public: InputGetUnsuccessfulException(void) :
+public: InputGetUnavailableException(void) :
 	runtime_error("Input port does not currently have that many samples "
 		"available") {};
 };
@@ -129,9 +130,9 @@ public: OutputPutImpossibleException(void) :
 	runtime_error("Output port could not possibly have space for that many "
 		"samples") {};
 };
-class OutputPutUnsuccessfulException : public runtime_error
+class OutputPutUnavailableException : public runtime_error
 {
-public: OutputPutUnsuccessfulException(void) :
+public: OutputPutUnavailableException(void) :
 	runtime_error("Output port does not currently have space for that many "
 		"samples") {};
 };
