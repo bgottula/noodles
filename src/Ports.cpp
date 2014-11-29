@@ -10,88 +10,121 @@ void Ports::add(const char *name)
 	}
 	
 	m_names.insert({name, index});
-	m_ports.push_back(vector<Noodle *>());
+	m_ports.push_back(Port());
+}
 
+Port& Ports::find_port(const char *name)
+{
+	if (m_names.count(name) == 0) throw NonexistentPortException();
+	int index = m_names[name];
+	return m_ports.at(index);
+}
+
+Port& InputPorts::find_port_check(const char *name)
+{
+	auto p = &find_port(name);
+	
+	if (p->size() == 0) throw InputNotConnectedException();
+	return *p;
+}
+
+Port& OutputPorts::find_port_check(const char *name)
+{
+	auto p = &find_port(name);
+	
+	if (p->size() == 0) throw OutputNotConnectedException();
+	return *p;
 }
 
 void InputPorts::connect(const char *name, Noodle *noodle)
 {
-	if (m_names.count(name) == 0)
-	{
-		throw NonexistentPortException();
-	}
+	auto p = find_port(name);
 	
-	int index = m_names[name];
-	
-	if (m_ports[index].size() > 0)
-	{
-		throw InputMultipleNoodleException();
-	}
-	
-	/* use vector::at instead of vector::operator[] so we get bounds checking */
-	m_ports.at(index).push_back(noodle);
-}
-
-bool InputPorts::get(const char *name, int *sample)
-{
-	if (m_names.count(name) == 0)
-	{
-		throw NonexistentPortException();
-	}
-	
-	int index = m_names[name];
-	auto noodles = m_ports[index];
-	
-	if (noodles.size() == 0)
-	{
-		throw InputNotConnectedException();
-	}
-	
-	Noodle *n = noodles.at(0);
-	
-	if (n->empty())
-	{
-		return false;
-	}
-	else
-	{
-		*sample = n->pop();
-		return true;
-	}
+	if (p.size() > 0) throw InputMultipleNoodleException();
+	p.push_back(noodle);
 }
 
 void OutputPorts::connect(const char *name, Noodle *noodle)
 {
-	if (m_names.count(name) == 0)
-	{
-		throw NonexistentPortException();
-	}
+	auto p = find_port(name);
 	
-	int index = m_names[name];
-	
-	/* use vector::at instead of vector::operator[] so we get bounds checking */
-	m_ports.at(index).push_back(noodle);
+	p.push_back(noodle);
 }
 
-void OutputPorts::put(const char *name, int sample)
+size_t InputPorts::please(const char *name)
 {
-	if (m_names.count(name) == 0)
-	{
-		throw NonexistentPortException();
-	}
+	auto p = find_port_check(name);
+	auto n = p[0];
 	
-	int index = m_names[name];
-	auto noodles = m_ports[index];
+	return n->count();
+}
+
+size_t OutputPorts::please(const char *name)
+{
+	auto p = find_port_check(name);
 	
-	if (noodles.size() == 0)
-	{
-		throw OutputNotConnectedException();
-	}
-	
-	for (auto it = noodles.begin(); it != noodles.end(); ++it)
+	/* find the noodle on this output port with the smallest number of free
+	 * spots for samples available, and return that number */
+	size_t min_free = SIZE_MAX;
+	for (auto it = p.begin(); it != p.end(); ++it)
 	{
 		Noodle *n = *it;
 		
-		n->push(sample);
+		min_free = min(min_free, n->free());
+		if (min_free == 0) break;
 	}
+	
+	return min_free;
+}
+
+void InputPorts::get_one(const char *name, int *sample)
+{
+	auto p = find_port_check(name);
+	auto n = p[0];
+
+	{
+		lock_guard<mutex> lock(n->mutex_ref());
+		
+		if (n->max() < 1) throw InputGetImpossibleException();
+		if (n->count() < 1) throw InputGetUnsuccessfulException();
+		*sample = n->pop();
+	}
+}
+
+void InputPorts::get_multi(const char *name, size_t count, int *samples)
+{
+#warning TODO
+}
+
+void InputPorts::get_vari(const char *name, size_t count, ...)
+{
+#warning TODO
+}
+
+void OutputPorts::put_one(const char *name, int sample)
+{
+	auto p = find_port_check(name);
+	
+	for (auto it = p.begin(); it != p.end(); ++it)
+	{
+		Noodle *n = *it;
+		
+		{
+			lock_guard<mutex> lock(n->mutex_ref());
+			
+			if (n->max() < 1) throw OutputPutImpossibleException();
+			if (n->free() < 1) throw OutputPutUnsuccessfulException();
+			n->push(sample);
+		}
+	}
+}
+
+void OutputPorts::put_multi(const char *name, size_t count, const int *samples)
+{
+#warning TODO
+}
+
+void OutputPorts::put_vari(const char *name, size_t count, ...)
+{
+#warning TODO
 }
