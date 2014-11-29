@@ -16,10 +16,10 @@ public:
 	virtual size_t please(const char *name) = 0;
 	
 protected:
-	/* get a reference to the port with the given name */
-	Port& find_port(const char *name);
-	/* get a reference to the port with the given name and check connections */
-	virtual Port& find_port_check(const char *name) = 0;
+	/* get a pointer to the port with the given name */
+	Port *find_port(const char *name);
+	/* get a pointer to the port with the given name and check connections */
+	virtual Port *find_port_check(const char *name) = 0;
 	
 	/* friendly name -> array index mapping */
 	unordered_map<const char *, int> m_names;
@@ -48,7 +48,7 @@ public:
 	void get_vari(const char *name, size_t count, ...);
 	
 private:
-	Port& find_port_check(const char *name);
+	Port *find_port_check(const char *name);
 };
 
 class OutputPorts : public Ports
@@ -72,7 +72,7 @@ public:
 	void put_vari(const char *name, size_t count, ...);
 	
 private:
-	Port& find_port_check(const char *name);
+	Port *find_port_check(const char *name);
 };
 
 /* thrown in Ports::add */

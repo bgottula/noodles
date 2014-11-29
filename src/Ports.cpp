@@ -13,48 +13,48 @@ void Ports::add(const char *name)
 	m_ports.push_back(Port());
 }
 
-Port& Ports::find_port(const char *name)
+Port *Ports::find_port(const char *name)
 {
 	if (m_names.count(name) == 0) throw NonexistentPortException();
 	int index = m_names[name];
-	return m_ports.at(index);
+	return &m_ports.at(index);
 }
 
-Port& InputPorts::find_port_check(const char *name)
+Port *InputPorts::find_port_check(const char *name)
 {
-	auto p = &find_port(name);
+	auto p = find_port(name);
 	
 	if (p->size() == 0) throw InputNotConnectedException();
-	return *p;
+	return p;
 }
 
-Port& OutputPorts::find_port_check(const char *name)
+Port *OutputPorts::find_port_check(const char *name)
 {
-	auto p = &find_port(name);
+	auto p = find_port(name);
 	
 	if (p->size() == 0) throw OutputNotConnectedException();
-	return *p;
+	return p;
 }
 
 void InputPorts::connect(const char *name, Noodle *noodle)
 {
 	auto p = find_port(name);
 	
-	if (p.size() > 0) throw InputMultipleNoodleException();
-	p.push_back(noodle);
+	if (p->size() > 0) throw InputMultipleNoodleException();
+	p->push_back(noodle);
 }
 
 void OutputPorts::connect(const char *name, Noodle *noodle)
 {
 	auto p = find_port(name);
 	
-	p.push_back(noodle);
+	p->push_back(noodle);
 }
 
 size_t InputPorts::please(const char *name)
 {
 	auto p = find_port_check(name);
-	auto n = p[0];
+	auto n = (*p)[0];
 	
 	return n->count();
 }
@@ -66,7 +66,7 @@ size_t OutputPorts::please(const char *name)
 	/* find the noodle on this output port with the smallest number of free
 	 * spots for samples available, and return that number */
 	size_t min_free = SIZE_MAX;
-	for (auto it = p.begin(); it != p.end(); ++it)
+	for (auto it = p->begin(); it != p->end(); ++it)
 	{
 		Noodle *n = *it;
 		
@@ -80,8 +80,9 @@ size_t OutputPorts::please(const char *name)
 void InputPorts::get_one(const char *name, int *sample)
 {
 	auto p = find_port_check(name);
-	auto n = p[0];
-
+	auto n = (*p)[0];
+	
+	/* mutex block */
 	{
 		lock_guard<mutex> lock(n->mutex_ref());
 		
@@ -105,10 +106,11 @@ void OutputPorts::put_one(const char *name, int sample)
 {
 	auto p = find_port_check(name);
 	
-	for (auto it = p.begin(); it != p.end(); ++it)
+	for (auto it = p->begin(); it != p->end(); ++it)
 	{
 		Noodle *n = *it;
 		
+		/* mutex block */
 		{
 			lock_guard<mutex> lock(n->mutex_ref());
 			
