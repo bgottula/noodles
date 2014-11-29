@@ -121,6 +121,30 @@ void OutputPorts::put_one(const char *name, int sample)
 	}
 }
 
+void OutputPorts::put_repeat(const char *name, size_t repeat, int sample)
+{
+	assert(repeat >= 1);
+	auto p = find_port_check(name);
+	
+	for (auto it = p->begin(); it != p->end(); ++it)
+	{
+		Noodle *n = *it;
+		
+		/* mutex block */
+		{
+			lock_guard<mutex> lock(n->mutex_ref());
+			
+			if (n->max() < repeat) throw OutputPutImpossibleException();
+			if (n->free() < repeat) throw OutputPutUnsuccessfulException();
+			
+			while (repeat-- > 0)
+			{
+				n->push(sample);
+			}
+		}
+	}
+}
+
 void OutputPorts::put_multi(const char *name, size_t count, const int *samples)
 {
 #warning TODO

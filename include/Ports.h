@@ -63,6 +63,8 @@ public:
 	
 	/* put one sample onto the output port queue */
 	void put_one(const char *name, int sample);
+	/* put one sample, repeated a number of times, onto the output queue */
+	void put_repeat(const char *name, size_t repeat, int sample);
 	/* put multiple samples onto the output port queue;
 	 * only performs one lock/unlock cycle on the queue mutex */
 	void put_multi(const char *name, size_t count, const int *samples);
