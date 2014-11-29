@@ -183,10 +183,8 @@ int main(int argc, char **argv)
 	g.addQNoodle(4, {&source, "output"}, {&passthru, "input"});
 	g.addRNoodle(-1, {&passthru, "output"}, {&sink1, "input"});
 	
-	for (int i = 0; i < 10; i++)
-	{
-		g.run();
-	}
+	RoundRobinScheduler sch(g);
+	sch.run();
 	
 	return 0;
 }

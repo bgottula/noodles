@@ -7,16 +7,19 @@ class Noodle;
 
 class Graph
 {
+	friend class Scheduler;
+	friend class RoundRobinScheduler;
+	friend class ThreadedScheduler;
+	friend class InteractiveScheduler;
+	
 public:
 	void addQNoodle(size_t queue_max, Endpoint from, Endpoint to);
 	void addRNoodle(int init, Endpoint from, Endpoint to);
 	
-	int checkGraph(void);
+	void checkGraph(void);
 	
 	void dumpGraph(void);
 	void dumpNoodles(void);
-	
-	void run(void);
 	
 private:
 	void addNoodle(Noodle *n, Endpoint from, Endpoint to);
@@ -37,11 +40,6 @@ class EmptyGraphException : public runtime_error
 {
 public: EmptyGraphException(void) :
 	runtime_error("Graphs must contain at least one noodle") {};
-};
-class GraphInvalidException : public runtime_error
-{
-public: GraphInvalidException(void) :
-	runtime_error("Graph validation failed") {};
 };
 
 #endif

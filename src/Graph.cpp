@@ -67,27 +67,20 @@ void Graph::addRNoodle(int init, Endpoint from, Endpoint to)
 	addNoodle(n, from, to);
 }
 
-int Graph::checkGraph(void)
+void Graph::checkGraph(void)
 {
-	debug("checkGraph: checking graph validity\n");
+	if (!m_needCheck) return;
 	
-	int errors = 0;
+	debug("checkGraph: checking graph validity\n");
 	
 	if (m_noodles.empty())
 	{
 		throw EmptyGraphException();
-		++errors;
 	}
 	
 	// TODO: check for nodes with no edges (error) [is this possible?]
 	
-	if (errors == 0)
-	{
-		m_needCheck = false;
-	}
-	
-	debug("- %d errors\n", errors);
-	return errors;
+	m_needCheck = false;
 }
 
 void Graph::dumpGraph(void)
@@ -178,27 +171,6 @@ void Graph::dumpGraph(void)
 	
 	/* clean up dynamically allocated strings */
 	m_strpool.clear();
-}
-
-void Graph::run(void)
-{
-	if (m_needCheck)
-	{
-		if (checkGraph() != 0)
-		{
-			throw GraphInvalidException();
-		}
-	}
-	
-	/* call work on all blocks */
-	for (auto it = m_blocks.begin(); it != m_blocks.end(); ++it)
-	{
-		Block *b = *it;
-		debug("run: calling work on block %s(%p)\n", b->name(), b);
-		b->work();
-		
-		dumpGraph();
-	}
 }
 
 const char *Graph::str_noodle(const Noodle *n)
