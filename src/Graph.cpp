@@ -1,11 +1,7 @@
 #include "all.h"
 
-void Graph::addNoodle(size_t queue_max, Endpoint from, Endpoint to)
+void Graph::addNoodle(Noodle *n, Endpoint from, Endpoint to)
 {
-	debug("addNoodle: %s[%s](%p) >>>{%zu} %s[%s](%p)\n",
-		from.block->name(), from.port, from.block, queue_max,
-		to.block->name(), to.port, to.block);
-	
 	if (m_blocks.find(from.block) == m_blocks.end())
 	{
 		debug("- block %s(%p) is not in the graph; adding now.\n",
@@ -38,18 +34,37 @@ void Graph::addNoodle(size_t queue_max, Endpoint from, Endpoint to)
 	
 	/* the connect functions will ensure that this is not a duplicate noodle and
 	 * that inputs are not connected to multiple noodles */
-	Noodle *noodle = new Noodle(queue_max, from, to);
-	from.block->outputs.connect(from.port, noodle);
-	to.block->inputs.connect(to.port, noodle);
+	from.block->outputs.connect(from.port, n);
+	to.block->inputs.connect(to.port, n);
 	
 	debug("- adding noodle to the graph.\n");
 	
-	bool result = m_noodles.insert(noodle).second;
+	bool result = m_noodles.insert(n).second;
 	assert(result);
 	
 	dumpGraph();
 	
 	m_needCheck = true;
+}
+
+void Graph::addQNoodle(size_t queue_max, Endpoint from, Endpoint to)
+{
+	debug("addQNoodle: %s[%s](%p) >>[q:%zu]>> %s[%s](%p)\n",
+		from.block->name(), from.port, from.block, queue_max,
+		to.block->name(), to.port, to.block);
+	
+	QNoodle *n = new QNoodle(queue_max, from, to);
+	addNoodle(n, from, to);
+}
+
+void Graph::addRNoodle(int init, Endpoint from, Endpoint to)
+{
+	debug("addRNoodle: %s[%s](%p) >>[r:%d]>> %s[%s](%p)\n",
+		from.block->name(), from.port, from.block, init,
+		to.block->name(), to.port, to.block);
+	
+	RNoodle *n = new RNoodle(init, from, to);
+	addNoodle(n, from, to);
 }
 
 int Graph::checkGraph(void)
@@ -119,10 +134,23 @@ void Graph::dumpGraph(void)
 	{
 		Noodle *n = *it;
 		
-		debug("\n  + noodle(%p)\n"
-			"      %s[%s](%p) >>>{%zu} %s[%s](%p)\n", n,
-			n->m_from.block->name(), n->m_from.port, n->m_from.block, n->m_max,
-			n->m_to.block->name(), n->m_to.port, n->m_to.block);
+		QNoodle *q = dynamic_cast<QNoodle *>(n);
+		RNoodle *r = dynamic_cast<RNoodle *>(n);
+		
+		// TODO: see if nullptr works
+		assert(q != NULL || r != NULL);
+		if (q != NULL)
+		{
+			debug("\n  + noodle(%p)\n      %s[%s](%p) >>[q:%zu]>> %s[%s](%p)\n",
+				q, q->m_from.block->name(), q->m_from.port, q->m_from.block,
+				q->m_max, q->m_to.block->name(), q->m_to.port, q->m_to.block);
+		}
+		else if (r != NULL)
+		{
+			debug("\n  + noodle(%p)\n      %s[%s](%p) >>[r:%d]>> %s[%s](%p)\n",
+				r, r->m_from.block->name(), r->m_from.port, r->m_from.block,
+				r->m_reg, r->m_to.block->name(), r->m_to.port, r->m_to.block);
+		}
 	}
 	
 	debug("\n=================================================================="
@@ -141,17 +169,29 @@ void Graph::dumpNoodles(void)
 	{
 		Noodle *n = *it;
 		
-		debug("\nnoodle(%p)\n  %s[%s](%p) >>>{%zu} %s[%s](%p)\n    {", n,
-			n->m_from.block->name(), n->m_from.port, n->m_from.block, n->m_max,
-			n->m_to.block->name(), n->m_to.port, n->m_to.block);
+		QNoodle *q = dynamic_cast<QNoodle *>(n);
+		RNoodle *r = dynamic_cast<RNoodle *>(n);
 		
-		deque<int>& q = n->m_queue;
-		for (auto q_it = q.cbegin(); q_it != q.cend(); ++q_it)
+		// TODO: see if nullptr works
+		assert(q != NULL || r != NULL);
+		if (q != NULL)
 		{
-			debug(" %d", *q_it);
+			debug("\nnoodle(%p)\n  %s[%s](%p) >>[q:%zu]>> %s[%s](%p)\n    {",
+				q, q->m_from.block->name(), q->m_from.port, q->m_from.block,
+				q->m_max, q->m_to.block->name(), q->m_to.port, q->m_to.block);
+			deque<int>& qq = q->m_queue;
+			for (auto q_it = qq.cbegin(); q_it != qq.cend(); ++q_it)
+			{
+				debug(" %d", *q_it);
+			}
+			debug(" }");
 		}
-		
-		debug(" }");
+		else if (r != NULL)
+		{
+			debug("\nnoodle(%p)\n  %s[%s](%p) >>[r:%d]>> %s[%s](%p)",
+				r, r->m_from.block->name(), r->m_from.port, r->m_from.block,
+				r->m_reg, r->m_to.block->name(), r->m_to.port, r->m_to.block);
+		}
 	}
 	
 	debug("\n=================================================================="
