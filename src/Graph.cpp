@@ -1,9 +1,9 @@
 #include "all.h"
 
-void Graph::addNoodle(Endpoint from, Endpoint to)
+void Graph::addNoodle(size_t queue_max, Endpoint from, Endpoint to)
 {
-	debug("addNoodle: %s[%s](%p) >>> %s[%s](%p)\n",
-		from.block->name(), from.port, from.block,
+	debug("addNoodle: %s[%s](%p) >>>{%zu} %s[%s](%p)\n",
+		from.block->name(), from.port, from.block, queue_max,
 		to.block->name(), to.port, to.block);
 	
 	if (m_blocks.find(from.block) == m_blocks.end())
@@ -38,7 +38,7 @@ void Graph::addNoodle(Endpoint from, Endpoint to)
 	
 	/* the connect functions will ensure that this is not a duplicate noodle and
 	 * that inputs are not connected to multiple noodles */
-	Noodle *noodle = new Noodle(from, to);
+	Noodle *noodle = new Noodle(queue_max, from, to);
 	from.block->outputs.connect(from.port, noodle);
 	to.block->inputs.connect(to.port, noodle);
 	
@@ -81,9 +81,9 @@ void Graph::dumpGraph(void)
 	if (!verbose) return;
 	
 	debug("\n================================ graph summary "
-		"=================================\n\n");
+		"=================================");
 	
-	debug("# %lu blocks\n", m_blocks.size());
+	debug("\n\n# %lu blocks\n", m_blocks.size());
 	for (auto it = m_blocks.cbegin(); it != m_blocks.cend(); ++it)
 	{
 		Block *b = *it;
@@ -120,8 +120,8 @@ void Graph::dumpGraph(void)
 		Noodle *n = *it;
 		
 		debug("\n  + noodle(%p)\n"
-			"      %s[%s](%p) >>> %s[%s](%p)\n", n,
-			n->m_from.block->name(), n->m_from.port, n->m_from.block,
+			"      %s[%s](%p) >>>{%zu} %s[%s](%p)\n", n,
+			n->m_from.block->name(), n->m_from.port, n->m_from.block, n->m_max,
 			n->m_to.block->name(), n->m_to.port, n->m_to.block);
 	}
 	

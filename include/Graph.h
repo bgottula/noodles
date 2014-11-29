@@ -8,7 +8,7 @@ class Noodle;
 class Graph
 {
 public:
-	void addNoodle(Endpoint from, Endpoint to);
+	void addNoodle(size_t queue_max, Endpoint from, Endpoint to);
 	int checkGraph(void);
 	void dumpGraph(void);
 	void run(void);
