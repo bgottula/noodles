@@ -11,7 +11,10 @@
 #include <cstring>
 
 /* C++ standard library */
+#include <algorithm>
+#include <atomic>
 #include <iostream>
+#include <mutex>
 #include <stdexcept>
 #include <typeinfo>
 
