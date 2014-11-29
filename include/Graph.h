@@ -10,9 +10,12 @@ class Graph
 public:
 	void addQNoodle(size_t queue_max, Endpoint from, Endpoint to);
 	void addRNoodle(int init, Endpoint from, Endpoint to);
+	
 	int checkGraph(void);
+	
 	void dumpGraph(void);
 	void dumpNoodles(void);
+	
 	void run(void);
 	
 private:
@@ -21,6 +24,13 @@ private:
 	bool m_needCheck = true;
 	unordered_set<Block *> m_blocks;
 	unordered_set<Noodle *> m_noodles;
+	
+	const char *str_noodle(const Noodle *n);
+	const char *str_block(const Block *b);
+	const char *str_endpoint(const Endpoint *e, bool input);
+	
+	StrPool m_strpool;
+	const size_t m_strlen = 128;
 };
 
 class EmptyGraphException : public runtime_error

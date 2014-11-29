@@ -92,17 +92,17 @@ int Graph::checkGraph(void)
 
 void Graph::dumpGraph(void)
 {
+	static int count = 0;
+	
 	/* don't waste time accessing stuff that we won't print */
 	if (!verbose) return;
 	
-	debug("\n================================ graph summary "
-		"=================================");
+	debug(AT_BLD AT_ULI "GRAPH SNAPSHOT #%d\n" AT_RST, ++count);
 	
-	debug("\n\n# %lu blocks\n", m_blocks.size());
 	for (auto it = m_blocks.cbegin(); it != m_blocks.cend(); ++it)
 	{
 		Block *b = *it;
-		debug("\n  + block %s(%p)\n", b->name(), b);
+		debug("  BLOCK " AT_BLD "%s" AT_RST, str_block(b));
 		
 		auto in_begin = b->inputs.m_names.cbegin();
 		auto in_end = b->inputs.m_names.cend();
@@ -112,8 +112,16 @@ void Graph::dumpGraph(void)
 			unsigned long num_noodles =
 				b->inputs.m_ports.at(b->inputs.m_names.at(name.first)).size();
 			
-			debug("    >> input \"%s\" (%lu noodle%s)\n",
-				name.first, num_noodles, (num_noodles == 1 ? "" : "s"));
+			debug("\n     in " AT_ULI FG_GRN "%s" AT_RST FG_DEF, name.first);
+			if (num_noodles > 0)
+			{
+				debug(" (" AT_BLD "%lu" AT_RST " noodle%s)",
+					num_noodles, (num_noodles == 1 ? "" : "s"));
+			}
+			else
+			{
+				debug(" (" FG_RED "unconnected!" FG_DEF ")");
+			}
 		}
 		
 		auto out_begin = b->outputs.m_names.cbegin();
@@ -124,78 +132,54 @@ void Graph::dumpGraph(void)
 			unsigned long num_noodles =
 				b->outputs.m_ports.at(b->outputs.m_names.at(name.first)).size();
 			
-			debug("    << output \"%s\" (%lu noodle%s)\n",
-				name.first, num_noodles, (num_noodles == 1 ? "" : "s"));
+			debug("\n    out " AT_ULI FG_RED "%s" AT_RST FG_DEF, name.first);
+			if (num_noodles > 0)
+			{
+				debug(" (" AT_BLD "%lu" AT_RST " noodle%s)",
+					num_noodles, (num_noodles == 1 ? "" : "s"));
+			}
+			else
+			{
+				debug(" (" AT_BLD "unconnected!" AT_RST ")");
+			}
 		}
-	}
-	
-	debug("\n\n# %lu noodles\n", m_noodles.size());
-	for (auto it = m_noodles.cbegin(); it != m_noodles.cend(); ++it)
-	{
-		Noodle *n = *it;
 		
-		QNoodle *q = dynamic_cast<QNoodle *>(n);
-		RNoodle *r = dynamic_cast<RNoodle *>(n);
-		
-		// TODO: see if nullptr works
-		assert(q != NULL || r != NULL);
-		if (q != NULL)
-		{
-			debug("\n  + noodle(%p)\n      %s[%s](%p) >>[q:%zu]>> %s[%s](%p)\n",
-				q, q->m_from.block->name(), q->m_from.port, q->m_from.block,
-				q->m_max, q->m_to.block->name(), q->m_to.port, q->m_to.block);
-		}
-		else if (r != NULL)
-		{
-			debug("\n  + noodle(%p)\n      %s[%s](%p) >>[r:%d]>> %s[%s](%p)\n",
-				r, r->m_from.block->name(), r->m_from.port, r->m_from.block,
-				r->m_reg, r->m_to.block->name(), r->m_to.port, r->m_to.block);
-		}
+		debug("\n\n");
 	}
-	
-	debug("\n=================================================================="
-		"==============\n\n");
-}
-
-void Graph::dumpNoodles(void)
-{
-	/* don't waste time accessing stuff that we won't print */
-	if (!verbose) return;
-	
-	debug("=================================== noodles "
-		"====================================");
 	
 	for (auto it = m_noodles.cbegin(); it != m_noodles.cend(); ++it)
 	{
 		Noodle *n = *it;
 		
-		QNoodle *q = dynamic_cast<QNoodle *>(n);
-		RNoodle *r = dynamic_cast<RNoodle *>(n);
+		debug(" NOODLE %s: %s >>> %s", str_noodle(n),
+			str_endpoint(&n->m_from, false), str_endpoint(&n->m_to, true));
+		/*debug(" NOODLE %s\n   from %s\n     to %s", str_noodle(n),
+			str_endpoint(&n->m_from), str_endpoint(&n->m_to));*/
 		
-		// TODO: see if nullptr works
-		assert(q != NULL || r != NULL);
-		if (q != NULL)
+		if (n->is_qnoodle())
 		{
-			debug("\nnoodle(%p)\n  %s[%s](%p) >>[q:%zu]>> %s[%s](%p)\n    {",
-				q, q->m_from.block->name(), q->m_from.port, q->m_from.block,
-				q->m_max, q->m_to.block->name(), q->m_to.port, q->m_to.block);
+			auto q = dynamic_cast<QNoodle *>(n);
+			debug("\n   fill " AT_BLD "%zu" AT_RST "/" AT_BLD "%zu" AT_RST
+				"\n  queue {" AT_BLD, q->count(), q->m_max);
+			
 			deque<int>& qq = q->m_queue;
 			for (auto q_it = qq.cbegin(); q_it != qq.cend(); ++q_it)
 			{
 				debug(" %d", *q_it);
 			}
-			debug(" }");
+			debug(AT_RST " }");
 		}
-		else if (r != NULL)
+		else
 		{
-			debug("\nnoodle(%p)\n  %s[%s](%p) >>[r:%d]>> %s[%s](%p)",
-				r, r->m_from.block->name(), r->m_from.port, r->m_from.block,
-				r->m_reg, r->m_to.block->name(), r->m_to.port, r->m_to.block);
+			auto r = dynamic_cast<RNoodle *>(n);
+			debug("\n    reg " AT_BLD "%d" AT_RST, r->m_reg);
 		}
+		
+		debug("\n\n");
 	}
 	
-	debug("\n=================================================================="
-		"==============\n\n");
+	/* clean up dynamically allocated strings */
+	m_strpool.clear();
 }
 
 void Graph::run(void)
@@ -215,6 +199,42 @@ void Graph::run(void)
 		debug("run: calling work on block %s(%p)\n", b->name(), b);
 		b->work();
 		
-		dumpNoodles();
+		dumpGraph();
 	}
+}
+
+const char *Graph::str_noodle(const Noodle *n)
+{
+	char *str = m_strpool.alloc(m_strlen);
+	if (n->is_qnoodle())
+	{
+		snprintf(str, m_strlen,
+			AT_BLD FG_YLW "QNoodle" AT_RST FG_DEF "@" AT_BLD "%04" PRIxPTR AT_RST,
+			((uintptr_t)n & 0xffff));
+	}
+	else
+	{
+		snprintf(str, m_strlen,
+			AT_BLD FG_MGT "RNoodle" AT_RST FG_DEF "@" AT_BLD "%04" PRIxPTR AT_RST,
+			((uintptr_t)n & 0xffff));
+	}
+	return str;
+}
+
+const char *Graph::str_block(const Block *b)
+{
+	char *str = m_strpool.alloc(m_strlen);
+	snprintf(str, m_strlen,
+		AT_BLD FG_CYN "%s" AT_RST FG_DEF "@" AT_BLD "%04" PRIxPTR AT_RST,
+		b->name(), ((uintptr_t)b & 0xffff));
+	return str;
+}
+
+const char *Graph::str_endpoint(const Endpoint *e, bool input)
+{
+	char *str = m_strpool.alloc(m_strlen);
+	snprintf(str, m_strlen,
+		AT_BLD FG_CYN "%s" AT_RST FG_DEF "@" AT_BLD "%04" PRIxPTR AT_RST "[" AT_ULI "%s%s" AT_RST FG_DEF "]",
+		e->block->name(), ((uintptr_t)e->block & 0xffff), (input ? FG_GRN : FG_RED), e->port);
+	return str;
 }
