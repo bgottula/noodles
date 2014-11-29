@@ -16,14 +16,13 @@ public:
 	
 	void work(void)
 	{
-		while (outputs.please("output") >= 1)
+		/*while*/if (outputs.available("output") >= 1)
 		{
 			outputs.put_one("output", m_counter++);
 		}
 	}
 	
 private:
-	int m_outputsPerWork = 1;
 	int m_counter;
 };
 
@@ -46,7 +45,8 @@ public:
 	{
 		int sample;
 		
-		while (inputs.please("input") >= 1 && outputs.please("output") >= 1)
+		while (inputs.available("input") >= 1 &&
+			outputs.available("output") >= 1)
 		{
 			inputs.get_one("input", &sample);
 			if (m_counter % 2 == 0)
@@ -77,10 +77,36 @@ public:
 	{
 		int sample;
 		
-		while (inputs.please("input") >= 1 && outputs.please("output") >= 2)
+		while (inputs.available("input") >= 1 &&
+			outputs.available("output") >= 2)
 		{
 			inputs.get_one("input", &sample);
 			outputs.put_repeat("output", 2, sample);
+		}
+	}
+};
+
+class Passthru : public Block
+{
+public:
+	Passthru(void)
+	{
+		inputs.add("input");
+		outputs.add("output");
+		reset();
+	}
+	
+	void reset(void) {}
+	
+	void work(void)
+	{
+		int sample;
+		
+		/*while*/if (inputs.available("input") >= 1 &&
+		outputs.available("output") >= 1)
+		{
+			inputs.get_one("input", &sample);
+			outputs.put_one("output", sample);
 		}
 	}
 };
@@ -100,7 +126,7 @@ public:
 	{
 		int sample;
 		
-		while (inputs.please("input") >= 1)
+		/*while*/if (inputs.available("input") >= 1)
 		{
 			inputs.get_one("input", &sample);
 			printf("Sink(%p) got %d\n", this, sample);
@@ -141,16 +167,21 @@ int main(int argc, char **argv)
 	Interpolator interp;
 	Sink sink1;
 	Sink sink2;
+	Passthru passthru;
 	
 	Graph g;
 	
 	/* do a dump of the graph's init state (0 vertices & 0 edges) */
 	g.dumpGraph();
 	
-	/*g.addNoodle(8, {&source, "output"}, {&decim, "input"});
-	g.addNoodle(8, {&decim, "output"}, {&interp, "input"});
-	g.addNoodle(8, {&interp, "output"}, {&sink1, "input"});*/
-	g.addNoodle(8, {&source, "output"}, {&sink2, "input"});
+	/*g.addQNoodle(8, {&source, "output"}, {&decim, "input"});
+	g.addQNoodle(8, {&decim, "output"}, {&interp, "input"});
+	g.addQNoodle(8, {&interp, "output"}, {&sink1, "input"});
+	g.addQNoodle(8, {&source, "output"}, {&sink2, "input"});*/
+	//g.addQNoodle(8, {&source, "output"}, {&sink2, "input"});
+	
+	g.addQNoodle(4, {&source, "output"}, {&passthru, "input"});
+	g.addRNoodle(-1, {&passthru, "output"}, {&sink1, "input"});
 	
 	for (int i = 0; i < 10; i++)
 	{
