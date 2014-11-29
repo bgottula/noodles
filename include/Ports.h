@@ -13,6 +13,8 @@ public:
 	/* associate a named port with a noodle */
 	virtual void connect(const char *name, Noodle *noodle) = 0;
 	
+	virtual size_t please(const char *name) = 0;
+	
 protected:
 	/* get a reference to the port with the given name */
 	Port& find_port(const char *name);
