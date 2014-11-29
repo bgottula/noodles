@@ -90,11 +90,11 @@ public:
 	size_t free(void) const { return 1; }
 	
 	/* write to the sample register */
-	void push(int sample) { m_reg = sample; }
+	void push(int sample) { m_reg.store(sample); }
 	/* read from the sample register */
-	int pop(void) { return m_reg; }
+	int pop(void) { return m_reg.load(); }
 	/* peek the sample register (same as pop) */
-	int peek(size_t where) { return m_reg; }
+	int peek(size_t where) { return m_reg.load(); }
 	
 private:
 	/* register containing the current sample value */
