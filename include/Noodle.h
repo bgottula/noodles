@@ -11,6 +11,7 @@ public:
 		: m_from(from), m_to(to) {};
 	
 	virtual bool is_qnoodle(void) const = 0;
+	virtual void lock(unique_lock<mutex>& mgr) = 0;
 	
 	virtual size_t max(void) const = 0;
 	virtual size_t count(void) const = 0;
@@ -40,6 +41,7 @@ public:
 		: Noodle(from, to), m_max(max) {};
 	
 	bool is_qnoodle(void) const { return true; }
+	void lock(unique_lock<mutex>& mgr) { mgr = unique_lock<mutex>(m_mutex); }
 	
 	/* get queue's max allowed sample count */
 	size_t max(void) const { return m_max; }
@@ -47,9 +49,6 @@ public:
 	size_t count(void) const { return m_queue.size(); }
 	/* get queue's free space count */
 	size_t free(void) const { return m_max - m_queue.size(); }
-	
-	/* get a reference to the queue mutex */
-	mutex& mutex_ref(void) { return m_mutex; }
 	
 	/* NEEDS LOCK: push one sample onto the queue */
 	void push(int sample);
@@ -81,6 +80,7 @@ public:
 		: Noodle(from, to), m_reg(init) {};
 	
 	bool is_qnoodle(void) const { return false; }
+	void lock(unique_lock<mutex>& mgr) { }
 	
 	/* register can always hold just one sample */
 	size_t max(void) const { return 1; }

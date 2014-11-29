@@ -84,12 +84,8 @@ void InputPorts::get_one(const char *name, int *sample)
 	
 	/* mutex block */
 	{
-		unique_lock<mutex> lock;
-		if (n->is_qnoodle())
-		{
-			QNoodle *q = dynamic_cast<QNoodle *>(n);
-			lock = unique_lock<mutex>(q->mutex_ref());
-		}
+		unique_lock<mutex> mgr;
+		n->lock(mgr);
 		
 		if (n->max() < 1) throw InputGetImpossibleException();
 		if (n->count() < 1) throw InputGetUnsuccessfulException();
@@ -117,12 +113,8 @@ void OutputPorts::put_one(const char *name, int sample)
 		
 		/* mutex block */
 		{
-			unique_lock<mutex> lock;
-			if (n->is_qnoodle())
-			{
-				QNoodle *q = dynamic_cast<QNoodle *>(n);
-				lock = unique_lock<mutex>(q->mutex_ref());
-			}
+			unique_lock<mutex> mgr;
+			n->lock(mgr);
 			
 			if (n->max() < 1) throw OutputPutImpossibleException();
 			if (n->free() < 1) throw OutputPutUnsuccessfulException();
@@ -142,12 +134,8 @@ void OutputPorts::put_repeat(const char *name, size_t repeat, int sample)
 		
 		/* mutex block */
 		{
-			unique_lock<mutex> lock;
-			if (n->is_qnoodle())
-			{
-				QNoodle *q = dynamic_cast<QNoodle *>(n);
-				lock = unique_lock<mutex>(q->mutex_ref());
-			}
+			unique_lock<mutex> mgr;
+			n->lock(mgr);
 			
 			if (n->max() < repeat) throw OutputPutImpossibleException();
 			if (n->free() < repeat) throw OutputPutUnsuccessfulException();
