@@ -16,9 +16,9 @@ public:
 	
 	void work(void)
 	{
-		for (int i = 0; i < m_outputsPerWork; i++)
+		while (outputs.please("output") >= 1)
 		{
-			outputs.put("output", m_counter++);
+			outputs.put_one("output", m_counter++);
 		}
 	}
 	
@@ -46,11 +46,12 @@ public:
 	{
 		int sample;
 		
-		while (inputs.get("input", &sample))
+		while (inputs.please("input") >= 1 && outputs.please("output") >= 1)
 		{
+			inputs.get_one("input", &sample);
 			if (m_counter % 2 == 0)
 			{
-				outputs.put("output", sample);
+				outputs.put_one("output", sample);
 			}
 			m_counter++;
 		}
@@ -76,10 +77,10 @@ public:
 	{
 		int sample;
 		
-		while (inputs.get("input", &sample))
+		while (inputs.please("input") >= 1 && outputs.please("output") >= 2)
 		{
-			outputs.put("output", sample);
-			outputs.put("output", sample);
+			inputs.get_one("input", &sample);
+			outputs.put_repeat("output", 2, sample);
 		}
 	}
 };
@@ -99,8 +100,9 @@ public:
 	{
 		int sample;
 		
-		while (inputs.get("input", &sample))
+		while (inputs.please("input") >= 1)
 		{
+			inputs.get_one("input", &sample);
 			printf("Sink(%p) got %d\n", this, sample);
 		}
 	}
@@ -110,9 +112,9 @@ public:
  * 1. figure out if you have the proper inputs to be able to do work
  * 2. figure out if you could store the output in the output queue
  * 3. if conditions (1) or (2) are false, STOP; don't touch inputs or outputs!
- * 4. pop input(s)
- * 5. do work
- * 6. push output(s)
+ * 4. get input(s)
+ * 5. do whatever processing needs to be done
+ * 6. put output(s)
  * 
  * TODO: break the current work() function into smaller pieces (e.g.
  * can_do_work, do_one_work, whatever) so that it's harder to accidentally get 
@@ -137,7 +139,7 @@ int main(int argc, char **argv)
 	Source source;
 	Decimator decim;
 	Interpolator interp;
-	Sink sink;
+	Sink sink1;
 	Sink sink2;
 	
 	Graph g;
@@ -145,10 +147,10 @@ int main(int argc, char **argv)
 	/* do a dump of the graph's init state (0 vertices & 0 edges) */
 	g.dumpGraph();
 	
-	g.addNoodle({&source, "output"}, {&decim, "input"});
-	g.addNoodle({&decim, "output"}, {&interp, "input"});
-	g.addNoodle({&interp, "output"}, {&sink, "input"});
-	g.addNoodle({&source, "output"}, {&sink2, "input"});
+	/*g.addNoodle(8, {&source, "output"}, {&decim, "input"});
+	g.addNoodle(8, {&decim, "output"}, {&interp, "input"});
+	g.addNoodle(8, {&interp, "output"}, {&sink1, "input"});*/
+	g.addNoodle(8, {&source, "output"}, {&sink2, "input"});
 	
 	for (int i = 0; i < 10; i++)
 	{
