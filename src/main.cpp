@@ -5,7 +5,7 @@ class Source : public Block
 public:
 	Source(void)
 	{
-		outputs.add("output");
+		outputs.add("phase");
 		reset();
 	}
 	
@@ -16,9 +16,12 @@ public:
 	
 	void work(void)
 	{
-		/*while*/if (outputs.available("output") >= 1)
+		if (outputs.available("phase") >= 1)
 		{
-			outputs.put_one("output", m_counter++);
+			int sample = m_counter++;
+			
+			outputs.put_one("phase", sample);
+			printf("Source(%p) sourced %d\n", this, sample);
 		}
 	}
 	
@@ -26,89 +29,105 @@ private:
 	int m_counter;
 };
 
-class Decimator : public Block
+class VariableRateDecimator : public Block
 {
 public:
-	Decimator(void)
+	VariableRateDecimator(void)
 	{
-		inputs.add("input");
-		outputs.add("output");
+		inputs.add("phase");
+		inputs.add("feedback");
+		outputs.add("phase_corrected");
 		reset();
 	}
 	
 	void reset(void)
 	{
-		m_counter = 0;
+		//m_counter = 0;
 	}
 	
 	void work(void)
 	{
-		int sample;
+		int phase;
+		int feedback;
 		
-		while (inputs.available("input") >= 1 &&
-			outputs.available("output") >= 1)
+		while (inputs.available("phase") >= 1 &&
+			inputs.available("feedback") >= 1 &&
+			outputs.available("phase_corrected") >= 1)
 		{
-			inputs.get_one("input", &sample);
-			if (m_counter % 2 == 0)
-			{
-				outputs.put_one("output", sample);
-			}
-			m_counter++;
+			inputs.get_one("phase", &phase);
+			inputs.get_one("feedback", &feedback);
+			
+			/* intentionally truncate to [0, 255] */
+			int sum = (uint8_t)(phase + feedback);
+			outputs.put_one("phase_corrected", sum);
+		}
+	}
+};
+
+class PhaseErrorDetector : public Block
+{
+public:
+	PhaseErrorDetector(void)
+	{
+		inputs.add("phase_corrected");
+		outputs.add("error");
+		reset();
+	}
+	
+	void reset(void)
+	{
+		
+	}
+	
+	void work(void)
+	{
+		/* dummy: passthru */
+		
+		if (inputs.available("phase_corrected") >= 1 &&
+			outputs.available("error") >= 1)
+		{
+			int sample;
+			inputs.get_one("phase_corrected", &sample);
+			outputs.put_one("error", sample);
+		}
+	}
+};
+
+class LoopFilter : public Block
+{
+public:
+	LoopFilter(void)
+	{
+		inputs.add("error");
+		outputs.add("adjustment");
+		reset();
+	}
+	
+	void reset(void)
+	{
+		m_integrator = 0;
+	}
+	
+	void work(void)
+	{
+		if (inputs.available("error") >= 1 &&
+			outputs.available("adjustment") >= 1)
+		{
+			int error;
+			inputs.get_one("error", &error);
+			
+			int adjustment = (error * m_p) + m_integrator;
+			outputs.put_one("adjustment", adjustment);
+			
+			m_integrator += (error * m_i);
 		}
 	}
 	
 private:
-	int m_counter;
-};
-
-class Interpolator : public Block
-{
-public:
-	Interpolator(void)
-	{
-		inputs.add("input");
-		outputs.add("output");
-		reset();
-	}
+	const int m_p = 1;
+	const int m_i = 1;
 	
-	void reset(void) {}
-	
-	void work(void)
-	{
-		int sample;
-		
-		while (inputs.available("input") >= 1 &&
-			outputs.available("output") >= 2)
-		{
-			inputs.get_one("input", &sample);
-			outputs.put_repeat("output", 2, sample);
-		}
-	}
-};
-
-class Passthru : public Block
-{
-public:
-	Passthru(void)
-	{
-		inputs.add("input");
-		outputs.add("output");
-		reset();
-	}
-	
-	void reset(void) {}
-	
-	void work(void)
-	{
-		int sample;
-		
-		/*while*/if (inputs.available("input") >= 1 &&
-		outputs.available("output") >= 1)
-		{
-			inputs.get_one("input", &sample);
-			outputs.put_one("output", sample);
-		}
-	}
+	int m_integrator;
 };
 
 class Sink : public Block
@@ -116,20 +135,23 @@ class Sink : public Block
 public:
 	Sink(void)
 	{
-		inputs.add("input");
+		inputs.add("phase_corrected");
 		reset();
 	}
 	
-	void reset(void) {}
+	void reset(void)
+	{
+		
+	}
 	
 	void work(void)
 	{
 		int sample;
 		
-		/*while*/if (inputs.available("input") >= 1)
+		if (inputs.available("phase_corrected") >= 1)
 		{
-			inputs.get_one("input", &sample);
-			printf("Sink(%p) got %d\n", this, sample);
+			inputs.get_one("phase_corrected", &sample);
+			printf("Sink(%p) sank %d\n", this, sample);
 		}
 	}
 };
@@ -163,25 +185,21 @@ int main(int argc, char **argv)
 	}
 	
 	Source source;
-	Decimator decim;
-	Interpolator interp;
-	Sink sink1;
-	Sink sink2;
-	Passthru passthru;
+	VariableRateDecimator vrd;
+	PhaseErrorDetector ped;
+	LoopFilter lf;
+	Sink sink;
 	
 	Graph g;
 	
 	/* do a dump of the graph's init state (0 vertices & 0 edges) */
 	g.dumpGraph();
 	
-	/*g.addQNoodle(8, {&source, "output"}, {&decim, "input"});
-	g.addQNoodle(8, {&decim, "output"}, {&interp, "input"});
-	g.addQNoodle(8, {&interp, "output"}, {&sink1, "input"});
-	g.addQNoodle(8, {&source, "output"}, {&sink2, "input"});*/
-	//g.addQNoodle(8, {&source, "output"}, {&sink2, "input"});
-	
-	g.addQNoodle(4, {&source, "output"}, {&passthru, "input"});
-	g.addRNoodle(-1, {&passthru, "output"}, {&sink1, "input"});
+	g.addQNoodle(8, {&source, "phase"}, {&vrd, "phase"});
+	g.addQNoodle(1, {&vrd, "phase_corrected"}, {&ped, "phase_corrected"});
+	g.addQNoodle(1, {&ped, "error"}, {&lf, "error"});
+	g.addRNoodle(0, {&lf, "adjustment"}, {&vrd, "feedback"});
+	g.addQNoodle(8, {&vrd, "phase_corrected"}, {&sink, "phase_corrected"});
 	
 	RoundRobinScheduler sch(g);
 	sch.run();
