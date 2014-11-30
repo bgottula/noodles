@@ -21,7 +21,7 @@ void RoundRobinScheduler::run_once(void)
 			b->name(), b);
 		b->work();
 		
-		m_graph.dumpGraph();
+		m_graph.dumpGraph(false, true);
 	}
 }
 
