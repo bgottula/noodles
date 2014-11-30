@@ -31,8 +31,6 @@
 #define BG_WHT "\e[47m"
 #define BG_DEF "\e[49m"
 
-
-
 extern bool verbose;
 
 void debug(const char *format, ...) __attribute__((format(printf, 1, 2)));
