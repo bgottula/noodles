@@ -83,7 +83,7 @@ void Graph::checkGraph(void)
 	m_needCheck = false;
 }
 
-void Graph::dumpGraph(void)
+void Graph::dumpGraph(bool blocks, bool noodles)
 {
 	static int count = 0;
 	
@@ -92,28 +92,34 @@ void Graph::dumpGraph(void)
 	
 	debug(AT_BLD AT_ULI "\nGRAPH SNAPSHOT #%d\n" AT_RST, ++count);
 	
+	if (blocks) dumpBlocks();
+	if (noodles) dumpNoodles();
+}
+
+void Graph::dumpBlocks(void)
+{
 	for (auto it = m_blocks.cbegin(); it != m_blocks.cend(); ++it)
 	{
 		Block *b = *it;
-		debug("  BLOCK " AT_BLD "%s" AT_RST, str_block(b));
+		debug("  BLOCK %s", str_block(b));
 		
 		auto in_begin = b->inputs.m_names.cbegin();
 		auto in_end = b->inputs.m_names.cend();
 		for (auto in_it = in_begin; in_it != in_end; ++in_it)
 		{
 			pair<const char *, int> name = *in_it;
-			unsigned long num_noodles =
-				b->inputs.m_ports.at(b->inputs.m_names.at(name.first)).size();
+			auto noodles =
+				b->inputs.m_ports.at(b->inputs.m_names.at(name.first));
 			
 			debug("\n     in " AT_ULI FG_GRN "%s" AT_RST FG_DEF, name.first);
-			if (num_noodles > 0)
+			if (!noodles.empty())
 			{
-				debug(" (" AT_BLD "%lu" AT_RST " noodle%s)",
-					num_noodles, (num_noodles == 1 ? "" : "s"));
+				debug(" (from %s)",
+					str_endpoint(&noodles.at(0)->m_from, false));
 			}
 			else
 			{
-				debug(" (" FG_RED "unconnected!" FG_DEF ")");
+				debug(" (unconnected!)");
 			}
 		}
 		
@@ -122,24 +128,35 @@ void Graph::dumpGraph(void)
 		for (auto out_it = out_begin; out_it != out_end; ++out_it)
 		{
 			pair<const char *, int> name = *out_it;
-			unsigned long num_noodles =
-				b->outputs.m_ports.at(b->outputs.m_names.at(name.first)).size();
+			auto noodles =
+				b->outputs.m_ports.at(b->outputs.m_names.at(name.first));
+			
+#warning TODO
+			// TODO: make this match the input noodles side
+			// (show a list of the from endpoints)
 			
 			debug("\n    out " AT_ULI FG_RED "%s" AT_RST FG_DEF, name.first);
-			if (num_noodles > 0)
+			if (!noodles.empty())
 			{
-				debug(" (" AT_BLD "%lu" AT_RST " noodle%s)",
+				unsigned long num_noodles = noodles.size();
+				debug(" (to %lu noodle%s)",
 					num_noodles, (num_noodles == 1 ? "" : "s"));
 			}
 			else
 			{
-				debug(" (" AT_BLD "unconnected!" AT_RST ")");
+				debug(" (unconnected!)");
 			}
 		}
 		
 		debug("\n\n");
 	}
 	
+	/* clean up dynamically allocated strings */
+	m_strpool.clear();
+}
+
+void Graph::dumpNoodles(void)
+{
 	for (auto it = m_noodles.cbegin(); it != m_noodles.cend(); ++it)
 	{
 		Noodle *n = *it;

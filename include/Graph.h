@@ -18,8 +18,7 @@ public:
 	
 	void checkGraph(void);
 	
-	void dumpGraph(void);
-	void dumpNoodles(void);
+	void dumpGraph(bool blocks = true, bool noodles = true);
 	
 private:
 	void addNoodle(Noodle *n, Endpoint from, Endpoint to);
@@ -27,6 +26,9 @@ private:
 	bool m_needCheck = true;
 	unordered_set<Block *> m_blocks;
 	unordered_set<Noodle *> m_noodles;
+	
+	void dumpBlocks(void);
+	void dumpNoodles(void);
 	
 	const char *str_noodle(const Noodle *n);
 	const char *str_block(const Block *b);
