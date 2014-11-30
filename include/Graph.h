@@ -24,8 +24,8 @@ private:
 	void addNoodle(Noodle *n, Endpoint from, Endpoint to);
 	
 	bool m_needCheck = true;
-	unordered_set<Block *> m_blocks;
-	unordered_set<Noodle *> m_noodles;
+	vector<Block *> m_blocks;
+	vector<Noodle *> m_noodles;
 	
 	void dumpBlocks(void);
 	void dumpNoodles(void);

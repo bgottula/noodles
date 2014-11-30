@@ -2,13 +2,12 @@
 
 void Graph::addNoodle(Noodle *n, Endpoint from, Endpoint to)
 {
-	if (m_blocks.find(from.block) == m_blocks.end())
+	if (find(m_blocks.cbegin(), m_blocks.cend(), from.block) == m_blocks.cend())
 	{
 		debug("- block %s(%p) is not in the graph; adding now.\n",
 			from.block->name(), from.block);
 		
-		bool result = m_blocks.insert(from.block).second;
-		assert(result);
+		m_blocks.push_back(from.block);
 	}
 	else
 	{
@@ -16,13 +15,12 @@ void Graph::addNoodle(Noodle *n, Endpoint from, Endpoint to)
 			from.block->name(), from.block);
 	}
 	
-	if (m_blocks.find(to.block) == m_blocks.end())
+	if (find(m_blocks.cbegin(), m_blocks.cend(), to.block) == m_blocks.cend())
 	{
 		debug("- block %s(%p) is not in the graph; adding now.\n",
 			to.block->name(), to.block);
 		
-		bool result = m_blocks.insert(to.block).second;
-		assert(result);
+		m_blocks.push_back(to.block);
 	}
 	else
 	{
@@ -39,8 +37,7 @@ void Graph::addNoodle(Noodle *n, Endpoint from, Endpoint to)
 	
 	debug("- adding noodle to the graph.\n");
 	
-	bool result = m_noodles.insert(n).second;
-	assert(result);
+	m_noodles.push_back(n);
 	
 	dumpGraph();
 	
