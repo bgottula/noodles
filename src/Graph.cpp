@@ -179,14 +179,14 @@ const char *Graph::str_noodle(const Noodle *n)
 	if (n->is_qnoodle())
 	{
 		snprintf(str, m_strlen,
-			AT_BLD FG_YLW "QNoodle" AT_RST FG_DEF "@" AT_BLD "%04" PRIxPTR AT_RST,
-			((uintptr_t)n & 0xffff));
+			AT_BLD FG_YLW "QNoodle" AT_RST FG_DEF "@" AT_BLD "%04"
+			PRIxPTR AT_RST, ((uintptr_t)n & 0xffff));
 	}
 	else
 	{
 		snprintf(str, m_strlen,
-			AT_BLD FG_MGT "RNoodle" AT_RST FG_DEF "@" AT_BLD "%04" PRIxPTR AT_RST,
-			((uintptr_t)n & 0xffff));
+			AT_BLD FG_MGT "RNoodle" AT_RST FG_DEF "@" AT_BLD "%04"
+			PRIxPTR AT_RST, ((uintptr_t)n & 0xffff));
 	}
 	return str;
 }
@@ -204,7 +204,9 @@ const char *Graph::str_endpoint(const Endpoint *e, bool input)
 {
 	char *str = m_strpool.alloc(m_strlen);
 	snprintf(str, m_strlen,
-		AT_BLD FG_CYN "%s" AT_RST FG_DEF "@" AT_BLD "%04" PRIxPTR AT_RST "[" AT_ULI "%s%s" AT_RST FG_DEF "]",
-		e->block->name(), ((uintptr_t)e->block & 0xffff), (input ? FG_GRN : FG_RED), e->port);
+		AT_BLD FG_CYN "%s" AT_RST FG_DEF "@" AT_BLD "%04" PRIxPTR AT_RST "["
+		AT_ULI "%s%s" AT_RST FG_DEF "]",
+		e->block->name(), ((uintptr_t)e->block & 0xffff),
+		(input ? FG_GRN : FG_RED), e->port);
 	return str;
 }
