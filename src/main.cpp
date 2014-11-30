@@ -29,10 +29,10 @@ private:
 	int m_counter;
 };
 
-class VariableRateDecimator : public Block
+class VariableDecimator : public Block
 {
 public:
-	VariableRateDecimator(void)
+	VariableDecimator(void)
 	{
 		inputs.add("phase");
 		inputs.add("feedback");
@@ -58,7 +58,7 @@ public:
 			inputs.get_one("feedback", &feedback);
 			
 			/* intentionally truncate to [0, 255] */
-			int sum = (uint8_t)(phase + feedback);
+			int sum = (phase + feedback) % 256;
 			outputs.put_one("phase_corrected", sum);
 		}
 	}
@@ -185,7 +185,7 @@ int main(int argc, char **argv)
 	}
 	
 	Source source;
-	VariableRateDecimator vrd;
+	VariableDecimator vd;
 	PhaseErrorDetector ped;
 	LoopFilter lf;
 	Sink sink;
@@ -195,11 +195,11 @@ int main(int argc, char **argv)
 	/* do a dump of the graph's init state (0 vertices & 0 edges) */
 	g.dumpGraph();
 	
-	g.addQNoodle(8, {&source, "phase"}, {&vrd, "phase"});
-	g.addQNoodle(1, {&vrd, "phase_corrected"}, {&ped, "phase_corrected"});
+	g.addQNoodle(4, {&source, "phase"}, {&vd, "phase"});
+	g.addQNoodle(1, {&vd, "phase_corrected"}, {&ped, "phase_corrected"});
 	g.addQNoodle(1, {&ped, "error"}, {&lf, "error"});
-	g.addRNoodle(0, {&lf, "adjustment"}, {&vrd, "feedback"});
-	g.addQNoodle(8, {&vrd, "phase_corrected"}, {&sink, "phase_corrected"});
+	g.addRNoodle(0, {&lf, "adjustment"}, {&vd, "feedback"});
+	g.addQNoodle(4, {&vd, "phase_corrected"}, {&sink, "phase_corrected"});
 	
 	RoundRobinScheduler sch(g);
 	sch.run();
