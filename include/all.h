@@ -13,8 +13,8 @@ using namespace std;
 #include "Endpoint.h"
 #include "Graph.h"
 #include "Scheduler.h"
+#include "Port.h"
 #include "Noodle.h"
-#include "Ports.h"
 #include "Block.h"
 
 #endif
