@@ -1,6 +1,10 @@
 #ifndef NOODLE_H
 #define NOODLE_H
 
+/* forward declarations */
+template <typename T> class InputPort;
+template <typename T> class OutputPort;
+
 /* base noodle class (protected ctor prevents direct instantiation) */
 template <typename T>
 class Noodle
