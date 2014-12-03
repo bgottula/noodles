@@ -1,5 +1,69 @@
 #include "all.h"
 
+#ifdef TEMPLATES
+
+/*template <typename T>
+void Graph::register_noodle(Noodle<T>& n)
+{
+	
+}*/
+
+#else
+
+Graph::~Graph(void)
+{
+	if (m_name != nullptr)
+	{
+		free(m_name);
+	}
+}
+
+const char *Graph::name(void) const
+{
+	/* only do this the first time the function is called for this instance */
+	if (m_name == nullptr)
+	{
+		decltype(*this) g = *this;
+		
+		int status;
+		m_name = abi::__cxa_demangle(typeid(g).name(),
+			nullptr, nullptr, &status);
+		assert(status == 0);
+	}
+	
+	return m_name;
+}
+
+void Graph::register_block(const char *b_name, Block *b)
+{
+	int status;
+	char *demangled = abi::__cxa_demangle(typeid(*b).name(),
+		nullptr, nullptr, &status);
+	assert(status == 0);
+	debug("%s.register_block: %s %s @ %p\n",
+		name(), demangled, b_name, b);
+	free(demangled);
+	
+	if (any_of(m_blocks.cbegin(), m_blocks.cend(),
+		[&](const NamedBlock& nb) {
+			return (nb.block == b);
+		}))
+	{
+		throw DuplicateBlockException();
+	}
+	if (any_of(m_blocks.cbegin(), m_blocks.cend(),
+		[&](const NamedBlock& nb) {
+			return (strcmp(b_name, nb.name) == 0);
+		}))
+	{
+		throw DuplicateBlockNameException();
+	}
+	
+	NamedBlock nb { .name = b_name, .block = b };
+	m_blocks.push_back(nb);
+}
+
+#if 0
 void Graph::addNoodle(Noodle *n, Endpoint from, Endpoint to)
 {
 	if (find(m_blocks.cbegin(), m_blocks.cend(), from.block) == m_blocks.cend())
@@ -224,3 +288,6 @@ const char *Graph::str_endpoint(const Endpoint *e, bool input)
 		(input ? FG_GRN : FG_RED), e->port);
 	return str;
 }
+#endif
+
+#endif
