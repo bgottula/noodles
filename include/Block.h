@@ -3,10 +3,9 @@
 
 #define REGISTER_PORT(_p) register_port(#_p, &_p)
 
+/* base for block classes (protected ctor prevents direct instantiation) */
 class Block
 {
-	friend class Graph;
-	
 public:
 	virtual ~Block();
 	
@@ -16,6 +15,8 @@ public:
 	const char *name(void) const;
 	
 protected:
+	Block() {}
+	
 	void register_port(const char *name, Port *p);
 	void list_ports(void);
 	
