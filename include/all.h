@@ -10,11 +10,10 @@ using namespace std;
 #include "debug.h"
 
 /* class headers (order matters) */
-#include "Endpoint.h"
+#include "Noodle.h"
+#include "Port.h"
+#include "Block.h"
 #include "Graph.h"
 #include "Scheduler.h"
-#include "Port.h"
-#include "Noodle.h"
-#include "Block.h"
 
 #endif
