@@ -183,7 +183,14 @@ public:
 	
 	void work(void)
 	{
-		
+		// work once and then return
+		// no need to check input/output availability
+	}
+	
+	bool can_work(void)
+	{
+		// TODO: check input/output availability HERE
+		return true;
 	}
 	
 private:
@@ -208,17 +215,17 @@ private:
 	ExampleBlock eblock2;
 };
 
-/* HOWTO: implement block work functions
- * 1. figure out if you have the proper inputs to be able to do work
- * 2. figure out if you could store the output in the output queue
- * 3. if conditions (1) or (2) are false, STOP; don't touch inputs or outputs!
- * 4. get input(s)
- * 5. do whatever processing needs to be done
- * 6. put output(s)
- * 
- * TODO: break the current work() function into smaller pieces (e.g.
- * can_do_work, do_one_work, whatever) so that it's harder to accidentally get 
- * this procedure wrong
+/* HOWTO: implement block functions
+ * can_work()
+ * - if inputs are not available, return false
+ * - if outputs are not available, return false
+ * - else, return true
+ * work():
+ * - assume that can_work() has already been found to be true
+ * - get input(s)
+ * - do processing that needs to be done
+ * - put output(s)
+ * - ONLY DO ONE 'CYCLE' AND THEN RETURN
  */
 
 int main(int argc, char **argv)

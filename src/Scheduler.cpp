@@ -20,9 +20,17 @@ void RoundRobinScheduler::run_once(void)
 	for (auto it = m_blocks.begin(); it != m_blocks.end(); ++it)
 	{
 		Block *b = *it;
-		debug("RoundRobinScheduler: calling work on block %s(%p)\n",
-			b->name(), b);
-		b->work();
+		
+		bool can_work = b->can_work();
+		debug("RoundRobinScheduler: block %s(%p) can%s do work\n",
+			(can_work ? "" : "not"), b->name(), b);
+		
+		if (can_work)
+		{
+			debug("RoundRobinScheduler: calling work on block %s(%p)\n",
+				b->name(), b);
+			b->work();
+		}
 		
 		m_graph.dumpGraph(false, true);
 	}

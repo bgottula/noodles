@@ -12,6 +12,8 @@ public:
 	virtual void reset(void) = 0;
 	virtual void work(void) = 0;
 	
+	virtual bool can_work(void) = 0;
+	
 	const char *name(void) const;
 	
 protected:
