@@ -143,6 +143,8 @@ public: OutputPutUnavailableException(void) :
 		"samples") {};
 };
 
+#define TEMPLATES
 #include "../src/Port.cpp"
+#undef TEMPLATES
 
 #endif

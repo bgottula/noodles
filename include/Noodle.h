@@ -104,6 +104,8 @@ private:
 	T m_reg;
 };
 
+#define TEMPLATES
 #include "../src/Noodle.cpp"
+#undef TEMPLATES
 
 #endif

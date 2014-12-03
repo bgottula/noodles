@@ -1,7 +1,6 @@
 #include "all.h"
 
-#ifndef NOODLE_CPP
-#define NOODLE_CPP
+#ifdef TEMPLATES
 
 template <typename T>
 void QNoodle<T>::push(const T& sample)

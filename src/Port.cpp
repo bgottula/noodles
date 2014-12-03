@@ -1,7 +1,6 @@
 #include "all.h"
 
-#ifndef PORT_CPP
-#define PORT_CPP
+#ifdef TEMPLATES
 
 template <typename T>
 void InputPort<T>::connect(Noodle<T> *n)
