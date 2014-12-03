@@ -8,14 +8,14 @@ Block::~Block(void)
 	}
 }
 
-void Block::register_port(const char *name, Port *p)
+void Block::register_port(const char *p_name, Port *p)
 {
 	int status;
 	char *demangled = abi::__cxa_demangle(typeid(*p).name(),
 		nullptr, nullptr, &status);
 	assert(status == 0);
 	debug("%s.register_port: %s %s @ %p\n",
-		this->name(), demangled, name, p);
+		name(), demangled, p_name, p);
 	free(demangled);
 	
 	if (any_of(m_ports.cbegin(), m_ports.cend(),
@@ -27,13 +27,13 @@ void Block::register_port(const char *name, Port *p)
 	}
 	if (any_of(m_ports.cbegin(), m_ports.cend(),
 		[&](const NamedPort& np) {
-			return (strcmp(name, np.name) == 0);
+			return (strcmp(p_name, np.name) == 0);
 		}))
 	{
 		throw DuplicatePortNameException();
 	}
 	
-	NamedPort np { .name = name, .port = p };
+	NamedPort np { .name = p_name, .port = p };
 	m_ports.push_back(np);
 }
 

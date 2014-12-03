@@ -17,7 +17,7 @@ public:
 protected:
 	Block() {}
 	
-	void register_port(const char *name, Port *p);
+	void register_port(const char *p_name, Port *p);
 	void list_ports(void);
 	
 private:
