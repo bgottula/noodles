@@ -8,7 +8,7 @@ class Block
 	friend class Graph;
 	
 public:
-	~Block();
+	virtual ~Block();
 	
 	virtual void reset(void) = 0;
 	virtual void work(void) = 0;
