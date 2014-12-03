@@ -38,6 +38,8 @@ void debug(const char *format, ...) __attribute__((format(printf, 1, 2)));
 class StrPool
 {
 public:
+	~StrPool() { clear(); }
+	
 	char *alloc(size_t len);
 	void clear(void);
 	
