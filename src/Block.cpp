@@ -14,9 +14,9 @@ void Block::register_port(const char *name, Port *p)
 	char *demangled = abi::__cxa_demangle(typeid(*p).name(),
 		nullptr, nullptr, &status);
 	assert(status == 0);
-	
-	printf("register_port: name %s type %s addr %p avail %zu\n",
-		name, demangled, p, p->available());
+	debug("%s.register_port: %s %s @ %p\n",
+		this->name(), demangled, name, p);
+	free(demangled);
 	
 	if (any_of(m_ports.cbegin(), m_ports.cend(),
 		[&](const NamedPort& np) {
