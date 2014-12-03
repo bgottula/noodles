@@ -4,20 +4,20 @@
 class Scheduler
 {
 public:
-	Scheduler(Graph& graph) :
-		m_graph(graph) { }
+	/*Scheduler(Graph& graph) :
+		m_graph(graph) {}*/
 	
 	virtual void run(void) = 0;
 	
 protected:
-	Graph& m_graph;
+	//Graph& m_graph;
 };
 
 class RoundRobinScheduler : public Scheduler
 {
 public:
-	RoundRobinScheduler(Graph& graph) :
-		Scheduler(graph) { }
+	/*RoundRobinScheduler(Graph& graph) :
+		Scheduler(graph) {}*/
 	
 	void run(void);
 	
@@ -28,8 +28,8 @@ private:
 class ThreadedScheduler : public Scheduler
 {
 public:
-	ThreadedScheduler(Graph& graph) :
-		Scheduler(graph) { }
+	/*ThreadedScheduler(Graph& graph) :
+		Scheduler(graph) {}*/
 	
 	void run(void);
 };
@@ -37,8 +37,8 @@ public:
 class InteractiveScheduler : public Scheduler
 {
 public:
-	InteractiveScheduler(Graph& graph) :
-		Scheduler(graph) { }
+	/*InteractiveScheduler(Graph& graph) :
+		Scheduler(graph) {}*/
 	
 	void run(void);
 };
