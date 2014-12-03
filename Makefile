@@ -1,9 +1,9 @@
 # object files used to link all binaries
-OBJ_COMMON:=obj/debug.o obj/Block.o obj/Graph.o obj/Noodle.o obj/Port.o obj/Scheduler.o
+OBJ_COMMON:=obj/debug.o obj/Noodle.o obj/Port.o obj/Block.o obj/Graph.o obj/Scheduler.o
 # object files used to link bin/noodles
 OBJ_NOODLES:=$(OBJ_COMMON) obj/main.o
 # object files used to link bin/test
-OBJ_TEST:=$(OBJ_COMMON) obj/unit/unit.o obj/unit/BlockTest.o obj/unit/GraphTest.o obj/unit/NoodleTest.o obj/unit/PortsTest.o
+OBJ_TEST:=$(OBJ_COMMON) obj/unit/unit.o obj/unit/NoodleTest.o obj/unit/PortsTest.o obj/unit/BlockTest.o obj/unit/GraphTest.o
 
 # libraries used to link bin/noodles
 LINK_NOODLES:=
