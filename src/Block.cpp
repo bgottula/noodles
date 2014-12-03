@@ -60,17 +60,6 @@ void Block::list_ports(void)
 		
 		if (i != nullptr) printf("is an input port.\n");
 		if (o != nullptr) printf("is an output port.\n");
-		
-		// TODO: how do we do this kind of thing, but generically??
-		/*InputPort<int> *ip_int = dynamic_cast<InputPort<int> *>(p);
-		if (ip_int != nullptr) printf("ip_int = %p\n", ip_int);
-		InputPort<float> *ip_float = dynamic_cast<InputPort<float> *>(p);
-		if (ip_float != nullptr) printf("ip_float = %p\n", ip_float);
-		OutputPort<int> *op_int = dynamic_cast<OutputPort<int> *>(p);
-		if (op_int != nullptr) printf("op_int = %p\n", op_int);
-		OutputPort<float> *op_float = dynamic_cast<OutputPort<float> *>(p);
-		if (op_float != nullptr) printf("op_float = %p\n", op_float);
-		*/
 	}
 }
 
@@ -79,8 +68,10 @@ const char *Block::name(void) const
 	/* only do this the first time the function is called for this instance */
 	if (m_name == nullptr)
 	{
+		decltype(*this) b = *this;
+		
 		int status;
-		m_name = abi::__cxa_demangle(typeid(*this).name(),
+		m_name = abi::__cxa_demangle(typeid(b).name(),
 			nullptr, nullptr, &status);
 		assert(status == 0);
 	}
