@@ -29,12 +29,12 @@ private:
 class DuplicatePortException : public runtime_error
 {
 public: DuplicatePortException(void) :
-	runtime_error("Blocks cannot contain duplicate ports") {};
+	runtime_error("Port instances may only be registered once") {};
 };
 class DuplicatePortNameException : public runtime_error
 {
 public: DuplicatePortNameException(void) :
-	runtime_error("Blocks must contain ports with unique names") {};
+	runtime_error("Port instances must be registered with unique names") {};
 };
 
 class NonexistentPortException : public runtime_error
