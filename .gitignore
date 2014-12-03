@@ -7,3 +7,4 @@ ipch
 *.vsp
 Release
 Debug
+DebugTest
