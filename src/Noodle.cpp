@@ -1,20 +1,28 @@
 #include "all.h"
 
-void QNoodle::push(int sample)
+#ifndef NOODLE_CPP
+#define NOODLE_CPP
+
+template <typename T>
+void QNoodle<T>::push(const T& sample)
 {
 	assert(m_queue.size() <= m_max);
 	m_queue.push_back(sample);
 }
 
-int QNoodle::pop(void)
+template <typename T>
+T QNoodle<T>::pop(void)
 {
-	int sample = m_queue.front();
+	T sample = m_queue.front();
 	m_queue.pop_front();
 	return sample;
 }
 
-int QNoodle::peek(size_t where)
+template <typename T>
+T QNoodle<T>::peek(size_t where)
 {
-#warning TODO
-	// TODO
+	T sample = m_queue[where];
+	return sample;
 }
+
+#endif

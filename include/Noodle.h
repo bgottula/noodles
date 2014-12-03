@@ -1,14 +1,12 @@
 #ifndef NOODLE_H
 #define NOODLE_H
 
-/* generic noodle class */
+/* base noodle class (protected ctor prevents direct instantiation) */
+template <typename T>
 class Noodle
 {
-	friend class Graph;
-	
 public:
-	Noodle(Endpoint from, Endpoint to)
-		: m_from(from), m_to(to) {};
+	virtual ~Noodle() {}
 	
 	virtual bool is_qnoodle(void) const = 0;
 	virtual void lock(unique_lock<mutex>& mgr) = 0;
@@ -17,28 +15,30 @@ public:
 	virtual size_t count(void) const = 0;
 	virtual size_t free(void) const = 0;
 	
-	virtual void push(int sample) = 0;
-	virtual int pop(void) = 0;
-	virtual int peek(size_t where) = 0;
+	virtual void push(const T& sample) = 0;
+	virtual T pop(void) = 0;
+	virtual T peek(size_t where) = 0;
 	
 protected:
-	/* currently these endpoint structs are only actually used in
+	Noodle(OutputPort<T> *from, InputPort<T> *to)
+		: m_from(from), m_to(to) {};
+	
+	/* currently these backref pointers are only actually used in
 	 * Graph::dumpGraph so we can easily iterate over all of the noodles and
-	 * see which blocks they are connected to in order to print a nice diagram
+	 * see which ports they are connected to in order to print a nice diagram
 	 * for the user; in no other case do we need to quickly iterate over the
 	 * list of noodles in this way; they can be ripped out later if desired */
-	Endpoint m_from;
-	Endpoint m_to;
+	OutputPort<T> *m_from;
+	InputPort<T>  *m_to;
 };
 
 /* queue noodle: buffers a certain number of samples */
-class QNoodle : public Noodle
+template <typename T>
+class QNoodle : public Noodle<T>
 {
-	friend class Graph;
-	
 public:
-	QNoodle(size_t max, Endpoint from, Endpoint to)
-		: Noodle(from, to), m_max(max) {};
+	QNoodle(size_t max, OutputPort<T> *from, InputPort<T> *to)
+		: Noodle<T>(from, to), m_max(max) {};
 	
 	bool is_qnoodle(void) const { return true; }
 	void lock(unique_lock<mutex>& mgr) { mgr = unique_lock<mutex>(m_mutex); }
@@ -51,18 +51,15 @@ public:
 	size_t free(void) const { return m_max - m_queue.size(); }
 	
 	/* NEEDS LOCK: push one sample onto the queue */
-	void push(int sample);
+	void push(const T& sample);
 	/* NEEDS LOCK: pop one sample from the queue */
-	int pop(void);
+	T pop(void);
 	/* NEEDS LOCK: peek one sample from a given position in the queue */
-	int peek(size_t where);
-	
-#warning TODO
-	// TODO: find out if peek really needs the mutex to be held
+	T peek(size_t where);
 	
 private:
 	/* sample buffer queue */
-	deque<int> m_queue;
+	deque<T> m_queue;
 	/* mutex to prevent simultaneous queue modification by multiple threads */
 	mutex m_mutex;
 	
@@ -71,16 +68,15 @@ private:
 };
 
 /* register noodle: holds only one sample, has init value, never blocks */
-class RNoodle : public Noodle
+template <typename T>
+class RNoodle : public Noodle<T>
 {
-	friend class Graph;
-	
 public:
-	RNoodle(int init, Endpoint from, Endpoint to)
-		: Noodle(from, to), m_reg(init) {};
+	RNoodle(T init, OutputPort<T> *from, InputPort<T> *to)
+		: Noodle<T>(from, to), m_reg(init) {};
 	
 	bool is_qnoodle(void) const { return false; }
-	void lock(unique_lock<mutex>& mgr) { }
+	void lock(unique_lock<mutex>& mgr) { mgr = unique_lock<mutex>(m_mutex); }
 	
 	/* register can always hold just one sample */
 	size_t max(void) const { return 1; }
@@ -90,15 +86,20 @@ public:
 	size_t free(void) const { return 1; }
 	
 	/* write to the sample register */
-	void push(int sample) { m_reg.store(sample); }
+	void push(const T& sample) { m_reg = sample; }
 	/* read from the sample register */
-	int pop(void) { return m_reg.load(); }
+	T pop(void) { return m_reg; }
 	/* peek the sample register (same as pop) */
-	int peek(size_t where) { return m_reg.load(); }
+	T peek(size_t where) { return m_reg; }
 	
 private:
+	/* mutex to ensure atomic loading/storing of the register value */
+	mutex m_mutex;
+	
 	/* register containing the current sample value */
-	atomic_int m_reg;
+	T m_reg;
 };
+
+#include "../src/Noodle.cpp"
 
 #endif
