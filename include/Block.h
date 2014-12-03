@@ -26,6 +26,13 @@ private:
 	vector<NamedPort> m_ports;
 };
 
+/* associates a name with a port */
+struct NamedBlock
+{
+	const char *name;
+	Block *block;
+};
+
 class DuplicatePortException : public runtime_error
 {
 public: DuplicatePortException(void) :
