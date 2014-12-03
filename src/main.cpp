@@ -1,5 +1,11 @@
 #include "all.h"
 
+#warning TODO
+// TODO: make it so that Block subclasses must register their ports in the
+// constructor (string -> Port<T>&); this will make debugging still be possible
+// ... hmm, where will they be registering them though?
+
+#if 0
 class Source : public Block
 {
 public:
@@ -155,6 +161,52 @@ public:
 		}
 	}
 };
+#endif
+
+class ExampleBlock : public Block
+{
+public:
+	ExampleBlock(void)
+	{
+		REGISTER_PORT(ip_int);
+		REGISTER_PORT(ip_float);
+		REGISTER_PORT(op_int);
+		REGISTER_PORT(op_float);
+		
+		//list_ports();
+	}
+	
+	void reset(void)
+	{
+		
+	}
+	
+	void work(void)
+	{
+		
+	}
+	
+private:
+	InputPort<int> ip_int;
+	InputPort<float> ip_float;
+	
+	OutputPort<int> op_int;
+	OutputPort<float> op_float;
+};
+
+class MyGraph : public Graph
+{
+public:
+	MyGraph(void)
+	{
+		REGISTER_BLOCK(eblock1);
+		REGISTER_BLOCK(eblock2);
+	}
+	
+private:
+	ExampleBlock eblock1;
+	ExampleBlock eblock2;
+};
 
 /* HOWTO: implement block work functions
  * 1. figure out if you have the proper inputs to be able to do work
@@ -184,6 +236,9 @@ int main(int argc, char **argv)
 		}
 	}
 	
+	MyGraph mg;
+	
+#if 0
 	Source source;
 	VariableDecimator vd;
 	PhaseErrorDetector ped;
@@ -203,6 +258,7 @@ int main(int argc, char **argv)
 	
 	RoundRobinScheduler sch(g);
 	sch.run();
+#endif
 	
 	return 0;
 }
