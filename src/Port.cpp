@@ -1,115 +1,126 @@
 #include "all.h"
 
-void Ports::add(const char *name)
+#ifndef PORT_CPP
+#define PORT_CPP
+
+template <typename T>
+void InputPort<T>::connect(Noodle<T> *n)
 {
-	int index = m_ports.size();
+	if (m_noodle != nullptr) throw InputMultipleNoodleException();
 	
-	if (m_names.count(name) != 0)
+	m_noodle = n;
+}
+
+template <typename T>
+void OutputPort<T>::connect(Noodle<T> *n)
+{
+	if (find(m_noodles.cbegin(), m_noodles.cend(), n) != m_noodles.cend())
+		throw OutputDuplicateNoodleException();
+	
+	m_noodles.push_back(n);
+}
+
+template <typename T>
+size_t InputPort<T>::available(void) const
+{
+	if (m_noodle == nullptr) throw InputNotConnectedException();
+	
+	return m_noodle->free();
+}
+
+template <typename T>
+size_t OutputPort<T>::available(void) const
+{
+	if (m_noodles.empty()) throw OutputNotConnectedException();
+	
+	auto it = min_element(m_noodles.cbegin(), m_noodles.cend(),
+		[](const Noodle<T> *lhs, const Noodle<T> *rhs) {
+			return (lhs->free() < rhs->free());
+		});
+	
+	return (*it)->free();
+}
+
+template <typename T>
+void InputPort<T>::get_one(T& sample)
+{
+	/* mutex block */
 	{
-		throw DuplicatePortException();
-	}
-	
-	m_names.insert({name, index});
-	m_ports.push_back(Port());
-}
-
-Port *Ports::find_port(const char *name)
-{
-	if (m_names.count(name) == 0) throw NonexistentPortException();
-	int index = m_names[name];
-	return &m_ports.at(index);
-}
-
-Port *InputPorts::find_port_check(const char *name)
-{
-	auto p = find_port(name);
-	
-	if (p->size() == 0) throw InputNotConnectedException();
-	return p;
-}
-
-Port *OutputPorts::find_port_check(const char *name)
-{
-	auto p = find_port(name);
-	
-	if (p->size() == 0) throw OutputNotConnectedException();
-	return p;
-}
-
-void InputPorts::connect(const char *name, Noodle *noodle)
-{
-	auto p = find_port(name);
-	
-	if (p->size() > 0) throw InputMultipleNoodleException();
-	p->push_back(noodle);
-}
-
-void OutputPorts::connect(const char *name, Noodle *noodle)
-{
-	auto p = find_port(name);
-	
-	p->push_back(noodle);
-}
-
-size_t InputPorts::available(const char *name)
-{
-	auto p = find_port_check(name);
-	auto n = (*p)[0];
-	
-	return n->count();
-}
-
-size_t OutputPorts::available(const char *name)
-{
-	auto p = find_port_check(name);
-	
-	/* find the noodle on this output port with the smallest number of free
-	 * spots for samples available, and return that number */
-	size_t min_free = SIZE_MAX;
-	for (auto it = p->begin(); it != p->end(); ++it)
-	{
-		Noodle *n = *it;
+		unique_lock<mutex> mgr;
+		m_noodle->lock(mgr);
 		
-		min_free = min(min_free, n->free());
-		if (min_free == 0) break;
+		if (m_noodle->max() < 1) throw InputGetImpossibleException();
+		if (m_noodle->count() < 1) throw InputGetUnavailableException();
+		sample = m_noodle->pop();
 	}
-	
-	return min_free;
 }
 
-void InputPorts::get_one(const char *name, int *sample)
+template <typename T>
+void InputPort<T>::get_arr(size_t count, T *samples)
 {
-	auto p = find_port_check(name);
-	auto n = (*p)[0];
+	assert(count >= 1);
 	
 	/* mutex block */
 	{
 		unique_lock<mutex> mgr;
-		n->lock(mgr);
+		m_noodle->lock(mgr);
 		
-		if (n->max() < 1) throw InputGetImpossibleException();
-		if (n->count() < 1) throw InputGetUnavailableException();
-		*sample = n->pop();
+		if (m_noodle->max() < count) throw InputGetImpossibleException();
+		if (m_noodle->count() < count) throw InputGetUnavailableException();
+		
+		for (size_t i = 0; i < count; ++i)
+		{
+			samples[i] = m_noodle->pop();
+		}
 	}
 }
 
-void InputPorts::get_multi(const char *name, size_t count, int *samples)
+template <typename T>
+void InputPort<T>::get_var(size_t count, ...)
 {
-#warning TODO
-}
-
-void InputPorts::get_vari(const char *name, size_t count, ...)
-{
-#warning TODO
-}
-
-void OutputPorts::put_one(const char *name, int sample)
-{
-	auto p = find_port_check(name);
+	assert(count >= 1);
 	
-	for (auto it = p->begin(); it != p->end(); ++it)
+	va_list v;
+	va_start(v, count);
+	
+	/* mutex block */
 	{
-		Noodle *n = *it;
+		unique_lock<mutex> mgr;
+		m_noodle->lock(mgr);
+		
+		if (m_noodle->max() < count) throw InputGetImpossibleException();
+		if (m_noodle->count() < count) throw InputGetUnavailableException();
+		
+		for (size_t i = 0; i < count; ++i)
+		{
+			T *sample = va_arg(v, T *);
+			*sample = m_noodle->pop();
+		}
+	}
+	
+	va_end(v);
+}
+
+template <typename T>
+void InputPort<T>::peek_one(size_t where, T& sample)
+{
+	/* mutex block */
+	{
+		unique_lock<mutex> mgr;
+		m_noodle->lock(mgr);
+		
+		if (m_noodle->max() <= where) throw InputPeekImpossibleException();
+		if (m_noodle->count() <= where) throw InputPeekUnavailableException();
+		sample = m_noodle->peek(where);
+	}
+}
+
+template <typename T>
+void OutputPort<T>::put_one(const T& sample)
+{
+	for (auto it = m_noodles.begin(); it != m_noodles.cend(); ++it)
+	{
+		Noodle<T> *n = *it;
 		
 		/* mutex block */
 		{
@@ -123,24 +134,24 @@ void OutputPorts::put_one(const char *name, int sample)
 	}
 }
 
-void OutputPorts::put_repeat(const char *name, size_t repeat, int sample)
+template <typename T>
+void OutputPort<T>::put_repeat(size_t count, const T& sample)
 {
-	assert(repeat >= 1);
-	auto p = find_port_check(name);
+	assert(count >= 1);
 	
-	for (auto it = p->begin(); it != p->end(); ++it)
+	for (auto it = m_noodles.begin(); it != m_noodles.cend(); ++it)
 	{
-		Noodle *n = *it;
+		Noodle<T> *n = *it;
 		
 		/* mutex block */
 		{
 			unique_lock<mutex> mgr;
 			n->lock(mgr);
 			
-			if (n->max() < repeat) throw OutputPutImpossibleException();
-			if (n->free() < repeat) throw OutputPutUnavailableException();
+			if (n->max() < count) throw OutputPutImpossibleException();
+			if (n->free() < count) throw OutputPutUnavailableException();
 			
-			while (repeat-- > 0)
+			for (size_t i = 0; i < count; ++i)
 			{
 				n->push(sample);
 			}
@@ -148,12 +159,48 @@ void OutputPorts::put_repeat(const char *name, size_t repeat, int sample)
 	}
 }
 
-void OutputPorts::put_multi(const char *name, size_t count, const int *samples)
+template <typename T>
+void OutputPort<T>::put_arr(size_t count, const T *samples)
 {
-#warning TODO
+	assert(count >= 1);
+	
+	for (auto it = m_noodles.begin(); it != m_noodles.cend(); ++it)
+	{
+		Noodle<T> *n = *it;
+		
+		/* mutex block */
+		{
+			unique_lock<mutex> mgr;
+			n->lock(mgr);
+			
+			if (n->max() < count) throw InputGetImpossibleException();
+			if (n->count() < count) throw InputGetUnavailableException();
+			
+			for (size_t i = 0; i < count; ++i)
+			{
+				n->push(samples[i]);
+			}
+		}
+	}
 }
 
-void OutputPorts::put_vari(const char *name, size_t count, ...)
+template <typename T>
+void OutputPort<T>::put_var(size_t count, ...)
 {
-#warning TODO
+	assert(count >= 1);
+	
+	va_list v;
+	va_start(v, count);
+	
+	T samples[count];
+	for (size_t i = 0; i < count; ++i)
+	{
+		const T& sample = va_arg(v, const T&);
+		samples[i] = sample;
+	}
+	put_arr(count, samples);
+	
+	va_end(v);
 }
+
+#endif

@@ -1,110 +1,109 @@
-#ifndef PORTS_H
-#define PORTS_H
+#ifndef PORT_H
+#define PORT_H
 
-typedef vector<Noodle *> Port;
-
-class Ports
+/* base for all ports (protected ctor prevents direct instantiation) */
+class Port
 {
-	friend class Graph;
-	
 public:
-	/* add an input or output port with the given name */
-	void add(const char *name);
-	/* associate a named port with a noodle */
-	virtual void connect(const char *name, Noodle *noodle) = 0;
+	virtual ~Port() {}
 	
-	virtual size_t available(const char *name) = 0;
+	virtual size_t available(void) const = 0;
 	
 protected:
-	/* get a pointer to the port with the given name */
-	Port *find_port(const char *name);
-	/* get a pointer to the port with the given name and check connections */
-	virtual Port *find_port_check(const char *name) = 0;
-	
-	/* friendly name -> array index mapping */
-	unordered_map<const char *, int> m_names;
-	/* array of ports, each possibly having multiple noodle pointers */
-	vector<Port> m_ports;
+	Port() {}
 };
 
-class InputPorts : public Ports
+/* base for InputPort<T> (protected ctor prevents direct instantiation) */
+class IPort : public Port
 {
 public:
-	/* associate a named port with a noodle */
-	void connect(const char *name, Noodle *noodle);
+	virtual ~IPort() {}
 	
-	/* return the number of samples waiting in the given input port;
-	 * this value is guaranteed not to decrease unless get() is called */
-	size_t available(const char *name);
-	
-	/* get one sample from the input port queue */
-	void get_one(const char *name, int *sample);
-	/* get multiple samples from the input port queue;
-	 * only performs one lock/unlock cycle on the queue mutex */
-	void get_multi(const char *name, size_t count, int *samples);
-	/* get multiple samples from the input port queue;
-	 * only performs one lock/unlock cycle on the queue mutex;
-	 * expects the given number of int pointers as variadic arguments */
-	void get_vari(const char *name, size_t count, ...);
-	
-private:
-	Port *find_port_check(const char *name);
+protected:
+	IPort() {}
 };
 
-class OutputPorts : public Ports
+/* base for OutputPort<T> (protected ctor prevents direct instantiation) */
+class OPort : public Port
 {
 public:
-	/* associate a named port with a noodle */
-	void connect(const char *name, Noodle *noodle);
+	virtual ~OPort() {}
 	
-	/* return the number of samples that could fit in the given output port;
-	 * this value is guaranteed not to decrease unless put() is called */
-	size_t available(const char *name);
-	
-	/* put one sample onto the output port queue */
-	void put_one(const char *name, int sample);
-	/* put one sample, repeated a number of times, onto the output queue */
-	void put_repeat(const char *name, size_t repeat, int sample);
-	/* put multiple samples onto the output port queue;
-	 * only performs one lock/unlock cycle on the queue mutex */
-	void put_multi(const char *name, size_t count, const int *samples);
-	/* put multiple samples onto the output port queue;
-	 * only performs one lock/unlock cycle on the queue mutex;
-	 * expects the given number of ints as variadic arguments */
-	void put_vari(const char *name, size_t count, ...);
-	
-private:
-	Port *find_port_check(const char *name);
+protected:
+	OPort() {}
 };
 
-/* thrown in Ports::add */
-class DuplicatePortException : public runtime_error
+
+/* generic InputPort class */
+template <typename T>
+class InputPort : public IPort
 {
-public: DuplicatePortException(void) :
-	runtime_error("Port names must be unique") {};
+public:
+	void connect(Noodle<T> *n);
+	
+	size_t available(void) const;
+	
+	void get_one(T& sample);
+	void get_arr(size_t count, T *samples);
+	void get_var(size_t count, ...);
+	
+	void peek_one(size_t where, T& sample);
+	
+	typedef T type;
+	
+protected:
+	Noodle<T> *m_noodle = nullptr;
 };
 
-/* thrown in Ports::connect, Ports::available,
- * InputPorts::get, OutputPorts::put */
-class NonexistentPortException : public runtime_error
+/* generic OutputPort class */
+template <typename T>
+class OutputPort : public OPort
 {
-public: NonexistentPortException(void) :
-	runtime_error("Port with that name has not been added") {};
+public:
+	void connect(Noodle<T> *n);
+	
+	size_t available(void) const;
+	
+	void put_one(const T& sample);
+	void put_repeat(size_t count, const T& sample);
+	void put_arr(size_t count, const T *samples);
+	void put_var(size_t count, ...);
+	
+	typedef T type;
+	
+protected:
+	vector<Noodle<T> *> m_noodles;
 };
 
-/* thrown in InputPorts::connect */
+/* associates a name with a port */
+struct NamedPort
+{
+	const char *name;
+	Port *port;
+};
+
 class InputMultipleNoodleException : public runtime_error
 {
 public: InputMultipleNoodleException(void) :
 	runtime_error("Input ports cannot be connected to multiple noodles") {};
 };
+class OutputDuplicateNoodleException : public runtime_error
+{
+public: OutputDuplicateNoodleException(void) :
+	runtime_error("Output port is already connected to this noodle") {};
+};
 
-/* thrown in InputPorts::get_* */
 class InputNotConnectedException : public runtime_error
 {
 public: InputNotConnectedException(void) :
 	runtime_error("Input port is not connected to a noodle") {};
 };
+class OutputNotConnectedException : public runtime_error
+{
+public: OutputNotConnectedException(void) :
+	runtime_error("Output port is not connected to any noodles") {};
+};
+
 class InputGetImpossibleException : public runtime_error
 {
 public: InputGetImpossibleException(void) :
@@ -118,12 +117,19 @@ public: InputGetUnavailableException(void) :
 		"available") {};
 };
 
-/* thrown in OutputPorts::put_* */
-class OutputNotConnectedException : public runtime_error
+class InputPeekImpossibleException : public runtime_error
 {
-public: OutputNotConnectedException(void) :
-	runtime_error("Output port is not connected to any noodles") {};
+public: InputPeekImpossibleException(void) :
+	runtime_error("Input port could not possibly have that many samples "
+		"available") {};
 };
+class InputPeekUnavailableException : public runtime_error
+{
+public: InputPeekUnavailableException(void) :
+	runtime_error("Input port does not currently have that many samples "
+		"available") {};
+};
+
 class OutputPutImpossibleException : public runtime_error
 {
 public: OutputPutImpossibleException(void) :
@@ -137,7 +143,6 @@ public: OutputPutUnavailableException(void) :
 		"samples") {};
 };
 
-#warning TODO
-// TODO: need tests for each of the 4 newest exceptions
+#include "../src/Port.cpp"
 
 #endif
