@@ -25,7 +25,7 @@ public:
 	
 protected:
 	Noodle(OutputPort<T> *from, InputPort<T> *to)
-		: m_from(from), m_to(to) {};
+		: m_from(from), m_to(to) {}
 	
 	/* currently these backref pointers are only actually used in
 	 * Graph::dumpGraph so we can easily iterate over all of the noodles and
@@ -42,7 +42,7 @@ class QNoodle : public Noodle<T>
 {
 public:
 	QNoodle(size_t max, OutputPort<T> *from, InputPort<T> *to)
-		: Noodle<T>(from, to), m_max(max) {};
+		: Noodle<T>(from, to), m_max(max) {}
 	
 	bool is_qnoodle(void) const { return true; }
 	void lock(unique_lock<mutex>& mgr) { mgr = unique_lock<mutex>(m_mutex); }
@@ -77,7 +77,7 @@ class RNoodle : public Noodle<T>
 {
 public:
 	RNoodle(T init, OutputPort<T> *from, InputPort<T> *to)
-		: Noodle<T>(from, to), m_reg(init) {};
+		: Noodle<T>(from, to), m_reg(init) {}
 	
 	bool is_qnoodle(void) const { return false; }
 	void lock(unique_lock<mutex>& mgr) { mgr = unique_lock<mutex>(m_mutex); }
