@@ -81,7 +81,7 @@ void Graph::register_block(const char *b_name, Block *b)
 		throw GraphDuplicateBlockNameException();
 	}
 	
-	NamedBlock nb { .name = b_name, .block = b };
+	NamedBlock nb = { .name = b_name, .block = b };
 	m_blocks.push_back(nb);
 }
 
