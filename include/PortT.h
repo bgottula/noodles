@@ -23,7 +23,7 @@ size_t InputPort<T>::available(void) const
 {
 	if (m_noodle == nullptr) throw InputNotConnectedException();
 	
-	return m_noodle->free();
+	return m_noodle->count();
 }
 
 template <typename T>
