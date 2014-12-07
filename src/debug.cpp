@@ -1,16 +1,32 @@
 #include "all.h"
 
 bool verbose = false;
+mutex debug_mutex;
 
 void debug(const char *format, ...)
 {
-	if (verbose)
+	if (!verbose) return;
+	
+	const int buf_size = 4096;
+	char *buf = new char[buf_size];
+	
+	va_list va;
+	va_start(va, format);
+	int result = vsnprintf(buf, buf_size, format, va);
+	va_end(va);
+	
+	assert(result >= 0);
+	assert(result < buf_size);
+	
+	/* only lock when we actually dump the string to stderr */
 	{
-		va_list va;
-		va_start(va, format);
-		vfprintf(stderr, format, va);
-		va_end(va);
+		lock_guard<mutex> lock(debug_mutex);
+		
+		fputs(buf, stderr);
+		fflush(stderr);
 	}
+	
+	delete[] buf;
 }
 
 #if defined(__GNUC__)
