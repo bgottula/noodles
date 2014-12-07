@@ -1,17 +1,12 @@
 #include "all.h"
 
-#warning TODO
-// TODO: make it so that Block subclasses must register their ports in the
-// constructor (string -> Port<T>&); this will make debugging still be possible
-// ... hmm, where will they be registering them though?
-
-#if 0
 class Source : public Block
 {
 public:
 	Source(void)
 	{
-		outputs.add("phase");
+		REGISTER_PORT(o_phase);
+		
 		reset();
 	}
 	
@@ -20,19 +15,23 @@ public:
 		m_counter = 0;
 	}
 	
+	bool can_work(void)
+	{
+		return (o_phase.available() >= 1);
+	}
+	
 	void work(void)
 	{
-		if (outputs.available("phase") >= 1)
-		{
-			int sample = m_counter++;
-			
-			outputs.put_one("phase", sample);
-			printf("Source(%p) sourced %d\n", this, sample);
-		}
+		int sample = m_counter++;
+		
+		o_phase.put_one(sample);
+		printf("Source(%p) sourced %d\n", this, sample);
 	}
 	
 private:
 	int m_counter;
+	
+	OutputPort<int> o_phase;
 };
 
 class VariableDecimator : public Block
@@ -40,34 +39,38 @@ class VariableDecimator : public Block
 public:
 	VariableDecimator(void)
 	{
-		inputs.add("phase");
-		inputs.add("feedback");
-		outputs.add("phase_corrected");
+		REGISTER_PORT(i_phase);
+		REGISTER_PORT(i_feedback);
+		REGISTER_PORT(o_phase_corrected);
+		
 		reset();
 	}
 	
-	void reset(void)
+	void reset(void) {}
+	
+	bool can_work(void)
 	{
-		//m_counter = 0;
+		return (i_phase.available() >= 1 && i_feedback.available() >= 1 &&
+			o_phase_corrected.available() >= 1);
 	}
 	
 	void work(void)
 	{
-		int phase;
-		int feedback;
+		int s_phase;
+		int s_feedback;
 		
-		while (inputs.available("phase") >= 1 &&
-			inputs.available("feedback") >= 1 &&
-			outputs.available("phase_corrected") >= 1)
-		{
-			inputs.get_one("phase", &phase);
-			inputs.get_one("feedback", &feedback);
-			
-			/* intentionally truncate to [0, 255] */
-			int sum = (phase + feedback) % 256;
-			outputs.put_one("phase_corrected", sum);
-		}
+		i_phase.get_one(s_phase);
+		i_feedback.get_one(s_feedback);
+		
+		/* intentionally truncate to [0, 255] */
+		int s_sum = (s_phase + s_feedback) % 256;
+		o_phase_corrected.put_one(s_sum);
 	}
+	
+private:
+	InputPort<int>  i_phase;
+	InputPort<int>  i_feedback;
+	OutputPort<int> o_phase_corrected;
 };
 
 class PhaseErrorDetector : public Block
@@ -75,28 +78,31 @@ class PhaseErrorDetector : public Block
 public:
 	PhaseErrorDetector(void)
 	{
-		inputs.add("phase_corrected");
-		outputs.add("error");
+		REGISTER_PORT(i_phase_corrected);
+		REGISTER_PORT(o_error);
+		
 		reset();
 	}
 	
-	void reset(void)
+	void reset(void) {}
+	
+	bool can_work(void)
 	{
-		
+		return (i_phase_corrected.available() >= 1 && o_error.available() >= 1);
 	}
 	
 	void work(void)
 	{
 		/* dummy: passthru */
 		
-		if (inputs.available("phase_corrected") >= 1 &&
-			outputs.available("error") >= 1)
-		{
-			int sample;
-			inputs.get_one("phase_corrected", &sample);
-			outputs.put_one("error", sample);
-		}
+		int sample;
+		i_phase_corrected.get_one(sample);
+		o_error.put_one(sample);
 	}
+	
+private:
+	InputPort<int>  i_phase_corrected;
+	OutputPort<int> o_error;
 };
 
 class LoopFilter : public Block
@@ -104,8 +110,9 @@ class LoopFilter : public Block
 public:
 	LoopFilter(void)
 	{
-		inputs.add("error");
-		outputs.add("adjustment");
+		REGISTER_PORT(i_error);
+		REGISTER_PORT(o_adjustment);
+		
 		reset();
 	}
 	
@@ -114,19 +121,20 @@ public:
 		m_integrator = 0;
 	}
 	
+	bool can_work(void)
+	{
+		return (i_error.available() >= 1 && o_adjustment.available() >= 1);
+	}
+	
 	void work(void)
 	{
-		if (inputs.available("error") >= 1 &&
-			outputs.available("adjustment") >= 1)
-		{
-			int error;
-			inputs.get_one("error", &error);
-			
-			int adjustment = (error * m_p) + m_integrator;
-			outputs.put_one("adjustment", adjustment);
-			
-			m_integrator += (error * m_i);
-		}
+		int s_error;
+		i_error.get_one(s_error);
+		
+		int s_adjustment = (s_error * m_p) + m_integrator;
+		o_adjustment.put_one(s_adjustment);
+		
+		m_integrator += (s_error * m_i);
 	}
 	
 private:
@@ -134,6 +142,9 @@ private:
 	const int m_i = 1;
 	
 	int m_integrator;
+	
+	InputPort<int>  i_error;
+	OutputPort<int> o_adjustment;
 };
 
 class Sink : public Block
@@ -141,64 +152,28 @@ class Sink : public Block
 public:
 	Sink(void)
 	{
-		inputs.add("phase_corrected");
+		REGISTER_PORT(i_phase_corrected);
+		
 		reset();
 	}
 	
-	void reset(void)
+	void reset(void) {}
+	
+	bool can_work(void)
 	{
-		
+		return (i_phase_corrected.available() >= 1);
 	}
 	
 	void work(void)
 	{
 		int sample;
+		i_phase_corrected.get_one(sample);
 		
-		if (inputs.available("phase_corrected") >= 1)
-		{
-			inputs.get_one("phase_corrected", &sample);
-			printf("Sink(%p) sank %d\n", this, sample);
-		}
-	}
-};
-#endif
-
-class ExampleBlock : public Block
-{
-public:
-	ExampleBlock(void)
-	{
-		REGISTER_PORT(ip_int);
-		REGISTER_PORT(ip_float);
-		REGISTER_PORT(op_int);
-		REGISTER_PORT(op_float);
-		
-		//list_ports();
-	}
-	
-	void reset(void)
-	{
-		
-	}
-	
-	void work(void)
-	{
-		// work once and then return
-		// no need to check input/output availability
-	}
-	
-	bool can_work(void)
-	{
-		// TODO: check input/output availability HERE
-		return true;
+		printf("Sink(%p) sank %d\n", this, sample);
 	}
 	
 private:
-	InputPort<int> ip_int;
-	InputPort<float> ip_float;
-	
-	OutputPort<int> op_int;
-	OutputPort<float> op_float;
+	InputPort<int> i_phase_corrected;
 };
 
 class MyGraph : public Graph
@@ -206,21 +181,45 @@ class MyGraph : public Graph
 public:
 	MyGraph(void)
 	{
-		REGISTER_BLOCK(eblock1);
-		REGISTER_BLOCK(eblock2);
+		REGISTER_BLOCK(b_src);
+		REGISTER_BLOCK(b_vd);
+		REGISTER_BLOCK(b_ped);
+		REGISTER_BLOCK(b_lf);
+		REGISTER_BLOCK(b_sink);
+		
+		ADD_QNOODLE(int, 4,
+			b_src, o_phase,
+			b_vd, i_phase);
+		ADD_QNOODLE(int, 1,
+			b_vd, o_phase_corrected,
+			b_ped, i_phase_corrected);
+		ADD_QNOODLE(int, 1,
+			b_ped, o_error,
+			b_lf, i_error);
+		ADD_RNOODLE(int, 0,
+			b_lf, o_adjustment,
+			b_vd, i_feedback);
+		ADD_QNOODLE(int, 4,
+			b_vd, o_phase_corrected,
+			b_sink, i_phase_corrected);
 	}
 	
 private:
-	ExampleBlock eblock1;
-	ExampleBlock eblock2;
+	Source             b_src;
+	VariableDecimator  b_vd;
+	PhaseErrorDetector b_ped;
+	LoopFilter         b_lf;
+	Sink               b_sink;
 };
 
-/* HOWTO: implement block functions
- * can_work()
+/* HOWTO: implement blocks
+ * constructor
+ * - do REGISTER_PORT() on each port
+ * function can_work()
  * - if inputs are not available, return false
  * - if outputs are not available, return false
  * - else, return true
- * work():
+ * function work():
  * - assume that can_work() has already been found to be true
  * - get input(s)
  * - do processing that needs to be done
@@ -243,7 +242,8 @@ int main(int argc, char **argv)
 		}
 	}
 	
-	MyGraph mg;
+	MyGraph graph;
+	RoundRobinScheduler sch(&graph);
 	
 #if 0
 	Source source;
