@@ -2,22 +2,22 @@
 
 void RoundRobinScheduler::run(void)
 {
-#if 0
-	m_graph.checkGraph();
+	m_graph->check();
 	
+	// TODO: get rid of this idiom for scheduler finish state
 	for (int i = 0; i < 10; ++i)
 	{
 		run_once();
 	}
-#endif
 }
 
 void RoundRobinScheduler::run_once(void)
 {
+#warning FINISHME
 #if 0
 	/* call work on all blocks */
-	auto m_blocks = m_graph.m_blocks;
-	for (auto it = m_blocks.begin(); it != m_blocks.end(); ++it)
+	auto m_blocks = m_graph->m_blocks;
+	for (auto it = m_blocks->begin(); it != m_blocks->end(); ++it)
 	{
 		Block *b = *it;
 		
@@ -32,7 +32,7 @@ void RoundRobinScheduler::run_once(void)
 			b->work();
 		}
 		
-		m_graph.dumpGraph(false, true);
+		m_graph->dump(false, true);
 	}
 #endif
 }
