@@ -5,6 +5,3 @@ ipch
 *.opensdf
 *.suo
 *.vsp
-Release
-Debug
-DebugTest
