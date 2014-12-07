@@ -3,8 +3,6 @@
 
 #define REGISTER_BLOCK(_b) register_block(#_b, &_b)
 
-#warning TODO
-// TODO: can we get _type from the ports? maybe too hard...
 #define ADD_QNOODLE(_type, _max, _b_from, _p_from, _b_to, _p_to) \
 	add_noodle(new QNoodle<_type>(_max, (_b_from).find_port(#_p_from), \
 		(_b_to).find_port(#_p_to)))
