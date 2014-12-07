@@ -1,9 +1,5 @@
 #include "all.h"
 
-#ifdef TEMPLATES
-
-#else
-
 Graph::~Graph(void)
 {
 	debug(AT_BLD "Graph::dtor" AT_RST "\n");
@@ -326,6 +322,4 @@ const char *Graph::str_endpoint(const Endpoint *e, bool input)
 		(input ? FG_GRN : FG_RED), e->port);
 	return str;
 }
-#endif
-
 #endif

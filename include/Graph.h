@@ -96,8 +96,4 @@ public: GraphNoNoodlesException(void) :
 	runtime_error("Graphs must contain at least one noodle") {};
 };
 
-#define TEMPLATES
-#include "../src/Graph.cpp"
-#undef TEMPLATES
-
 #endif
