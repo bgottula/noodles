@@ -202,4 +202,32 @@ void OutputPort<T>::put_var(size_t count, ...)
 	va_end(v);
 }
 
+template <typename T>
+void InputPort<T>::check(void) const
+{
+#warning FINISHME
+}
+
+template <typename T>
+void OutputPort<T>::check(void) const
+{
+#warning FINISHME
+}
+
+#else
+
+void Port::set_owner(Block *b)
+{
+	if (m_owner != nullptr) throw PortAlreadyOwnedException();
+	
+	m_owner = b;
+}
+
+Block *Port::get_owner(void)
+{
+	if (m_owner == nullptr) throw PortNotOwnedException();
+	
+	return m_owner;
+}
+
 #endif

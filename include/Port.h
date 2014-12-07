@@ -1,6 +1,9 @@
 #ifndef PORT_H
 #define PORT_H
 
+/* forward declarations */
+class Block;
+
 /* base for all ports (protected ctor prevents direct instantiation) */
 class Port
 {
@@ -9,8 +12,16 @@ public:
 	
 	virtual size_t available(void) const = 0;
 	
+	virtual void check(void) const = 0;
+	
+	void set_owner(Block *b);
+	Block *get_owner(void);
+	
 protected:
 	Port() {}
+	
+private:
+	Block *m_owner = nullptr;
 };
 
 /* base for InputPort<T> (protected ctor prevents direct instantiation) */
@@ -49,6 +60,8 @@ public:
 	
 	void peek_one(size_t where, T& sample);
 	
+	void check(void) const;
+	
 	typedef T type;
 	
 protected:
@@ -69,10 +82,13 @@ public:
 	void put_arr(size_t count, const T *samples);
 	void put_var(size_t count, ...);
 	
+	void check(void) const;
+	
 	typedef T type;
 	
 protected:
 	vector<Noodle<T> *> m_noodles;
+	Block *m_owner = nullptr;
 };
 
 /* associates a name with a port */
@@ -80,6 +96,17 @@ struct NamedPort
 {
 	const char *name;
 	Port *port;
+};
+
+class PortAlreadyOwnedException : public runtime_error
+{
+public: PortAlreadyOwnedException(void) :
+	runtime_error("Port has already had a block assigned as its owner") {};
+};
+class PortNotOwnedException : public runtime_error
+{
+public: PortNotOwnedException(void) :
+	runtime_error("Port does not yet have a block assigned as its owner") {};
 };
 
 class InputMultipleNoodleException : public runtime_error
