@@ -51,7 +51,7 @@ void Block::register_port(const char *p_name, Port *p)
 	
 	p->set_owner(this);
 	
-	NamedPort np { .name = p_name, .port = p };
+	NamedPort np { p_name, p };
 	m_ports.push_back(np);
 }
 
