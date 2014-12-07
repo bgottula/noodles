@@ -58,6 +58,7 @@ public:
 	void clear(void);
 	
 private:
+	mutex m_mutex;
 	list<void *> m_ptrs;
 };
 
