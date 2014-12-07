@@ -1,6 +1,8 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
+#if defined(__GNUC__)
+
 #define AT_RST  "\e[0m"  // reset all attributes
 #define AT_BLD  "\e[1m"  // bold
 #define AT_ULI  "\e[4m"  // underline
@@ -30,6 +32,40 @@
 #define BG_CYN "\e[46m"
 #define BG_WHT "\e[47m"
 #define BG_DEF "\e[49m"
+
+#else
+
+#define AT_RST  ""
+#define AT_BLD  ""
+#define AT_ULI  ""
+#define AT_BLK  ""
+#define AT_REV  ""
+#define AT_NBLD ""
+#define AT_NULI ""
+#define AT_NBLK ""
+#define AT_NREV ""
+
+#define FG_BLK ""
+#define FG_RED ""
+#define FG_GRN ""
+#define FG_YLW ""
+#define FG_BLU ""
+#define FG_MGT ""
+#define FG_CYN ""
+#define FG_WHT ""
+#define FG_DEF ""
+
+#define BG_BLK ""
+#define BG_RED ""
+#define BG_GRN ""
+#define BG_YLW ""
+#define BG_BLU ""
+#define BG_MGT ""
+#define BG_CYN ""
+#define BG_WHT ""
+#define BG_DEF ""
+
+#endif
 
 extern bool verbose;
 
