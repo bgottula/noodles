@@ -45,6 +45,19 @@ const char *demangle(const char *mangled)
 	
 	return demangled;
 }
+#elif defined(_MSC_VER)
+const char *demangle(const char *mangled)
+{
+	const char *demangled = mangled;
+	
+	/* remove 'class ' prefix that MSVC puts on type_info::name strings */
+	if (strncmp(mangled, "class ", 6) == 0)
+	{
+		demangled += 6;
+	}
+	
+	return demangled;
+}
 #endif
 
 void AutoFree::push(void *p)

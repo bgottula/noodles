@@ -79,7 +79,7 @@ void debug(_Printf_format_string_ const char *format, ...);
 void debug(const char *format, ...);
 #endif
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(_MSC_VER)
 const char *demangle(const char *mangled);
 #else
 #define demangle(_x) _x
