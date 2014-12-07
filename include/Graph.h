@@ -3,32 +3,45 @@
 
 #define REGISTER_BLOCK(_b) register_block(#_b, &_b)
 
+#warning TODO
+// TODO: can we get _type from the ports? maybe too hard...
+#define ADD_QNOODLE(_type, _max, _b_from, _p_from, _b_to, _p_to) \
+	add_noodle(new QNoodle<_type>(_max, (_b_from).find_port(#_p_from), \
+		(_b_to).find_port(#_p_to)))
+#define ADD_RNOODLE(_type, _init, _b_from, _p_from, _b_to, _p_to) \
+	add_noodle(new RNoodle<_type>(_init, (_b_from).find_port(#_p_from), \
+		(_b_to).find_port(#_p_to)))
+
+enum class GraphState
+{
+	SETUP,
+	RUN,
+};
+
 /* base for graphs (protected ctor prevents direct instantiation) */
 class Graph
 {
 public:
 	virtual ~Graph();
 	
-	//void addQNoodle(size_t queue_max, Port *from, Port *to);
-	//void addRNoodle(int init, Port *from, Port *to);
+	void check(void);
+	void dump(bool blocks = true, bool noodles = true) const;
 	
 	const char *name(void) const;
-	
-	//void checkGraph(void);
-	
-	//void dumpGraph(bool blocks = true, bool noodles = true);
 	
 protected:
 	Graph() {}
 	
 	void register_block(const char *b_name, Block *b);
-	//void register_noodle(Noodle& n);
+	void add_noodle(NoodleBase *n);
 	
 private:
 	mutable char *m_name = nullptr;
 	
 	vector<NamedBlock> m_blocks;
-	//vector<Noodle> m_noodles;
+	vector<NoodleBase *> m_noodles;
+	
+	GraphState m_state = GraphState::SETUP;
 	
 	//template <typename T>
 	//void addNoodle(Noodle<T> *n, Endpoint from, Endpoint to);
@@ -48,22 +61,40 @@ private:
 	//const size_t m_strlen = 128;
 };
 
-class DuplicateBlockException : public runtime_error
+class GraphModifiedAfterSetupException : public runtime_error
 {
-public: DuplicateBlockException(void) :
+public: GraphModifiedAfterSetupException(void) :
+	runtime_error("Graphs can only be modified when they are in the SETUP "
+		"state") {};
+};
+
+class GraphDuplicateBlockException : public runtime_error
+{
+public: GraphDuplicateBlockException(void) :
 	runtime_error("Block instances may only be registered once") {};
 };
-class DuplicateBlockNameException : public runtime_error
+class GraphDuplicateBlockNameException : public runtime_error
 {
-public: DuplicateBlockNameException(void) :
+public: GraphDuplicateBlockNameException(void) :
 	runtime_error("Block instances must be registered with unique names") {};
 };
 
-/*class EmptyGraphException : public runtime_error
+class GraphDuplicateNoodleException : public runtime_error
 {
-public: EmptyGraphException(void) :
+public: GraphDuplicateNoodleException(void) :
+	runtime_error("Noodle instances may only be registered once") {};
+};
+
+class GraphNoBlocksException : public runtime_error
+{
+public: GraphNoBlocksException(void) :
+	runtime_error("Graphs must contain at least one block") {};
+};
+class GraphNoNoodlesException : public runtime_error
+{
+public: GraphNoNoodlesException(void) :
 	runtime_error("Graphs must contain at least one noodle") {};
-};*/
+};
 
 #define TEMPLATES
 #include "../src/Graph.cpp"

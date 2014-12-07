@@ -2,20 +2,44 @@
 
 #ifdef TEMPLATES
 
-/*template <typename T>
-void Graph::register_noodle(Noodle<T>& n)
-{
-	
-}*/
-
 #else
 
 Graph::~Graph(void)
 {
+	debug(AT_BLD "Graph::dtor" AT_RST "\n");
+	
 	if (m_name != nullptr)
 	{
 		free(m_name);
 	}
+	
+	for_each(m_noodles.cbegin(), m_noodles.cend(),
+		[](const NoodleBase *n) {
+			delete n;
+		});
+}
+
+void Graph::check(void)
+{
+	dump();
+	
+	if (m_blocks.empty()) throw GraphNoBlocksException();
+	if (m_noodles.empty()) throw GraphNoNoodlesException();
+	
+	for_each(m_blocks.cbegin(), m_blocks.cend(),
+		[](const NamedBlock& nb) {
+			nb.block->check();
+		});
+	
+#warning TODO
+	// TODO: also check all noodles (write Noodle::check or whatever)
+	
+	m_state = GraphState::RUN;
+}
+
+void Graph::dump(bool blocks, bool noodles) const
+{
+#warning FINISHME
 }
 
 const char *Graph::name(void) const
@@ -36,11 +60,13 @@ const char *Graph::name(void) const
 
 void Graph::register_block(const char *b_name, Block *b)
 {
+	if (m_state != GraphState::SETUP) throw GraphModifiedAfterSetupException();
+	
 	int status;
 	char *demangled = abi::__cxa_demangle(typeid(*b).name(),
 		nullptr, nullptr, &status);
 	assert(status == 0);
-	debug("%s.register_block: %s %s @ %p\n",
+	debug(AT_BLD "%s.register_block:" AT_RST " %s %s @ %p\n",
 		name(), demangled, b_name, b);
 	free(demangled);
 	
@@ -49,18 +75,30 @@ void Graph::register_block(const char *b_name, Block *b)
 			return (nb.block == b);
 		}))
 	{
-		throw DuplicateBlockException();
+		throw GraphDuplicateBlockException();
 	}
 	if (any_of(m_blocks.cbegin(), m_blocks.cend(),
 		[&](const NamedBlock& nb) {
 			return (strcmp(b_name, nb.name) == 0);
 		}))
 	{
-		throw DuplicateBlockNameException();
+		throw GraphDuplicateBlockNameException();
 	}
 	
 	NamedBlock nb { .name = b_name, .block = b };
 	m_blocks.push_back(nb);
+}
+
+void Graph::add_noodle(NoodleBase *n)
+{
+	if (m_state != GraphState::SETUP) throw GraphModifiedAfterSetupException();
+	
+	if (find(m_noodles.cbegin(), m_noodles.cend(), n) != m_noodles.cend())
+	{
+		throw GraphDuplicateNoodleException();
+	}
+	
+	m_noodles.push_back(n);
 }
 
 #if 0
