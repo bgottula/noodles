@@ -65,7 +65,7 @@ void AutoFree::clear(void)
 	}
 }
 
-char *StrPool::alloc(size_t len)
+char *StringPool::alloc(size_t len)
 {
 	char *str = new char[len];
 	
@@ -75,7 +75,7 @@ char *StrPool::alloc(size_t len)
 	return str;
 }
 
-void StrPool::clear(void)
+void StringPool::clear(void)
 {
 	lock_guard<mutex> lock(m_mutex);
 	

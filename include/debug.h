@@ -98,10 +98,10 @@ private:
 	list<void *> m_ptrs;
 };
 
-class StrPool
+class StringPool
 {
 public:
-	~StrPool() { clear(); }
+	~StringPool() { clear(); }
 	
 	char *alloc(size_t len);
 	void clear(void);

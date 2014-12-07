@@ -55,7 +55,7 @@ private:
 	//const char *str_block(const Block *b);
 	//const char *str_endpoint(const Endpoint *e, bool input);
 	
-	//StrPool m_strpool;
+	//StringPool m_strpool;
 	//const size_t m_strlen = 128;
 };
 
