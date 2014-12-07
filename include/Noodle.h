@@ -2,12 +2,27 @@
 #define NOODLE_H
 
 /* forward declarations */
+class Port;
+class IPort;
+class OPort;
 template <typename T> class InputPort;
 template <typename T> class OutputPort;
 
 /* base noodle class (protected ctor prevents direct instantiation) */
+class NoodleBase
+{
+public:
+	virtual ~NoodleBase() {}
+	
+	virtual void check(void) const = 0;
+	
+protected:
+	NoodleBase() {}
+};
+
+/* common noodle template (protected ctor prevents direct instantiation) */
 template <typename T>
-class Noodle
+class Noodle : public NoodleBase
 {
 public:
 	virtual ~Noodle() {}
@@ -23,9 +38,12 @@ public:
 	virtual T pop(void) = 0;
 	virtual T peek(size_t where) = 0;
 	
+	void check(void) const;
+	
+	typedef T type;
+	
 protected:
-	Noodle(OutputPort<T> *from, InputPort<T> *to)
-		: m_from(from), m_to(to) {}
+	Noodle(Port *from, Port *to);
 	
 	/* currently these backref pointers are only actually used in
 	 * Graph::dumpGraph so we can easily iterate over all of the noodles and
@@ -41,7 +59,7 @@ template <typename T>
 class QNoodle : public Noodle<T>
 {
 public:
-	QNoodle(size_t max, OutputPort<T> *from, InputPort<T> *to)
+	QNoodle(size_t max, Port *from, Port *to)
 		: Noodle<T>(from, to), m_max(max) {}
 	
 	bool is_qnoodle(void) const { return true; }
@@ -61,6 +79,8 @@ public:
 	/* NEEDS LOCK: peek one sample from a given position in the queue */
 	T peek(size_t where);
 	
+	typedef typename Noodle<T>::type type;
+	
 private:
 	/* sample buffer queue */
 	deque<T> m_queue;
@@ -76,7 +96,7 @@ template <typename T>
 class RNoodle : public Noodle<T>
 {
 public:
-	RNoodle(T init, OutputPort<T> *from, InputPort<T> *to)
+	RNoodle(T init, Port *from, Port *to)
 		: Noodle<T>(from, to), m_reg(init) {}
 	
 	bool is_qnoodle(void) const { return false; }
@@ -93,8 +113,10 @@ public:
 	void push(const T& sample) { m_reg = sample; }
 	/* read from the sample register */
 	T pop(void) { return m_reg; }
-	/* peek the sample register (same as pop) */
-	T peek(size_t where) { return m_reg; }
+	/* peek the sample register (explicitly ignore the where parameter) */
+	T peek(size_t where) { (void)where; return m_reg; }
+	
+	typedef typename Noodle<T>::type type;
 	
 private:
 	/* mutex to ensure atomic loading/storing of the register value */
@@ -102,6 +124,28 @@ private:
 	
 	/* register containing the current sample value */
 	T m_reg;
+};
+
+class NoodleFromPortNotOutputException : public runtime_error
+{
+public: NoodleFromPortNotOutputException(void) :
+	runtime_error("Noodle's from-port must be an output port") {};
+};
+class NoodleToPortNotInputException : public runtime_error
+{
+public: NoodleToPortNotInputException(void) :
+	runtime_error("Noodle's to-port must be an input port") {};
+};
+
+class NoodleFromPortWrongTypeException : public runtime_error
+{
+public: NoodleFromPortWrongTypeException(void) :
+	runtime_error("Noodle's from-port type parameter does not match") {};
+};
+class NoodleToPortWrongTypeException : public runtime_error
+{
+public: NoodleToPortWrongTypeException(void) :
+	runtime_error("Noodle's to-port type parameter does not match") {};
 };
 
 #define TEMPLATES
