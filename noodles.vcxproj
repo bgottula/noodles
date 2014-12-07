@@ -157,7 +157,9 @@
     <ClInclude Include="include\Endpoint.h" />
     <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\Noodle.h" />
+    <ClInclude Include="include\NoodleT.h" />
     <ClInclude Include="include\Port.h" />
+    <ClInclude Include="include\PortT.h" />
     <ClInclude Include="include\Scheduler.h" />
     <ClInclude Include="include\std.h" />
   </ItemGroup>
