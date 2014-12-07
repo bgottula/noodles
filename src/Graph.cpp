@@ -22,7 +22,6 @@ void Graph::check(void)
 			nb.block->check();
 		});
 	
-#warning TODO
 	// TODO: also check all noodles (write Noodle::check or whatever)
 	
 	m_state = GraphState::RUN;
