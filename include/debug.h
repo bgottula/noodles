@@ -33,7 +33,17 @@
 
 extern bool verbose;
 
+#if defined(__GNUC__)
 void debug(const char *format, ...) __attribute__((format(printf, 1, 2)));
+#elif _MSC_VER == 1400
+#include <sal.h>
+void debug(__format_string const char *format, ...);
+#elif _MSC_VER > 1400
+#include <sal.h>
+void debug(_Printf_format_string_ const char *format, ...);
+#else
+void debug(const char *format, ...);
+#endif
 
 class StrPool
 {
