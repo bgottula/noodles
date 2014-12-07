@@ -2,6 +2,8 @@
 
 void Block::check(void) const
 {
+	debug(AT_BLD "%s::check" AT_RST "\n", name());
+	
 #warning FINISHME
 }
 
@@ -31,7 +33,7 @@ const char *Block::name(void) const
 
 void Block::register_port(const char *p_name, Port *p)
 {
-	debug(AT_BLD "%s.register_port:" AT_RST " %s %s @ %p\n",
+	debug(AT_BLD "%s::register_port:" AT_RST " %s %s @ %p\n",
 		name(), demangle(typeid(*p).name()), p_name, p);
 	
 	if (any_of(m_ports.cbegin(), m_ports.cend(),
@@ -64,7 +66,7 @@ void Block::list_ports(void)
 		
 		decltype(*p) x = *p;
 		{
-			printf(AT_BLD "%s.list_ports:" AT_RST " %s %s @ %p, avail = %zu\n",
+			printf(AT_BLD "%s::list_ports:" AT_RST " %s %s @ %p, avail = %zu\n",
 				name(), demangle(typeid(x).name()), np.name, &x, x.available());
 		}
 		

@@ -2,7 +2,7 @@
 
 Graph::~Graph(void)
 {
-	debug(AT_BLD "Graph::dtor" AT_RST "\n");
+	debug(AT_BLD "%s dtor" AT_RST "\n", name());
 	
 	for_each(m_noodles.cbegin(), m_noodles.cend(),
 		[](const NoodleBase *n) {
@@ -12,6 +12,8 @@ Graph::~Graph(void)
 
 void Graph::check(void)
 {
+	debug(AT_BLD "%s::check" AT_RST "\n", name());
+	
 	dump();
 	
 	if (m_blocks.empty()) throw GraphNoBlocksException();
@@ -48,7 +50,7 @@ void Graph::register_block(const char *b_name, Block *b)
 {
 	if (m_state != GraphState::SETUP) throw GraphModifiedAfterSetupException();
 	
-	debug(AT_BLD "%s.register_block:" AT_RST " %s %s @ %p\n",
+	debug(AT_BLD "%s::register_block:" AT_RST " %s %s @ %p\n",
 		name(), demangle(typeid(*b).name()), b_name, b);
 	
 	if (any_of(m_blocks.cbegin(), m_blocks.cend(),

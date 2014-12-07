@@ -2,6 +2,8 @@
 
 void RoundRobinScheduler::run(void)
 {
+	debug(AT_BLD "RoundRobinScheduler::run" AT_RST "\n");
+	
 	m_graph->check();
 	
 	// TODO: get rid of this idiom for scheduler finish state

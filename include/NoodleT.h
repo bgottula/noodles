@@ -16,8 +16,8 @@ Noodle<T>::Noodle(Port *from, Port *to)
 	if (m_from == nullptr) throw NoodleFromPortWrongTypeException();
 	if (m_to == nullptr) throw NoodleToPortWrongTypeException();
 	
-	debug(AT_BLD "%s::ctor:" AT_RST " from %s (@ %p) to %s (@ %p)\n",
-		demangle(typeid(*this).name()),
+	debug(AT_BLD "Noodle<%s> ctor:" AT_RST " from %s (@ %p) to %s (@ %p)\n",
+		demangle(typeid(T).name()),
 		demangle(typeid(*m_from).name()), m_from,
 		demangle(typeid(*m_to).name()), m_to);
 	
@@ -28,6 +28,9 @@ Noodle<T>::Noodle(Port *from, Port *to)
 template<typename T>
 void Noodle<T>::check(void) const
 {
+	debug(AT_BLD "Noodle<%s>::check" AT_RST "\n",
+		demangle(typeid(T).name()));
+	
 #warning FINISHME
 }
 
