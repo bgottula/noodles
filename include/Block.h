@@ -10,9 +10,13 @@ public:
 	virtual ~Block();
 	
 	virtual void reset(void) = 0;
-	virtual void work(void) = 0;
 	
 	virtual bool can_work(void) = 0;
+	virtual void work(void) = 0;
+	
+	void check(void) const;
+	
+	Port *find_port(const char *p_name);
 	
 	const char *name(void) const;
 	
@@ -35,20 +39,20 @@ struct NamedBlock
 	Block *block;
 };
 
-class DuplicatePortException : public runtime_error
+class BlockDuplicatePortException : public runtime_error
 {
-public: DuplicatePortException(void) :
+public: BlockDuplicatePortException(void) :
 	runtime_error("Port instances may only be registered once") {};
 };
-class DuplicatePortNameException : public runtime_error
+class BlockDuplicatePortNameException : public runtime_error
 {
-public: DuplicatePortNameException(void) :
+public: BlockDuplicatePortNameException(void) :
 	runtime_error("Port instances must be registered with unique names") {};
 };
 
-class NonexistentPortException : public runtime_error
+class BlockNonexistentPortException : public runtime_error
 {
-public: NonexistentPortException(void) :
+public: BlockNonexistentPortException(void) :
 	runtime_error("Port with that name has not been registered") {};
 };
 

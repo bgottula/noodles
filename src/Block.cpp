@@ -8,13 +8,46 @@ Block::~Block(void)
 	}
 }
 
+void Block::check(void) const
+{
+#warning FINISHME
+}
+
+Port *Block::find_port(const char *p_name)
+{
+	auto it = find_if(m_ports.cbegin(), m_ports.cend(),
+		[&](const NamedPort& np) {
+			return (strcmp(p_name, np.name) == 0);
+		});
+	
+	if (it == m_ports.cend()) throw BlockNonexistentPortException();
+	
+	return (*it).port;
+}
+
+const char *Block::name(void) const
+{
+	/* only do this the first time the function is called for this instance */
+	if (m_name == nullptr)
+	{
+		decltype(*this) b = *this;
+		
+		int status;
+		m_name = abi::__cxa_demangle(typeid(b).name(),
+			nullptr, nullptr, &status);
+		assert(status == 0);
+	}
+	
+	return m_name;
+}
+
 void Block::register_port(const char *p_name, Port *p)
 {
 	int status;
 	char *demangled = abi::__cxa_demangle(typeid(*p).name(),
 		nullptr, nullptr, &status);
 	assert(status == 0);
-	debug("%s.register_port: %s %s @ %p\n",
+	debug(AT_BLD "%s.register_port:" AT_RST " %s %s @ %p\n",
 		name(), demangled, p_name, p);
 	free(demangled);
 	
@@ -23,15 +56,17 @@ void Block::register_port(const char *p_name, Port *p)
 			return (np.port == p);
 		}))
 	{
-		throw DuplicatePortException();
+		throw BlockDuplicatePortException();
 	}
 	if (any_of(m_ports.cbegin(), m_ports.cend(),
 		[&](const NamedPort& np) {
 			return (strcmp(p_name, np.name) == 0);
 		}))
 	{
-		throw DuplicatePortNameException();
+		throw BlockDuplicatePortNameException();
 	}
+	
+	p->set_owner(this);
 	
 	NamedPort np { .name = p_name, .port = p };
 	m_ports.push_back(np);
@@ -51,8 +86,8 @@ void Block::list_ports(void)
 				nullptr, nullptr, &status);
 			assert(status == 0);
 			
-			printf("list_ports: name %s type %s addr %p avail %zu\n",
-				np.name, demangled, &x, x.available());
+			printf(AT_BLD "%s.list_ports:" AT_RST " %s %s @ %p, avail = %zu\n",
+				name(), demangled, np.name, &x, x.available());
 		}
 		
 		IPort *i = dynamic_cast<IPort *>(p);
@@ -61,20 +96,4 @@ void Block::list_ports(void)
 		if (i != nullptr) printf("is an input port.\n");
 		if (o != nullptr) printf("is an output port.\n");
 	}
-}
-
-const char *Block::name(void) const
-{
-	/* only do this the first time the function is called for this instance */
-	if (m_name == nullptr)
-	{
-		decltype(*this) b = *this;
-		
-		int status;
-		m_name = abi::__cxa_demangle(typeid(b).name(),
-			nullptr, nullptr, &status);
-		assert(status == 0);
-	}
-	
-	return m_name;
 }
