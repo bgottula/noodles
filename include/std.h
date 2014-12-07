@@ -19,9 +19,6 @@
 #include <stdexcept>
 #include <typeinfo>
 
-/* exotic C++ ABI stuff */
-#include <cxxabi.h>
-
 /* STL */
 #include <list>
 #include <queue>
@@ -32,5 +29,15 @@
 #include <vector>
 
 /* Boost */
+
+/* GCC-specific */
+#if defined(__GNUC__)
+#include <cxxabi.h>
+#endif
+
+/* MSVC-specific */
+#if defined(_MSC_VER)
+#include <sal.h>
+#endif
 
 #endif
