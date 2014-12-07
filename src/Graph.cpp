@@ -4,11 +4,6 @@ Graph::~Graph(void)
 {
 	debug(AT_BLD "Graph::dtor" AT_RST "\n");
 	
-	if (m_name != nullptr)
-	{
-		free(m_name);
-	}
-	
 	for_each(m_noodles.cbegin(), m_noodles.cend(),
 		[](const NoodleBase *n) {
 			delete n;
@@ -44,11 +39,7 @@ const char *Graph::name(void) const
 	if (m_name == nullptr)
 	{
 		decltype(*this) g = *this;
-		
-		int status;
-		m_name = abi::__cxa_demangle(typeid(g).name(),
-			nullptr, nullptr, &status);
-		assert(status == 0);
+		m_name = demangle(typeid(g).name());
 	}
 	
 	return m_name;
@@ -58,13 +49,8 @@ void Graph::register_block(const char *b_name, Block *b)
 {
 	if (m_state != GraphState::SETUP) throw GraphModifiedAfterSetupException();
 	
-	int status;
-	char *demangled = abi::__cxa_demangle(typeid(*b).name(),
-		nullptr, nullptr, &status);
-	assert(status == 0);
 	debug(AT_BLD "%s.register_block:" AT_RST " %s %s @ %p\n",
-		name(), demangled, b_name, b);
-	free(demangled);
+		name(), demangle(typeid(*b).name()), b_name, b);
 	
 	if (any_of(m_blocks.cbegin(), m_blocks.cend(),
 		[&](const NamedBlock& nb) {

@@ -7,7 +7,7 @@
 class Block
 {
 public:
-	virtual ~Block();
+	virtual ~Block() {}
 	
 	virtual void reset(void) = 0;
 	
@@ -27,7 +27,7 @@ protected:
 	void list_ports(void);
 	
 private:
-	mutable char *m_name = nullptr;
+	mutable const char *m_name = nullptr;
 	
 	vector<NamedPort> m_ports;
 };

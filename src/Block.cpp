@@ -1,13 +1,5 @@
 #include "all.h"
 
-Block::~Block(void)
-{
-	if (m_name != nullptr)
-	{
-		free(m_name);
-	}
-}
-
 void Block::check(void) const
 {
 #warning FINISHME
@@ -31,11 +23,7 @@ const char *Block::name(void) const
 	if (m_name == nullptr)
 	{
 		decltype(*this) b = *this;
-		
-		int status;
-		m_name = abi::__cxa_demangle(typeid(b).name(),
-			nullptr, nullptr, &status);
-		assert(status == 0);
+		m_name = demangle(typeid(b).name());
 	}
 	
 	return m_name;
@@ -43,13 +31,8 @@ const char *Block::name(void) const
 
 void Block::register_port(const char *p_name, Port *p)
 {
-	int status;
-	char *demangled = abi::__cxa_demangle(typeid(*p).name(),
-		nullptr, nullptr, &status);
-	assert(status == 0);
 	debug(AT_BLD "%s.register_port:" AT_RST " %s %s @ %p\n",
-		name(), demangled, p_name, p);
-	free(demangled);
+		name(), demangle(typeid(*p).name()), p_name, p);
 	
 	if (any_of(m_ports.cbegin(), m_ports.cend(),
 		[&](const NamedPort& np) {
@@ -81,13 +64,8 @@ void Block::list_ports(void)
 		
 		decltype(*p) x = *p;
 		{
-			int status;
-			char *demangled = abi::__cxa_demangle(typeid(x).name(),
-				nullptr, nullptr, &status);
-			assert(status == 0);
-			
 			printf(AT_BLD "%s.list_ports:" AT_RST " %s %s @ %p, avail = %zu\n",
-				name(), demangled, np.name, &x, x.available());
+				name(), demangle(typeid(x).name()), np.name, &x, x.available());
 		}
 		
 		IPort *i = dynamic_cast<IPort *>(p);

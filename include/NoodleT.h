@@ -16,23 +16,10 @@ Noodle<T>::Noodle(Port *from, Port *to)
 	if (m_from == nullptr) throw NoodleFromPortWrongTypeException();
 	if (m_to == nullptr) throw NoodleToPortWrongTypeException();
 	
-	int status;
-	char *this_demangled = abi::__cxa_demangle(typeid(*this).name(),
-		nullptr, nullptr, &status);
-	assert(status == 0);
-	char *from_demangled = abi::__cxa_demangle(typeid(*m_from).name(),
-		nullptr, nullptr, &status);
-	assert(status == 0);
-	char *to_demangled = abi::__cxa_demangle(typeid(*m_to).name(),
-		nullptr, nullptr, &status);
-	assert(status == 0);
-	
 	debug(AT_BLD "%s::ctor:" AT_RST " from %s (@ %p) to %s (@ %p)\n",
-		this_demangled, from_demangled, m_from, to_demangled, m_to);
-	
-	std::free(this_demangled);
-	std::free(from_demangled);
-	std::free(to_demangled);
+		demangle(typeid(*this).name()),
+		demangle(typeid(*m_from).name()), m_from,
+		demangle(typeid(*m_to).name()), m_to);
 	
 	m_from->connect(this);
 	m_to->connect(this);

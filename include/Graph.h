@@ -36,7 +36,7 @@ protected:
 	void add_noodle(NoodleBase *n);
 	
 private:
-	mutable char *m_name = nullptr;
+	mutable const char *m_name = nullptr;
 	
 	vector<NamedBlock> m_blocks;
 	vector<NoodleBase *> m_noodles;

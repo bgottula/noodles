@@ -43,6 +43,24 @@ void debug(_Printf_format_string_ const char *format, ...);
 void debug(const char *format, ...);
 #endif
 
+#if defined(__GNUC__)
+const char *demangle(const char *mangled);
+#else
+#define demangle(_x) _x
+#endif
+
+class AutoFree
+{
+public:
+	~AutoFree() { clear(); }
+	
+	void push(void *p);
+	void clear(void);
+	
+private:
+	list<void *> m_ptrs;
+};
+
 class StrPool
 {
 public:
