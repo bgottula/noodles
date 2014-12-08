@@ -23,8 +23,8 @@ void RoundRobinScheduler::run_once()
 	/* call work on all blocks */
 	for (auto it = it_begin; it != it_end; ++it)
 	{
-		NamedBlock nb = *it;
-		Block *b = nb.block;
+		Named<Block> nb = *it;
+		Block *b = nb.ptr;
 		
 		bool can_work = b->can_work();
 		debug(AT_BLD "RoundRobinScheduler::run_once:" AT_RST

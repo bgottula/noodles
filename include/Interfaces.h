@@ -23,4 +23,11 @@ private:
 	mutable const char *m_name = nullptr;
 };
 
+template <typename T>
+struct Named
+{
+	const char *name;
+	T *ptr;
+};
+
 #endif

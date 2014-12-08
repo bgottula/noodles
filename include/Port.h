@@ -90,13 +90,6 @@ protected:
 	vector<Noodle<T> *> m_noodles;
 };
 
-/* associates a name with a port */
-struct NamedPort
-{
-	const char *name;
-	Port *port;
-};
-
 class InputMultipleNoodleException : public runtime_error
 {
 public: InputMultipleNoodleException() : runtime_error(

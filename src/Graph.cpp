@@ -10,8 +10,8 @@ void Graph::check()
 	//if (m_noodles.empty()) throw GraphNoNoodlesException();
 	
 	for_each(blocks_cbegin(), blocks_cend(),
-		[](const NamedBlock& nb) {
-			nb.block->check();
+		[](const Named<Block>& nb) {
+			nb.ptr->check();
 		});
 	
 	// TODO: also check all noodles (write Noodle::check or whatever)

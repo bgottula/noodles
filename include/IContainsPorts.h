@@ -17,11 +17,11 @@ protected:
 	//virtual void list_ports();
 	
 private:
-	vector<NamedPort> m_ports;
+	vector<Named<Port> > m_ports;
 	
-	typedef vector<NamedPort>::iterator       v_iter;
-	typedef vector<NamedPort>::const_iterator v_citer;
-	typedef vector<NamedPort>::size_type      v_size;
+	typedef vector<Named<Port> >::iterator       v_iter;
+	typedef vector<Named<Port> >::const_iterator v_citer;
+	typedef vector<Named<Port> >::size_type      v_size;
 	
 public:
 	v_iter ports_begin() { return m_ports.begin(); }

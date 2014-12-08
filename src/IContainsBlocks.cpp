@@ -10,13 +10,13 @@ void IContainsBlocks::check() const
 Block *IContainsBlocks::find_block(const char *b_name)
 {
 	auto it = find_if(m_blocks.cbegin(), m_blocks.cend(),
-		[&](const NamedBlock& nb) {
+		[&](const Named<Block>& nb) {
 			return (strcmp(b_name, nb.name) == 0);
 		});
 	
 	if (it == m_blocks.cend()) throw NonexistentBlockException();
 	
-	return (*it).block;
+	return (*it).ptr;
 }
 
 void IContainsBlocks::register_block(const char *b_name, Block *b)
@@ -28,14 +28,14 @@ void IContainsBlocks::register_block(const char *b_name, Block *b)
 		demangle(typeid(*this).name()), demangle(typeid(*b).name()), b_name, b);
 	
 	if (any_of(m_blocks.cbegin(), m_blocks.cend(),
-		[&](const NamedBlock& nb) {
-			return (nb.block == b);
+		[&](const Named<Block>& nb) {
+			return (nb.ptr == b);
 		}))
 	{
 		throw DuplicateBlockException();
 	}
 	if (any_of(m_blocks.cbegin(), m_blocks.cend(),
-		[&](const NamedBlock& nb) {
+		[&](const Named<Block>& nb) {
 			return (strcmp(b_name, nb.name) == 0);
 		}))
 	{
@@ -44,6 +44,6 @@ void IContainsBlocks::register_block(const char *b_name, Block *b)
 	
 	b->set_owner(this);
 	
-	NamedBlock nb = { b_name, b };
+	Named<Block> nb = { b_name, b };
 	m_blocks.push_back(nb);
 }

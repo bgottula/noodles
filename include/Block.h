@@ -27,11 +27,4 @@ private:
 	IContainsBlocks *m_owner = nullptr;
 };
 
-/* associates a name with a block */
-struct NamedBlock
-{
-	const char *name;
-	Block *block;
-};
-
 #endif

@@ -10,13 +10,13 @@ void IContainsPorts::check() const
 Port *IContainsPorts::find_port(const char *p_name)
 {
 	auto it = find_if(m_ports.cbegin(), m_ports.cend(),
-		[&](const NamedPort& np) {
+		[&](const Named<Port>& np) {
 			return (strcmp(p_name, np.name) == 0);
 		});
 	
 	if (it == m_ports.cend()) throw NonexistentPortException();
 	
-	return (*it).port;
+	return (*it).ptr;
 }
 
 void IContainsPorts::register_port(const char *p_name, Port *p)
@@ -25,14 +25,14 @@ void IContainsPorts::register_port(const char *p_name, Port *p)
 		demangle(typeid(*this).name()), demangle(typeid(*p).name()), p_name, p);
 	
 	if (any_of(m_ports.cbegin(), m_ports.cend(),
-		[&](const NamedPort& np) {
-			return (np.port == p);
+		[&](const Named<Port>& np) {
+			return (np.ptr == p);
 		}))
 	{
 		throw DuplicatePortException();
 	}
 	if (any_of(m_ports.cbegin(), m_ports.cend(),
-		[&](const NamedPort& np) {
+		[&](const Named<Port>& np) {
 			return (strcmp(p_name, np.name) == 0);
 		}))
 	{
@@ -41,7 +41,7 @@ void IContainsPorts::register_port(const char *p_name, Port *p)
 	
 	p->set_owner(this);
 	
-	NamedPort np { p_name, p };
+	Named<Port> np { p_name, p };
 	m_ports.push_back(np);
 }
 
