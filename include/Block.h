@@ -12,15 +12,15 @@ class Block :
 public:
 	virtual ~Block() {}
 	
-	virtual void reset(void) = 0;
-	
-	virtual bool can_work(void) = 0;
-	virtual void work(void) = 0;
-	
 	virtual void check(void) const;
 	
 	virtual void set_owner(IContainsBlocks *owner);
 	virtual IContainsBlocks *get_owner(void);
+	
+	virtual void reset(void) = 0;
+	
+	virtual bool can_work(void) = 0;
+	virtual void work(void) = 0;
 	
 protected:
 	Block() {}
