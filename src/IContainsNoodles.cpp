@@ -1,5 +1,12 @@
 #include "all.h"
 
+void IContainsNoodles::check() const
+{
+	debug(AT_BLD "IContainsNoodles::check" AT_RST "\n");
+	
+#warning FINISHME
+}
+
 void IContainsNoodles::add_noodle(NoodleBase *n)
 {
 #warning Graph needs a way to tell IContainsNoodles to lock up after GraphState goes to RUN

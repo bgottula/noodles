@@ -1,5 +1,12 @@
 #include "all.h"
 
+void IContainsBlocks::check() const
+{
+	debug(AT_BLD "IContainsBlocks::check" AT_RST "\n");
+	
+#warning FINISHME
+}
+
 Block *IContainsBlocks::find_block(const char *b_name)
 {
 	auto it = find_if(m_blocks.cbegin(), m_blocks.cend(),

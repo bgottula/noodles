@@ -12,6 +12,8 @@ public:
 			});
 	}
 	
+	virtual void check() const;
+	
 	vector<NoodleBase *>::iterator noodles_begin()
 	{ return m_noodles.begin(); }
 	vector<NoodleBase *>::iterator noodles_end()

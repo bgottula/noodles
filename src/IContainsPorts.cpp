@@ -1,5 +1,12 @@
 #include "all.h"
 
+void IContainsPorts::check() const
+{
+	debug(AT_BLD "IContainsPorts::check" AT_RST "\n");
+	
+#warning FINISHME
+}
+
 Port *IContainsPorts::find_port(const char *p_name)
 {
 	auto it = find_if(m_ports.cbegin(), m_ports.cend(),

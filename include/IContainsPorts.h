@@ -6,6 +6,8 @@ class IContainsPorts
 public:
 	virtual ~IContainsPorts() {}
 	
+	virtual void check() const;
+	
 	vector<NamedPort>::iterator ports_begin()
 	{ return m_ports.begin(); }
 	vector<NamedPort>::iterator ports_end()

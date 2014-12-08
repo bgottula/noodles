@@ -6,6 +6,8 @@ class IContainsBlocks
 public:
 	virtual ~IContainsBlocks() {}
 	
+	virtual void check() const;
+	
 	vector<NamedBlock>::iterator blocks_begin()
 	{ return m_blocks.begin(); }
 	vector<NamedBlock>::iterator blocks_end()

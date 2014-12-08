@@ -7,6 +7,8 @@ class IHasOwner
 public:
 	virtual ~IHasOwner() {}
 	
+	virtual void check() const;
+	
 	virtual const T *get_owner() const;
 	virtual void set_owner(const T *owner);
 	
