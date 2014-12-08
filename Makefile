@@ -14,7 +14,7 @@ LINK_TEST:=
 HEADERS:=include/*.h
 
 # g++ options
-GCC_FLAGS:=-std=c++0x -Wall -Wextra -g -Og -rdynamic -I obj -I include -include std.h -fdiagnostics-color=always
+GCC_FLAGS:=-std=c++11 -Wall -Wextra -g -Og -rdynamic -I obj -I include -include std.h -fdiagnostics-color=always
 
 
 # how to link against boost unit test framework: dynamic, static, or header
