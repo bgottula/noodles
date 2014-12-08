@@ -7,7 +7,7 @@ void IHasOwner<T>::check() const
 	debug(AT_BLD "IHasOwner<%s>::check" AT_RST "\n",
 		demangle(typeid(T).name()));
 	
-#warning FINISHME
+	if (m_owner == nullptr) throw NotOwnedException();
 }
 
 template <typename T>
