@@ -8,7 +8,7 @@ class OPort;
 template <typename T> class InputPort;
 template <typename T> class OutputPort;
 
-/* base noodle class (protected ctor prevents direct instantiation) */
+/* non-template base for all noodles */
 class NoodleBase
 {
 public:
@@ -20,7 +20,7 @@ protected:
 	NoodleBase() {}
 };
 
-/* common noodle template (protected ctor prevents direct instantiation) */
+/* generic base for QNoodle<T> and RNoodle<T> */
 template <typename T>
 class Noodle : public NoodleBase
 {

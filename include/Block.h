@@ -1,7 +1,7 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-/* base for block classes (protected ctor prevents direct instantiation) */
+/* base for block implementations */
 class Block :
 	public IKnowsSubclassName,
 	public IContainsPorts

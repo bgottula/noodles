@@ -7,7 +7,7 @@ enum class GraphState
 	RUN,
 };
 
-/* base for graphs (protected ctor prevents direct instantiation) */
+/* base for graph implementations */
 class Graph :
 	public IKnowsSubclassName,
 	public IContainsNoodles,

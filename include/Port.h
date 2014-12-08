@@ -4,7 +4,7 @@
 /* forward declarations */
 class Block;
 
-/* base for all ports (protected ctor prevents direct instantiation) */
+/* base for all ports */
 class Port
 {
 public:
@@ -24,7 +24,7 @@ private:
 	Block *m_owner = nullptr;
 };
 
-/* base for InputPort<T> (protected ctor prevents direct instantiation) */
+/* non-template base for InputPort<T> */
 class IPort : public Port
 {
 public:
@@ -34,7 +34,7 @@ protected:
 	IPort() {}
 };
 
-/* base for OutputPort<T> (protected ctor prevents direct instantiation) */
+/* non-template base for OutputPort<T> */
 class OPort : public Port
 {
 public:
