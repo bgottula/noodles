@@ -50,7 +50,7 @@ void IContainsPorts::list_ports()
 		{
 			printf(AT_BLD "%s::list_ports:" AT_RST " %s %s @ %p, avail = %zu\n",
 				demangle(typeid(*this).name()), demangle(typeid(x).name()),
-				np.name, &x, x.available());
+				np.name, &x, x.avail());
 		}
 		
 		IPort *i = dynamic_cast<IPort *>(p);

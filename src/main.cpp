@@ -17,7 +17,7 @@ public:
 	
 	bool can_work()
 	{
-		return (o_phase.available() >= 1);
+		return (o_phase.avail() >= 1);
 	}
 	
 	void work()
@@ -50,8 +50,8 @@ public:
 	
 	bool can_work()
 	{
-		return (i_phase.available() >= 1 && i_feedback.available() >= 1 &&
-			o_phase_corrected.available() >= 1);
+		return (i_phase.avail() >= 1 && i_feedback.avail() >= 1 &&
+			o_phase_corrected.avail() >= 1);
 	}
 	
 	void work()
@@ -88,7 +88,7 @@ public:
 	
 	bool can_work()
 	{
-		return (i_phase_corrected.available() >= 1 && o_error.available() >= 1);
+		return (i_phase_corrected.avail() >= 1 && o_error.avail() >= 1);
 	}
 	
 	void work()
@@ -123,7 +123,7 @@ public:
 	
 	bool can_work()
 	{
-		return (i_error.available() >= 1 && o_adjustment.available() >= 1);
+		return (i_error.avail() >= 1 && o_adjustment.avail() >= 1);
 	}
 	
 	void work()
@@ -161,7 +161,7 @@ public:
 	
 	bool can_work()
 	{
-		return (i_phase_corrected.available() >= 1);
+		return (i_phase_corrected.avail() >= 1);
 	}
 	
 	void work()

@@ -13,7 +13,7 @@ public:
 	
 	virtual void check() const;
 	
-	virtual size_t available() const = 0;
+	virtual size_t avail() const = 0;
 	
 protected:
 	Port() {}
@@ -53,7 +53,7 @@ public:
 	
 	void connect(Noodle<T> *n);
 	
-	size_t available() const;
+	size_t avail() const;
 	
 	void get_one(T& sample);
 	void get_arr(size_t count, T *samples);
@@ -77,7 +77,7 @@ public:
 	
 	void connect(Noodle<T> *n);
 	
-	size_t available() const;
+	size_t avail() const;
 	
 	void put_one(const T& sample);
 	void put_repeat(size_t count, const T& sample);

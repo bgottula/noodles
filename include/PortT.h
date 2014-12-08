@@ -37,7 +37,7 @@ void OutputPort<T>::connect(Noodle<T> *n)
 }
 
 template <typename T>
-size_t InputPort<T>::available() const
+size_t InputPort<T>::avail() const
 {
 	if (m_noodle == nullptr) throw InputNotConnectedException();
 	
@@ -45,7 +45,7 @@ size_t InputPort<T>::available() const
 }
 
 template <typename T>
-size_t OutputPort<T>::available() const
+size_t OutputPort<T>::avail() const
 {
 	if (m_noodles.empty()) throw OutputNotConnectedException();
 	
