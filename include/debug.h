@@ -82,7 +82,7 @@ void debug(const char *format, ...);
 #if defined(__GNUC__) || defined(_MSC_VER)
 const char *demangle(const char *mangled);
 #else
-#define demangle(_x) _x
+#define demangle(_x) (_x)
 #endif
 
 class AutoFree

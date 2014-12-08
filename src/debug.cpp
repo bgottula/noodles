@@ -40,7 +40,9 @@ const char *demangle(const char *mangled)
 	assert(status == 0);
 	assert(demangled != nullptr);
 	
-	/* keep track of the string so we can free() it later */
+	/* keep track of the string so we can free() it later; if we let the caller
+	 * manage the string, they would have to know if they were on G++ or MSVC to
+	 * know whether to free() the string pointer (yuck) */
 	strs.push(demangled);
 	
 	return demangled;
