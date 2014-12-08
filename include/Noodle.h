@@ -15,17 +15,17 @@ class NoodleBase
 public:
 	virtual ~NoodleBase() {}
 	
-	virtual size_t max(void) const = 0;
-	virtual size_t count(void) const = 0;
-	virtual size_t free(void) const = 0;
+	virtual void check(void) const = 0
+	
+	virtual void set_owner(IContainsNoodles *owner);
+	virtual IContainsNoodles *get_owner(void);
 	
 	virtual bool is_qnoodle(void) const = 0;
 	virtual void lock(unique_lock<mutex>& mgr) = 0;
 	
-	virtual void check(void) const = 0;
-	
-	virtual void set_owner(IContainsNoodles *owner);
-	virtual IContainsNoodles *get_owner(void);
+	virtual size_t max(void) const = 0;
+	virtual size_t count(void) const = 0;
+	virtual size_t free(void) const = 0;
 	
 protected:
 	NoodleBase() {}
@@ -126,11 +126,10 @@ public:
 	typedef typename Noodle<T>::type type;
 	
 private:
-	/* mutex to ensure atomic loading/storing of the register value */
-	mutex m_mutex;
-	
 	/* register containing the current sample value */
 	T m_reg;
+	/* mutex to ensure atomic loading/storing of the register value */
+	mutex m_mutex;
 };
 
 class NoodleAlreadyOwnedException : public runtime_error
