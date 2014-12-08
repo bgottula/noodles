@@ -38,7 +38,7 @@ public:
 	virtual T pop(void) = 0;
 	virtual T peek(size_t where) = 0;
 	
-	void check(void) const;
+	virtual void check(void) const;
 	
 	typedef T type;
 	
