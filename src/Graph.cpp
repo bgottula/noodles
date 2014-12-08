@@ -3,11 +3,6 @@
 Graph::~Graph(void)
 {
 	debug(AT_BLD "%s dtor" AT_RST "\n", name());
-	
-	for_each(m_noodles.cbegin(), m_noodles.cend(),
-		[](const NoodleBase *n) {
-			delete n;
-		});
 }
 
 void Graph::check(void)
@@ -16,10 +11,10 @@ void Graph::check(void)
 	
 	dump();
 	
-	if (m_blocks.empty()) throw GraphNoBlocksException();
-	if (m_noodles.empty()) throw GraphNoNoodlesException();
+	//if (m_blocks.empty()) throw GraphNoBlocksException();
+	//if (m_noodles.empty()) throw GraphNoNoodlesException();
 	
-	for_each(m_blocks.cbegin(), m_blocks.cend(),
+	for_each(blocks_cbegin(), blocks_cend(),
 		[](const NamedBlock& nb) {
 			nb.block->check();
 		});
@@ -32,56 +27,6 @@ void Graph::check(void)
 void Graph::dump(bool blocks, bool noodles) const
 {
 #warning FINISHME
-}
-
-const char *Graph::name(void) const
-{
-	/* only do this the first time the function is called for this instance */
-	if (m_name == nullptr)
-	{
-		decltype(*this) g = *this;
-		m_name = demangle(typeid(g).name());
-	}
-	
-	return m_name;
-}
-
-void Graph::register_block(const char *b_name, Block *b)
-{
-	if (m_state != GraphState::SETUP) throw GraphModifiedAfterSetupException();
-	
-	debug(AT_BLD "%s::register_block:" AT_RST " %s %s @ %p\n",
-		name(), demangle(typeid(*b).name()), b_name, b);
-	
-	if (any_of(m_blocks.cbegin(), m_blocks.cend(),
-		[&](const NamedBlock& nb) {
-			return (nb.block == b);
-		}))
-	{
-		throw GraphDuplicateBlockException();
-	}
-	if (any_of(m_blocks.cbegin(), m_blocks.cend(),
-		[&](const NamedBlock& nb) {
-			return (strcmp(b_name, nb.name) == 0);
-		}))
-	{
-		throw GraphDuplicateBlockNameException();
-	}
-	
-	NamedBlock nb = { b_name, b };
-	m_blocks.push_back(nb);
-}
-
-void Graph::add_noodle(NoodleBase *n)
-{
-	if (m_state != GraphState::SETUP) throw GraphModifiedAfterSetupException();
-	
-	if (find(m_noodles.cbegin(), m_noodles.cend(), n) != m_noodles.cend())
-	{
-		throw GraphDuplicateNoodleException();
-	}
-	
-	m_noodles.push_back(n);
 }
 
 #if 0
