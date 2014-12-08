@@ -25,8 +25,8 @@ Noodle<T>::Noodle(Port *from, Port *to)
 	m_to->connect(this);
 }
 
-template<typename T>
-void Noodle<T>::check(void) const
+template <typename T>
+void QNoodle<T>::check(void) const
 {
 	debug(AT_BLD "%s::check" AT_RST "\n",
 		demangle(typeid(*this).name()));
@@ -54,6 +54,15 @@ T QNoodle<T>::peek(size_t where)
 {
 	T sample = m_queue[where];
 	return sample;
+}
+
+template <typename T>
+void RNoodle<T>::check(void) const
+{
+	debug(AT_BLD "%s::check" AT_RST "\n",
+		demangle(typeid(*this).name()));
+	
+#warning FINISHME
 }
 
 #endif

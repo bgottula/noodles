@@ -15,7 +15,7 @@ class NoodleBase
 public:
 	virtual ~NoodleBase() {}
 	
-	virtual void check(void) const = 0
+	virtual void check(void) const;
 	
 	virtual void set_owner(IContainsNoodles *owner);
 	virtual IContainsNoodles *get_owner(void);
@@ -45,8 +45,6 @@ public:
 	virtual T pop(void) = 0;
 	virtual T peek(size_t where) = 0;
 	
-	virtual void check(void) const;
-	
 	typedef T type;
 	
 protected:
@@ -68,6 +66,8 @@ class QNoodle : public Noodle<T>
 public:
 	QNoodle(size_t max, Port *from, Port *to)
 		: Noodle<T>(from, to), m_max(max) {}
+	
+	void check(void) const;
 	
 	bool is_qnoodle(void) const { return true; }
 	void lock(unique_lock<mutex>& mgr) { mgr = unique_lock<mutex>(m_mutex); }
@@ -105,6 +105,8 @@ class RNoodle : public Noodle<T>
 public:
 	RNoodle(T init, Port *from, Port *to)
 		: Noodle<T>(from, to), m_reg(init) {}
+	
+	void check(void) const;
 	
 	bool is_qnoodle(void) const { return false; }
 	void lock(unique_lock<mutex>& mgr) { mgr = unique_lock<mutex>(m_mutex); }
