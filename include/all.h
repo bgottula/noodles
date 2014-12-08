@@ -11,6 +11,8 @@ using namespace std;
 
 /* class headers (order matters) */
 #include "Interfaces.h"
+#include "IHasOwner.h"
+#include "IHasOwnerT.h"
 #include "Noodle.h"
 #include "NoodleT.h"
 #include "IContainsNoodles.h"
