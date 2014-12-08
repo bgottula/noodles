@@ -12,15 +12,15 @@ class Block :
 public:
 	virtual ~Block() {}
 	
-	virtual void check(void) const;
+	virtual void check() const;
 	
 	virtual void set_owner(IContainsBlocks *owner);
-	virtual IContainsBlocks *get_owner(void);
+	virtual IContainsBlocks *get_owner();
 	
-	virtual void reset(void) = 0;
+	virtual void reset() = 0;
 	
-	virtual bool can_work(void) = 0;
-	virtual void work(void) = 0;
+	virtual bool can_work() = 0;
+	virtual void work() = 0;
 	
 protected:
 	Block() {}
@@ -38,12 +38,12 @@ struct NamedBlock
 
 class BlockAlreadyOwnedException : public runtime_error
 {
-public: BlockAlreadyOwnedException(void) :
+public: BlockAlreadyOwnedException() :
 	runtime_error("Block has already had an owner assigned") {}
 };
 class BlockNotOwnedException : public runtime_error
 {
-public: BlockNotOwnedException(void) :
+public: BlockNotOwnedException() :
 	runtime_error("Block does not yet have an owner assigned") {}
 };
 

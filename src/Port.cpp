@@ -1,6 +1,6 @@
 #include "all.h"
 
-void Port::check(void) const
+void Port::check() const
 {
 	debug(AT_BLD "Port::check" AT_RST "\n");
 	
@@ -14,7 +14,7 @@ void Port::set_owner(IContainsPorts *owner)
 	m_owner = owner;
 }
 
-IContainsPorts *Port::get_owner(void)
+IContainsPorts *Port::get_owner()
 {
 	if (m_owner == nullptr) throw PortNotOwnedException();
 	

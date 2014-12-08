@@ -6,19 +6,19 @@ class IContainsBlocks
 public:
 	virtual ~IContainsBlocks() {}
 	
-	vector<NamedBlock>::iterator blocks_begin(void)
+	vector<NamedBlock>::iterator blocks_begin()
 	{ return m_blocks.begin(); }
-	vector<NamedBlock>::iterator blocks_end(void)
+	vector<NamedBlock>::iterator blocks_end()
 	{ return m_blocks.end(); }
 	
-	vector<NamedBlock>::const_iterator blocks_cbegin(void) const
+	vector<NamedBlock>::const_iterator blocks_cbegin() const
 	{ return m_blocks.cbegin(); }
-	vector<NamedBlock>::const_iterator blocks_cend(void) const
+	vector<NamedBlock>::const_iterator blocks_cend() const
 	{ return m_blocks.cend(); }
 	
-	vector<NamedBlock>::size_type blocks_size(void) const
+	vector<NamedBlock>::size_type blocks_size() const
 	{ return m_blocks.size(); }
-	bool blocks_empty(void) const
+	bool blocks_empty() const
 	{ return m_blocks.empty(); }
 	
 	virtual Block *find_block(const char *b_name);
@@ -27,7 +27,7 @@ protected:
 	IContainsBlocks() {}
 	
 	virtual void register_block(const char *b_name, Block *b);
-	//virtual void list_blocks(void);
+	//virtual void list_blocks();
 	
 private:
 	vector<NamedBlock> m_blocks;
@@ -35,17 +35,17 @@ private:
 
 class NonexistentBlockException : public runtime_error
 {
-public: NonexistentBlockException(void) :
+public: NonexistentBlockException() :
 	runtime_error("Block with that name has not been registered") {}
 };
 class DuplicateBlockException : public runtime_error
 {
-public: DuplicateBlockException(void) :
+public: DuplicateBlockException() :
 	runtime_error("Block instances may only be registered once") {}
 };
 class DuplicateBlockNameException : public runtime_error
 {
-public: DuplicateBlockNameException(void) :
+public: DuplicateBlockNameException() :
 	runtime_error("Block instances must be registered with unique names") {}
 };
 

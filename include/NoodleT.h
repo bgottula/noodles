@@ -26,7 +26,7 @@ Noodle<T>::Noodle(Port *from, Port *to)
 }
 
 template <typename T>
-void QNoodle<T>::check(void) const
+void QNoodle<T>::check() const
 {
 	debug(AT_BLD "%s::check" AT_RST "\n",
 		demangle(typeid(*this).name()));
@@ -42,7 +42,7 @@ void QNoodle<T>::push(const T& sample)
 }
 
 template <typename T>
-T QNoodle<T>::pop(void)
+T QNoodle<T>::pop()
 {
 	T sample = m_queue.front();
 	m_queue.pop_front();
@@ -57,7 +57,7 @@ T QNoodle<T>::peek(size_t where)
 }
 
 template <typename T>
-void RNoodle<T>::check(void) const
+void RNoodle<T>::check() const
 {
 	debug(AT_BLD "%s::check" AT_RST "\n",
 		demangle(typeid(*this).name()));

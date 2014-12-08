@@ -1,6 +1,6 @@
 #include "all.h"
 
-void NoodleBase::check(void) const
+void NoodleBase::check() const
 {
 	debug(AT_BLD "NoodleBase::check" AT_RST "\n");
 	
@@ -14,7 +14,7 @@ void NoodleBase::set_owner(IContainsNoodles *owner)
 	m_owner = owner;
 }
 
-IContainsNoodles *NoodleBase::get_owner(void)
+IContainsNoodles *NoodleBase::get_owner()
 {
 	if (m_owner == nullptr) throw NoodleNotOwnedException();
 	

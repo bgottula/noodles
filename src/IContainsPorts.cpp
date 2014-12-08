@@ -39,7 +39,7 @@ void IContainsPorts::register_port(const char *p_name, Port *p)
 }
 
 #if 0
-void IContainsPorts::list_ports(void)
+void IContainsPorts::list_ports()
 {
 	for (auto it = m_ports.begin(); it != m_ports.end(); ++it)
 	{

@@ -69,7 +69,7 @@ void AutoFree::push(void *p)
 	m_ptrs.push_back(p);
 }
 
-void AutoFree::clear(void)
+void AutoFree::clear()
 {
 	lock_guard<mutex> lock(m_mutex);
 	
@@ -90,7 +90,7 @@ char *StringPool::alloc(size_t len)
 	return str;
 }
 
-void StringPool::clear(void)
+void StringPool::clear()
 {
 	lock_guard<mutex> lock(m_mutex);
 	

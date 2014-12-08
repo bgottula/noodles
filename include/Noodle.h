@@ -15,17 +15,17 @@ class NoodleBase
 public:
 	virtual ~NoodleBase() {}
 	
-	virtual void check(void) const;
+	virtual void check() const;
 	
 	virtual void set_owner(IContainsNoodles *owner);
-	virtual IContainsNoodles *get_owner(void);
+	virtual IContainsNoodles *get_owner();
 	
-	virtual bool is_qnoodle(void) const = 0;
+	virtual bool is_qnoodle() const = 0;
 	virtual void lock(unique_lock<mutex>& mgr) = 0;
 	
-	virtual size_t max(void) const = 0;
-	virtual size_t count(void) const = 0;
-	virtual size_t free(void) const = 0;
+	virtual size_t max() const = 0;
+	virtual size_t count() const = 0;
+	virtual size_t free() const = 0;
 	
 protected:
 	NoodleBase() {}
@@ -42,7 +42,7 @@ public:
 	virtual ~Noodle() {}
 	
 	virtual void push(const T& sample) = 0;
-	virtual T pop(void) = 0;
+	virtual T pop() = 0;
 	virtual T peek(size_t where) = 0;
 	
 	typedef T type;
@@ -67,22 +67,22 @@ public:
 	QNoodle(size_t max, Port *from, Port *to)
 		: Noodle<T>(from, to), m_max(max) {}
 	
-	void check(void) const;
+	void check() const;
 	
-	bool is_qnoodle(void) const { return true; }
+	bool is_qnoodle() const { return true; }
 	void lock(unique_lock<mutex>& mgr) { mgr = unique_lock<mutex>(m_mutex); }
 	
 	/* get queue's max allowed sample count */
-	size_t max(void) const { return m_max; }
+	size_t max() const { return m_max; }
 	/* get queue's sample count */
-	size_t count(void) const { return m_queue.size(); }
+	size_t count() const { return m_queue.size(); }
 	/* get queue's free space count */
-	size_t free(void) const { return m_max - m_queue.size(); }
+	size_t free() const { return m_max - m_queue.size(); }
 	
 	/* NEEDS LOCK: push one sample onto the queue */
 	void push(const T& sample);
 	/* NEEDS LOCK: pop one sample from the queue */
-	T pop(void);
+	T pop();
 	/* NEEDS LOCK: peek one sample from a given position in the queue */
 	T peek(size_t where);
 	
@@ -107,22 +107,22 @@ public:
 	RNoodle(T init, Port *from, Port *to)
 		: Noodle<T>(from, to), m_reg(init) {}
 	
-	void check(void) const;
+	void check() const;
 	
-	bool is_qnoodle(void) const { return false; }
+	bool is_qnoodle() const { return false; }
 	void lock(unique_lock<mutex>& mgr) { mgr = unique_lock<mutex>(m_mutex); }
 	
 	/* register can always hold just one sample */
-	size_t max(void) const { return 1; }
+	size_t max() const { return 1; }
 	/* register can always furnish one get */
-	size_t count(void) const { return 1; }
+	size_t count() const { return 1; }
 	/* register can always furnish one put */
-	size_t free(void) const { return 1; }
+	size_t free() const { return 1; }
 	
 	/* write to the sample register */
 	void push(const T& sample) { m_reg = sample; }
 	/* read from the sample register */
-	T pop(void) { return m_reg; }
+	T pop() { return m_reg; }
 	/* peek the sample register (explicitly ignore the where parameter) */
 	T peek(size_t where) { (void)where; return m_reg; }
 	
@@ -138,34 +138,34 @@ private:
 
 class NoodleAlreadyOwnedException : public runtime_error
 {
-public: NoodleAlreadyOwnedException(void) :
+public: NoodleAlreadyOwnedException() :
 	runtime_error("Noodle has already had an owner assigned") {}
 };
 class NoodleNotOwnedException : public runtime_error
 {
-public: NoodleNotOwnedException(void) :
+public: NoodleNotOwnedException() :
 	runtime_error("Noodle does not yet have an owner assigned") {}
 };
 
 class NoodleFromPortNotOutputException : public runtime_error
 {
-public: NoodleFromPortNotOutputException(void) :
+public: NoodleFromPortNotOutputException() :
 	runtime_error("Noodle's from-port must be an output port") {}
 };
 class NoodleToPortNotInputException : public runtime_error
 {
-public: NoodleToPortNotInputException(void) :
+public: NoodleToPortNotInputException() :
 	runtime_error("Noodle's to-port must be an input port") {}
 };
 
 class NoodleFromPortWrongTypeException : public runtime_error
 {
-public: NoodleFromPortWrongTypeException(void) :
+public: NoodleFromPortWrongTypeException() :
 	runtime_error("Noodle's from-port type parameter does not match") {}
 };
 class NoodleToPortWrongTypeException : public runtime_error
 {
-public: NoodleToPortWrongTypeException(void) :
+public: NoodleToPortWrongTypeException() :
 	runtime_error("Noodle's to-port type parameter does not match") {}
 };
 

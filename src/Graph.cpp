@@ -1,6 +1,6 @@
 #include "all.h"
 
-void Graph::check(void)
+void Graph::check()
 {
 	debug(AT_BLD "%s::check" AT_RST "\n", name());
 	
@@ -91,7 +91,7 @@ void Graph::addRNoodle(int init, Endpoint from, Endpoint to)
 	addNoodle(n, from, to);
 }
 
-void Graph::checkGraph(void)
+void Graph::checkGraph()
 {
 	if (!m_needCheck) return;
 	
@@ -120,7 +120,7 @@ void Graph::dumpGraph(bool blocks, bool noodles)
 	if (noodles) dumpNoodles();
 }
 
-void Graph::dumpBlocks(void)
+void Graph::dumpBlocks()
 {
 	for (auto it = m_blocks.cbegin(); it != m_blocks.cend(); ++it)
 	{
@@ -179,7 +179,7 @@ void Graph::dumpBlocks(void)
 	m_strpool.clear();
 }
 
-void Graph::dumpNoodles(void)
+void Graph::dumpNoodles()
 {
 	for (auto it = m_noodles.cbegin(); it != m_noodles.cend(); ++it)
 	{

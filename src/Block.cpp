@@ -1,6 +1,6 @@
 #include "all.h"
 
-void Block::check(void) const
+void Block::check() const
 {
 	debug(AT_BLD "%s::check" AT_RST "\n", name());
 	
@@ -14,7 +14,7 @@ void Block::set_owner(IContainsBlocks *owner)
 	m_owner = owner;
 }
 
-IContainsBlocks *Block::get_owner(void)
+IContainsBlocks *Block::get_owner()
 {
 	if (m_owner == nullptr) throw BlockNotOwnedException();
 	

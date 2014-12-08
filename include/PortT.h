@@ -2,7 +2,7 @@
 #define PORT_T_H
 
 template <typename T>
-void InputPort<T>::check(void) const
+void InputPort<T>::check() const
 {
 	debug(AT_BLD "%s::check" AT_RST "\n",
 		demangle(typeid(*this).name()));
@@ -11,7 +11,7 @@ void InputPort<T>::check(void) const
 }
 
 template <typename T>
-void OutputPort<T>::check(void) const
+void OutputPort<T>::check() const
 {
 	debug(AT_BLD "%s::check" AT_RST "\n",
 		demangle(typeid(*this).name()));
@@ -37,7 +37,7 @@ void OutputPort<T>::connect(Noodle<T> *n)
 }
 
 template <typename T>
-size_t InputPort<T>::available(void) const
+size_t InputPort<T>::available() const
 {
 	if (m_noodle == nullptr) throw InputNotConnectedException();
 	
@@ -45,7 +45,7 @@ size_t InputPort<T>::available(void) const
 }
 
 template <typename T>
-size_t OutputPort<T>::available(void) const
+size_t OutputPort<T>::available() const
 {
 	if (m_noodles.empty()) throw OutputNotConnectedException();
 	

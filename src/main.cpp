@@ -3,24 +3,24 @@
 class Source : public Block
 {
 public:
-	Source(void)
+	Source()
 	{
 		REGISTER_PORT(o_phase);
 		
 		reset();
 	}
 	
-	void reset(void)
+	void reset()
 	{
 		m_counter = 0;
 	}
 	
-	bool can_work(void)
+	bool can_work()
 	{
 		return (o_phase.available() >= 1);
 	}
 	
-	void work(void)
+	void work()
 	{
 		int sample = m_counter++;
 		
@@ -37,7 +37,7 @@ private:
 class VariableDecimator : public Block
 {
 public:
-	VariableDecimator(void)
+	VariableDecimator()
 	{
 		REGISTER_PORT(i_phase);
 		REGISTER_PORT(i_feedback);
@@ -46,15 +46,15 @@ public:
 		reset();
 	}
 	
-	void reset(void) {}
+	void reset() {}
 	
-	bool can_work(void)
+	bool can_work()
 	{
 		return (i_phase.available() >= 1 && i_feedback.available() >= 1 &&
 			o_phase_corrected.available() >= 1);
 	}
 	
-	void work(void)
+	void work()
 	{
 		int s_phase;
 		int s_feedback;
@@ -76,7 +76,7 @@ private:
 class PhaseErrorDetector : public Block
 {
 public:
-	PhaseErrorDetector(void)
+	PhaseErrorDetector()
 	{
 		REGISTER_PORT(i_phase_corrected);
 		REGISTER_PORT(o_error);
@@ -84,14 +84,14 @@ public:
 		reset();
 	}
 	
-	void reset(void) {}
+	void reset() {}
 	
-	bool can_work(void)
+	bool can_work()
 	{
 		return (i_phase_corrected.available() >= 1 && o_error.available() >= 1);
 	}
 	
-	void work(void)
+	void work()
 	{
 		/* dummy: passthru */
 		
@@ -108,7 +108,7 @@ private:
 class LoopFilter : public Block
 {
 public:
-	LoopFilter(void)
+	LoopFilter()
 	{
 		REGISTER_PORT(i_error);
 		REGISTER_PORT(o_adjustment);
@@ -116,17 +116,17 @@ public:
 		reset();
 	}
 	
-	void reset(void)
+	void reset()
 	{
 		m_integrator = 0;
 	}
 	
-	bool can_work(void)
+	bool can_work()
 	{
 		return (i_error.available() >= 1 && o_adjustment.available() >= 1);
 	}
 	
-	void work(void)
+	void work()
 	{
 		int s_error;
 		i_error.get_one(s_error);
@@ -150,21 +150,21 @@ private:
 class Sink : public Block
 {
 public:
-	Sink(void)
+	Sink()
 	{
 		REGISTER_PORT(i_phase_corrected);
 		
 		reset();
 	}
 	
-	void reset(void) {}
+	void reset() {}
 	
-	bool can_work(void)
+	bool can_work()
 	{
 		return (i_phase_corrected.available() >= 1);
 	}
 	
-	void work(void)
+	void work()
 	{
 		int sample;
 		i_phase_corrected.get_one(sample);
@@ -179,7 +179,7 @@ private:
 class MyGraph : public Graph
 {
 public:
-	MyGraph(void)
+	MyGraph()
 	{
 		REGISTER_BLOCK(b_src);
 		REGISTER_BLOCK(b_vd);

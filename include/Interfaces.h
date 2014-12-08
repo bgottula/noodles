@@ -6,7 +6,7 @@ class IKnowsSubclassName
 public:
 	virtual ~IKnowsSubclassName() {}
 	
-	virtual const char *name(void) const
+	virtual const char *name() const
 	{
 		if (m_name == nullptr)
 		{

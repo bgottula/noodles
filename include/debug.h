@@ -91,7 +91,7 @@ public:
 	~AutoFree() { clear(); }
 	
 	void push(void *p);
-	void clear(void);
+	void clear();
 	
 private:
 	mutex m_mutex;
@@ -104,7 +104,7 @@ public:
 	~StringPool() { clear(); }
 	
 	char *alloc(size_t len);
-	void clear(void);
+	void clear();
 	
 private:
 	mutex m_mutex;

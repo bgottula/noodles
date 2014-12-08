@@ -6,7 +6,7 @@ class Scheduler
 public:
 	virtual ~Scheduler() {}
 	
-	virtual void run(void) = 0;
+	virtual void run() = 0;
 	
 protected:
 	Scheduler(Graph *graph) :
@@ -21,10 +21,10 @@ public:
 	RoundRobinScheduler(Graph *graph) :
 		Scheduler(graph) {}
 	
-	void run(void);
+	void run();
 	
 private:
-	void run_once(void);
+	void run_once();
 };
 
 class ThreadedScheduler : public Scheduler
@@ -33,7 +33,7 @@ public:
 	ThreadedScheduler(Graph *graph) :
 		Scheduler(graph) {}
 	
-	void run(void);
+	void run();
 };
 
 class InteractiveScheduler : public Scheduler
@@ -42,7 +42,7 @@ public:
 	InteractiveScheduler(Graph *graph) :
 		Scheduler(graph) {}
 	
-	void run(void);
+	void run();
 };
 
 #endif

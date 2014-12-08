@@ -1,6 +1,6 @@
 #include "all.h"
 
-void RoundRobinScheduler::run(void)
+void RoundRobinScheduler::run()
 {
 	debug(AT_BLD "RoundRobinScheduler::run" AT_RST "\n");
 	
@@ -13,7 +13,7 @@ void RoundRobinScheduler::run(void)
 	}
 }
 
-void RoundRobinScheduler::run_once(void)
+void RoundRobinScheduler::run_once()
 {
 	debug(AT_BLD "RoundRobinScheduler::run_once" AT_RST "\n");
 	
@@ -42,12 +42,12 @@ void RoundRobinScheduler::run_once(void)
 	}
 }
 
-void ThreadedScheduler::run(void)
+void ThreadedScheduler::run()
 {
 	debug(AT_BLD "ThreadedScheduler::run" AT_RST "\n");
 }
 
-void InteractiveScheduler::run(void)
+void InteractiveScheduler::run()
 {
 	debug(AT_BLD "InteractiveScheduler::run" AT_RST "\n");
 }

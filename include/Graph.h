@@ -16,7 +16,7 @@ class Graph :
 public:
 	virtual ~Graph() {}
 	
-	virtual void check(void);
+	virtual void check();
 	virtual void dump(bool blocks = true, bool noodles = true) const;
 	
 protected:
@@ -25,8 +25,8 @@ protected:
 private:
 	GraphState m_state = GraphState::SETUP;
 	
-	//void dumpBlocks(void);
-	//void dumpNoodles(void);
+	//void dumpBlocks();
+	//void dumpNoodles();
 	
 	//const char *str_noodle(const Noodle *n);
 	//const char *str_block(const Block *b);
@@ -38,19 +38,19 @@ private:
 
 class GraphModifiedAfterSetupException : public runtime_error
 {
-public: GraphModifiedAfterSetupException(void) :
+public: GraphModifiedAfterSetupException() :
 	runtime_error("Graphs can only be modified when they are in the SETUP "
 		"state") {}
 };
 
 class GraphNoBlocksException : public runtime_error
 {
-public: GraphNoBlocksException(void) :
+public: GraphNoBlocksException() :
 	runtime_error("Graphs must contain at least one block") {}
 };
 class GraphNoNoodlesException : public runtime_error
 {
-public: GraphNoNoodlesException(void) :
+public: GraphNoNoodlesException() :
 	runtime_error("Graphs must contain at least one noodle") {}
 };
 

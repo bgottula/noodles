@@ -6,19 +6,19 @@ class IContainsNoodles
 public:
 	virtual ~IContainsNoodles();
 	
-	vector<NoodleBase *>::iterator noodles_begin(void)
+	vector<NoodleBase *>::iterator noodles_begin()
 	{ return m_noodles.begin(); }
-	vector<NoodleBase *>::iterator noodles_end(void)
+	vector<NoodleBase *>::iterator noodles_end()
 	{ return m_noodles.end(); }
 	
-	vector<NoodleBase *>::const_iterator noodles_cbegin(void) const
+	vector<NoodleBase *>::const_iterator noodles_cbegin() const
 	{ return m_noodles.cbegin(); }
-	vector<NoodleBase *>::const_iterator noodles_cend(void) const
+	vector<NoodleBase *>::const_iterator noodles_cend() const
 	{ return m_noodles.cend(); }
 	
-	vector<NoodleBase *>::size_type noodles_size(void) const
+	vector<NoodleBase *>::size_type noodles_size() const
 	{ return m_noodles.size(); }
-	bool noodles_empty(void) const
+	bool noodles_empty() const
 	{ return m_noodles.empty(); }
 	
 protected:
@@ -32,7 +32,7 @@ private:
 
 class DuplicateNoodleException : public runtime_error
 {
-public: DuplicateNoodleException(void) :
+public: DuplicateNoodleException() :
 	runtime_error("Noodle instances may only be registered once") {}
 };
 
