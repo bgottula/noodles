@@ -8,21 +8,6 @@ public:
 	
 	virtual void check() const;
 	
-	vector<NamedBlock>::iterator blocks_begin()
-	{ return m_blocks.begin(); }
-	vector<NamedBlock>::iterator blocks_end()
-	{ return m_blocks.end(); }
-	
-	vector<NamedBlock>::const_iterator blocks_cbegin() const
-	{ return m_blocks.cbegin(); }
-	vector<NamedBlock>::const_iterator blocks_cend() const
-	{ return m_blocks.cend(); }
-	
-	vector<NamedBlock>::size_type blocks_size() const
-	{ return m_blocks.size(); }
-	bool blocks_empty() const
-	{ return m_blocks.empty(); }
-	
 	virtual Block *find_block(const char *b_name);
 	
 protected:
@@ -33,6 +18,20 @@ protected:
 	
 private:
 	vector<NamedBlock> m_blocks;
+	
+	typedef vector<NamedBlock>::iterator       v_iter;
+	typedef vector<NamedBlock>::const_iterator v_citer;
+	typedef vector<NamedBlock>::size_type      v_size;
+	
+public:
+	v_iter blocks_begin() { return m_blocks.begin(); }
+	v_iter blocks_end()   { return m_blocks.end(); }
+	
+	v_citer blocks_cbegin() const { return m_blocks.cbegin(); }
+	v_citer blocks_cend()   const { return m_blocks.cend(); }
+	
+	v_size blocks_size()   const { return m_blocks.size(); }
+	bool   blocks_empty()  const { return m_blocks.empty(); }
 };
 
 class NonexistentBlockException : public runtime_error

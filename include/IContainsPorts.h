@@ -8,21 +8,6 @@ public:
 	
 	virtual void check() const;
 	
-	vector<NamedPort>::iterator ports_begin()
-	{ return m_ports.begin(); }
-	vector<NamedPort>::iterator ports_end()
-	{ return m_ports.end(); }
-	
-	vector<NamedPort>::const_iterator ports_cbegin() const
-	{ return m_ports.cbegin(); }
-	vector<NamedPort>::const_iterator ports_cend() const
-	{ return m_ports.cend(); }
-	
-	vector<NamedPort>::size_type ports_size() const
-	{ return m_ports.size(); }
-	bool ports_empty() const
-	{ return m_ports.empty(); }
-	
 	virtual Port *find_port(const char *p_name);
 	
 protected:
@@ -33,6 +18,20 @@ protected:
 	
 private:
 	vector<NamedPort> m_ports;
+	
+	typedef vector<NamedPort>::iterator       v_iter;
+	typedef vector<NamedPort>::const_iterator v_citer;
+	typedef vector<NamedPort>::size_type      v_size;
+	
+public:
+	v_iter ports_begin() { return m_ports.begin(); }
+	v_iter ports_end()   { return m_ports.end(); }
+	
+	v_citer ports_cbegin() const { return m_ports.cbegin(); }
+	v_citer ports_cend()   const { return m_ports.cend(); }
+	
+	v_size ports_size()   const { return m_ports.size(); }
+	bool   ports_empty()  const { return m_ports.empty(); }
 };
 
 class NonexistentPortException : public runtime_error
