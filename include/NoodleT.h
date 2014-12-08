@@ -28,8 +28,8 @@ Noodle<T>::Noodle(Port *from, Port *to)
 template<typename T>
 void Noodle<T>::check(void) const
 {
-	debug(AT_BLD "Noodle<%s>::check" AT_RST "\n",
-		demangle(typeid(T).name()));
+	debug(AT_BLD "%s::check" AT_RST "\n",
+		demangle(typeid(*this).name()));
 	
 #warning FINISHME
 }

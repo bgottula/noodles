@@ -204,8 +204,8 @@ void OutputPort<T>::put_var(size_t count, ...)
 template <typename T>
 void InputPort<T>::check(void) const
 {
-	debug(AT_BLD "InputPort<%s>::check" AT_RST "\n",
-		demangle(typeid(T).name()));
+	debug(AT_BLD "%s::check" AT_RST "\n",
+		demangle(typeid(*this).name()));
 	
 #warning FINISHME
 }
@@ -213,8 +213,8 @@ void InputPort<T>::check(void) const
 template <typename T>
 void OutputPort<T>::check(void) const
 {
-	debug(AT_BLD "OutputPort<%s>::check" AT_RST "\n",
-		demangle(typeid(T).name()));
+	debug(AT_BLD "%s::check" AT_RST "\n",
+		demangle(typeid(*this).name()));
 	
 #warning FINISHME
 }
