@@ -1,5 +1,5 @@
 # object files used to link all binaries
-OBJ_COMMON:=obj/debug.o obj/Noodle.o obj/Port.o obj/Block.o obj/Graph.o obj/Scheduler.o
+OBJ_COMMON:=obj/debug.o obj/Noodle.o obj/IContainsNoodles.o obj/Port.o obj/IContainsPorts.o obj/Block.o obj/IContainsBlocks.o obj/Graph.o obj/Scheduler.o
 # object files used to link bin/noodles
 OBJ_NOODLES:=$(OBJ_COMMON) obj/main.o
 # object files used to link bin/test

@@ -10,11 +10,15 @@ using namespace std;
 #include "debug.h"
 
 /* class headers (order matters) */
+#include "Interfaces.h"
 #include "Noodle.h"
 #include "NoodleT.h"
+#include "IContainsNoodles.h"
 #include "Port.h"
 #include "PortT.h"
+#include "IContainsPorts.h"
 #include "Block.h"
+#include "IContainsBlocks.h"
 #include "Graph.h"
 #include "Scheduler.h"
 
