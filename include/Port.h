@@ -12,7 +12,7 @@ public:
 	
 	virtual size_t available(void) const = 0;
 	
-	virtual void check(void) const = 0;
+	virtual void check(void) const;
 	
 	virtual void set_owner(IContainsPorts *owner);
 	virtual IContainsPorts *get_owner(void);

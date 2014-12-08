@@ -1,5 +1,12 @@
 #include "all.h"
 
+void Port::check(void) const
+{
+	debug(AT_BLD "Port::check" AT_RST "\n");
+	
+#warning FINISHME
+}
+
 void Port::set_owner(IContainsPorts *owner)
 {
 	if (m_owner != nullptr) throw PortAlreadyOwnedException();
