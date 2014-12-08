@@ -39,7 +39,7 @@ public:
 	
 	virtual void push(const T& sample) = 0;
 	virtual T pop() = 0;
-	virtual T peek(size_t where) = 0;
+	virtual T peek(size_t where) const = 0;
 	
 	typedef T type;
 	
@@ -81,7 +81,7 @@ public:
 	/* NEEDS LOCK: pop one sample from the queue */
 	T pop();
 	/* NEEDS LOCK: peek one sample from a given position in the queue */
-	T peek(size_t where);
+	T peek(size_t where) const;
 	
 	/* manually inherit Noodle<T>::type */
 	typedef typename Noodle<T>::type type;
@@ -122,7 +122,7 @@ public:
 	/* read from the sample register */
 	T pop() { return m_reg; }
 	/* peek the sample register (explicitly ignore the where parameter) */
-	T peek(size_t where) { (void)where; return m_reg; }
+	T peek(size_t where) const { (void)where; return m_reg; }
 	
 	/* manually inherit Noodle<T>::type */
 	typedef typename Noodle<T>::type type;

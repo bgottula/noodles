@@ -61,7 +61,7 @@ T QNoodle<T>::pop()
 }
 
 template <typename T>
-T QNoodle<T>::peek(size_t where)
+T QNoodle<T>::peek(size_t where) const
 {
 	T sample = m_queue[where];
 	return sample;
