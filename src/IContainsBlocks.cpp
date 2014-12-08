@@ -35,6 +35,8 @@ void IContainsBlocks::register_block(const char *b_name, Block *b)
 		throw DuplicateBlockNameException();
 	}
 	
+	b->set_owner(this);
+	
 	NamedBlock nb = { b_name, b };
 	m_blocks.push_back(nb);
 }
