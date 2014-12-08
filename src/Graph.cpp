@@ -21,6 +21,8 @@ void Graph::check(void)
 
 void Graph::dump(bool blocks, bool noodles) const
 {
+	debug(AT_BLD "%s::dump" AT_RST "\n", name());
+	
 #warning FINISHME
 }
 
