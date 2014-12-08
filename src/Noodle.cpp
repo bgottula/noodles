@@ -11,7 +11,7 @@ void NoodleBase::check() const
 
 void NoodleBase::dump(int level) const
 {
-	debug("%*sNoodle " AT_BLD "???" AT_RST "\n",
+	debug("%*s- Noodle " AT_BLD "???" AT_RST "\n",
 		(level * 2), "");
 	
 	// TODO

@@ -39,7 +39,7 @@ void QNoodle<T>::check() const
 template <typename T>
 void QNoodle<T>::dump(int level) const
 {
-	debug("%*s%s " AT_BLD "???" AT_RST "\n",
+	debug("%*s- %s " AT_BLD "???" AT_RST "\n",
 		(level * 2), "", demangle(typeid(*this).name()));
 	
 	// TODO
@@ -81,7 +81,7 @@ void RNoodle<T>::check() const
 template <typename T>
 void RNoodle<T>::dump(int level) const
 {
-	debug("%*s%s " AT_BLD "???" AT_RST "\n",
+	debug("%*s- %s " AT_BLD "???" AT_RST "\n",
 		(level * 2), "", demangle(typeid(*this).name()));
 	
 	// TODO

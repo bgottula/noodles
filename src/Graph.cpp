@@ -20,7 +20,7 @@ void Graph::check() const
 
 void Graph::dump(int level) const
 {
-	debug("%*sGraph " AT_BLD "%s" AT_RST "\n",
+	debug("%*s- Graph " AT_BLD "%s" AT_RST "\n",
 		(level * 2), "", sub_name());
 	
 	IContainsBlockGroups::dump(level + 1);
