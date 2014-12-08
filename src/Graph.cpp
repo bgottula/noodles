@@ -1,6 +1,6 @@
 #include "all.h"
 
-void Graph::check()
+void Graph::check() const
 {
 	debug(AT_BLD "%s::check" AT_RST "\n", name());
 	
@@ -9,14 +9,12 @@ void Graph::check()
 	//if (m_blocks.empty()) throw GraphNoBlocksException();
 	//if (m_noodles.empty()) throw GraphNoNoodlesException();
 	
-	for_each(blocks_cbegin(), blocks_cend(),
-		[](const Named<Block>& nb) {
-			nb.ptr->check();
-		});
+	// TODO
 	
-	// TODO: also check all noodles (write Noodle::check or whatever)
+	IContainsNoodles::check();
+	IContainsBlocks::check();
 	
-	m_state = GraphState::RUN;
+	//m_state = GraphState::RUN;
 }
 
 void Graph::dump(bool blocks, bool noodles) const

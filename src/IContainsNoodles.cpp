@@ -4,7 +4,10 @@ void IContainsNoodles::check() const
 {
 	debug(AT_BLD "IContainsNoodles::check" AT_RST "\n");
 	
-#warning FINISHME
+	for_each(m_noodles.cbegin(), m_noodles.cend(),
+		[](const NoodleBase *n) {
+			n->check();
+		});
 }
 
 void IContainsNoodles::add_noodle(NoodleBase *n)

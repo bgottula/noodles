@@ -4,7 +4,10 @@ void IContainsBlocks::check() const
 {
 	debug(AT_BLD "IContainsBlocks::check" AT_RST "\n");
 	
-#warning FINISHME
+	for_each(m_blocks.cbegin(), m_blocks.cend(),
+		[](const Named<Block> nb) {
+			nb.ptr->check();
+		});
 }
 
 Block *IContainsBlocks::find_block(const char *b_name)

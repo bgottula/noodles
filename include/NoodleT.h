@@ -31,7 +31,9 @@ void QNoodle<T>::check() const
 	debug(AT_BLD "%s::check" AT_RST "\n",
 		demangle(typeid(*this).name()));
 	
-#warning FINISHME
+	// TODO
+	
+	Noodle<T>::check();
 }
 
 template <typename T>
@@ -62,7 +64,9 @@ void RNoodle<T>::check() const
 	debug(AT_BLD "%s::check" AT_RST "\n",
 		demangle(typeid(*this).name()));
 	
-#warning FINISHME
+	// TODO
+	
+	Noodle<T>::check();
 }
 
 #endif

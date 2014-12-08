@@ -4,7 +4,10 @@ void IContainsPorts::check() const
 {
 	debug(AT_BLD "IContainsPorts::check" AT_RST "\n");
 	
-#warning FINISHME
+	for_each(m_ports.cbegin(), m_ports.cend(),
+		[](const Named<Port> np) {
+			np.ptr->check();
+		});
 }
 
 Port *IContainsPorts::find_port(const char *p_name)

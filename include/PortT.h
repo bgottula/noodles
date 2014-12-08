@@ -7,7 +7,9 @@ void InputPort<T>::check() const
 	debug(AT_BLD "%s::check" AT_RST "\n",
 		demangle(typeid(*this).name()));
 	
-#warning FINISHME
+	if (m_noodle == nullptr) throw InputNotConnectedException();
+	
+	Port::check();
 }
 
 template <typename T>
@@ -16,7 +18,9 @@ void OutputPort<T>::check() const
 	debug(AT_BLD "%s::check" AT_RST "\n",
 		demangle(typeid(*this).name()));
 	
-#warning FINISHME
+	if (m_noodles.empty()) throw OutputNotConnectedException();
+	
+	Port::check();
 }
 
 template <typename T>

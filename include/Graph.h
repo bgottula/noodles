@@ -16,7 +16,7 @@ class Graph :
 public:
 	virtual ~Graph() {}
 	
-	virtual void check();
+	virtual void check() const;
 	virtual void dump(bool blocks = true, bool noodles = true) const;
 	
 protected:
