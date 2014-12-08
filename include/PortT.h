@@ -24,6 +24,24 @@ void OutputPort<T>::check() const
 }
 
 template <typename T>
+void InputPort<T>::dump(int level) const
+{
+	debug("%*s%s " AT_BLD "%s" AT_RST "\n",
+		(level * 2), "", demangle(typeid(*this).name()), get_name());
+	
+	// TODO
+}
+
+template <typename T>
+void OutputPort<T>::dump(int level) const
+{
+	debug("%*s%s " AT_BLD "%s" AT_RST "\n",
+		(level * 2), "", demangle(typeid(*this).name()), get_name());
+	
+	// TODO
+}
+
+template <typename T>
 void InputPort<T>::connect(Noodle<T> *n)
 {
 	if (m_noodle != nullptr) throw InputMultipleNoodleException();

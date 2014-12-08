@@ -37,6 +37,15 @@ void QNoodle<T>::check() const
 }
 
 template <typename T>
+void QNoodle<T>::dump(int level) const
+{
+	debug("%*s%s " AT_BLD "???" AT_RST "\n",
+		(level * 2), "", demangle(typeid(*this).name()));
+	
+	// TODO
+}
+
+template <typename T>
 void QNoodle<T>::push(const T& sample)
 {
 	assert(m_queue.size() <= m_max);
@@ -67,6 +76,15 @@ void RNoodle<T>::check() const
 	// TODO
 	
 	Noodle<T>::check();
+}
+
+template <typename T>
+void RNoodle<T>::dump(int level) const
+{
+	debug("%*s%s " AT_BLD "???" AT_RST "\n",
+		(level * 2), "", demangle(typeid(*this).name()));
+	
+	// TODO
 }
 
 #endif

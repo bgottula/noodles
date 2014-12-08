@@ -17,7 +17,7 @@ public:
 	virtual ~NoodleBase() {}
 	
 	virtual void check() const;
-	virtual void dump(int level = 0) const;
+	virtual void dump(int level = 0) const = 0;
 	
 	virtual bool is_qnoodle() const = 0;
 	virtual void lock(unique_lock<mutex>& mgr) = 0;
@@ -64,6 +64,7 @@ public:
 		: Noodle<T>(from, to), m_max(max) {}
 	
 	void check() const;
+	void dump(int level = 0) const;
 	
 	bool is_qnoodle() const { return true; }
 	void lock(unique_lock<mutex>& mgr) { mgr = unique_lock<mutex>(m_mutex); }
@@ -104,6 +105,7 @@ public:
 		: Noodle<T>(from, to), m_reg(init) {}
 	
 	void check() const;
+	void dump(int level = 0) const;
 	
 	bool is_qnoodle() const { return false; }
 	void lock(unique_lock<mutex>& mgr) { mgr = unique_lock<mutex>(m_mutex); }

@@ -13,7 +13,7 @@ public:
 	virtual ~Port() {}
 	
 	virtual void check() const;
-	virtual void dump(int level = 0) const;
+	virtual void dump(int level = 0) const = 0;
 	
 	virtual size_t avail() const = 0;
 	
@@ -49,6 +49,7 @@ public:
 	InputPort() {}
 	
 	void check() const;
+	void dump(int level = 0) const;
 	
 	void connect(Noodle<T> *n);
 	
@@ -73,6 +74,7 @@ public:
 	OutputPort() {}
 	
 	void check() const;
+	void dump(int level = 0) const;
 	
 	void connect(Noodle<T> *n);
 	
