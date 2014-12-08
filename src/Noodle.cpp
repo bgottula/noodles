@@ -8,3 +8,11 @@ void NoodleBase::check() const
 	
 	IHasOwner::check();
 }
+
+void NoodleBase::dump(int level) const
+{
+	debug("%*sNoodle " AT_BLD "???" AT_RST "\n",
+		(level * 2), "");
+	
+	// TODO
+}

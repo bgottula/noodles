@@ -14,6 +14,7 @@ public:
 	virtual ~Block() {}
 	
 	virtual void check() const final;
+	virtual void dump(int level = 0) const final;
 	
 	virtual void reset() = 0;
 	

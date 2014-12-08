@@ -7,6 +7,7 @@ public:
 	virtual ~IContainsBlockGroups() {}
 	
 	virtual void check() const;
+	virtual void dump(int level = 0) const;
 	
 	virtual BlockGroup *find_group(const char *g_name) final;
 	

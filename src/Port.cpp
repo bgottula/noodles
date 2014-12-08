@@ -8,3 +8,11 @@ void Port::check() const
 	
 	IHasOwner::check();
 }
+
+void Port::dump(int level) const
+{
+	debug("%*sPort " AT_BLD "???" AT_RST "\n",
+		(level * 2), "");
+	
+	// TODO
+}

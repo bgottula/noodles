@@ -13,6 +13,7 @@ public:
 	}
 	
 	virtual void check() const;
+	virtual void dump(int level = 0) const;
 	
 protected:
 	IContainsNoodles() {}

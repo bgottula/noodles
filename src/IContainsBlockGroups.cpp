@@ -10,6 +10,14 @@ void IContainsBlockGroups::check() const
 		});
 }
 
+void IContainsBlockGroups::dump(int level) const
+{
+	for_each(m_groups.cbegin(), m_groups.cend(),
+		[=](const Named<BlockGroup> ng) {
+			ng.ptr->dump(level);
+		});
+}
+
 BlockGroup *IContainsBlockGroups::find_group(const char *g_name)
 {
 	auto it = find_if(m_groups.cbegin(), m_groups.cend(),

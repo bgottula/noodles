@@ -16,6 +16,7 @@ public:
 	virtual ~BlockGroup() {}
 	
 	virtual void check() const final;
+	virtual void dump(int level = 0) const final;
 	
 protected:
 	BlockGroup() {}

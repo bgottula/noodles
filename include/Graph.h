@@ -18,7 +18,7 @@ public:
 	virtual ~Graph() {}
 	
 	virtual void check() const final;
-	virtual void dump(bool blocks = true, bool noodles = true) const final;
+	virtual void dump(int level = 0) const final;
 	
 protected:
 	Graph() {}

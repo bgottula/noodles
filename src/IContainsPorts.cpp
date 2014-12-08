@@ -10,6 +10,14 @@ void IContainsPorts::check() const
 		});
 }
 
+void IContainsPorts::dump(int level) const
+{
+	for_each(m_ports.cbegin(), m_ports.cend(),
+		[=](const Named<Port> np) {
+			np.ptr->dump(level);
+		});
+}
+
 Port *IContainsPorts::find_port(const char *p_name)
 {
 	auto it = find_if(m_ports.cbegin(), m_ports.cend(),

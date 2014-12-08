@@ -7,6 +7,7 @@ public:
 	virtual ~IContainsPorts() {}
 	
 	virtual void check() const;
+	virtual void dump(int level = 0) const;
 	
 	virtual Port *find_port(const char *p_name) final;
 	

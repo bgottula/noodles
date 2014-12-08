@@ -10,6 +10,14 @@ void IContainsNoodles::check() const
 		});
 }
 
+void IContainsNoodles::dump(int level) const
+{
+	for_each(m_noodles.cbegin(), m_noodles.cend(),
+		[=](const NoodleBase *n) {
+			n->dump(level);
+		});
+}
+
 void IContainsNoodles::add_noodle(NoodleBase *n)
 {
 #warning Graph needs a way to tell IContainsNoodles to lock up after GraphState goes to RUN

@@ -10,6 +10,14 @@ void IContainsBlocks::check() const
 		});
 }
 
+void IContainsBlocks::dump(int level) const
+{
+	for_each(m_blocks.cbegin(), m_blocks.cend(),
+		[=](const Named<Block> nb) {
+			nb.ptr->dump(level);
+		});
+}
+
 Block *IContainsBlocks::find_block(const char *b_name)
 {
 	auto it = find_if(m_blocks.cbegin(), m_blocks.cend(),

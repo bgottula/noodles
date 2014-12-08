@@ -12,6 +12,7 @@ public:
 	virtual ~Port() {}
 	
 	virtual void check() const;
+	virtual void dump(int level = 0) const;
 	
 	virtual size_t avail() const = 0;
 	

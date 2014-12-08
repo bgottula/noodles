@@ -7,6 +7,7 @@ public:
 	virtual ~IContainsBlocks() {}
 	
 	virtual void check() const;
+	virtual void dump(int level = 0) const;
 	
 	virtual Block *find_block(const char *b_name) final;
 	

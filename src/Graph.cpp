@@ -18,11 +18,14 @@ void Graph::check() const
 	//m_state = GraphState::RUN;
 }
 
-void Graph::dump(bool blocks, bool noodles) const
+void Graph::dump(int level) const
 {
-	debug(AT_BLD "%s::dump" AT_RST "\n", name());
+	debug("%*sGraph " AT_BLD "%s" AT_RST "\n",
+		(level * 2), "", name());
 	
-#warning FINISHME
+	IContainsBlockGroups::dump(level + 1);
+	IContainsBlocks::dump(level + 1);
+	IContainsNoodles::dump(level + 1);
 }
 
 #if 0

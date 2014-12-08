@@ -38,7 +38,7 @@ void RoundRobinScheduler::run_once()
 			b->work();
 		}
 		
-		m_graph->dump(false, true);
+		m_graph->dump();
 	}
 }
 

@@ -17,6 +17,7 @@ public:
 	virtual ~NoodleBase() {}
 	
 	virtual void check() const;
+	virtual void dump(int level = 0) const;
 	
 	virtual bool is_qnoodle() const = 0;
 	virtual void lock(unique_lock<mutex>& mgr) = 0;
