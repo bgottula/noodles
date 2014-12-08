@@ -44,12 +44,15 @@ protected:
 	OPort() {}
 };
 
-
 /* generic InputPort class */
 template <typename T>
 class InputPort : public IPort
 {
 public:
+	InputPort() {}
+	
+	void check(void) const;
+	
 	void connect(Noodle<T> *n);
 	
 	size_t available(void) const;
@@ -57,10 +60,7 @@ public:
 	void get_one(T& sample);
 	void get_arr(size_t count, T *samples);
 	void get_var(size_t count, ...);
-	
 	void peek_one(size_t where, T& sample);
-	
-	void check(void) const;
 	
 	typedef T type;
 	
@@ -73,6 +73,10 @@ template <typename T>
 class OutputPort : public OPort
 {
 public:
+	OutputPort() {}
+	
+	void check(void) const;
+	
 	void connect(Noodle<T> *n);
 	
 	size_t available(void) const;
@@ -81,8 +85,6 @@ public:
 	void put_repeat(size_t count, const T& sample);
 	void put_arr(size_t count, const T *samples);
 	void put_var(size_t count, ...);
-	
-	void check(void) const;
 	
 	typedef T type;
 	

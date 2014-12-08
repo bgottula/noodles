@@ -2,6 +2,24 @@
 #define PORT_T_H
 
 template <typename T>
+void InputPort<T>::check(void) const
+{
+	debug(AT_BLD "%s::check" AT_RST "\n",
+		demangle(typeid(*this).name()));
+	
+#warning FINISHME
+}
+
+template <typename T>
+void OutputPort<T>::check(void) const
+{
+	debug(AT_BLD "%s::check" AT_RST "\n",
+		demangle(typeid(*this).name()));
+	
+#warning FINISHME
+}
+
+template <typename T>
 void InputPort<T>::connect(Noodle<T> *n)
 {
 	if (m_noodle != nullptr) throw InputMultipleNoodleException();
@@ -199,24 +217,6 @@ void OutputPort<T>::put_var(size_t count, ...)
 	put_arr(count, samples);
 	
 	va_end(v);
-}
-
-template <typename T>
-void InputPort<T>::check(void) const
-{
-	debug(AT_BLD "%s::check" AT_RST "\n",
-		demangle(typeid(*this).name()));
-	
-#warning FINISHME
-}
-
-template <typename T>
-void OutputPort<T>::check(void) const
-{
-	debug(AT_BLD "%s::check" AT_RST "\n",
-		demangle(typeid(*this).name()));
-	
-#warning FINISHME
 }
 
 #endif
