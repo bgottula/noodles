@@ -15,8 +15,8 @@ void BlockGroup::check() const
 
 void BlockGroup::dump(int level) const
 {
-	debug("%*sBlockGroup " AT_BLD "%s" AT_RST "\n",
-		(level * 2), "", sub_name());
+	debug("%*s%s " AT_BLD "%s" AT_RST "\n",
+		(level * 2), "", sub_name(), get_name());
 	
 	IContainsPorts::dump(level + 1);
 	IContainsBlocks::dump(level + 1);
