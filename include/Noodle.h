@@ -148,6 +148,4 @@ public: NoodleToPortWrongTypeException(void) :
 	runtime_error("Noodle's to-port type parameter does not match") {};
 };
 
-#include "NoodleT.h"
-
 #endif

@@ -11,7 +11,9 @@ using namespace std;
 
 /* class headers (order matters) */
 #include "Noodle.h"
+#include "NoodleT.h"
 #include "Port.h"
+#include "PortT.h"
 #include "Block.h"
 #include "Graph.h"
 #include "Scheduler.h"

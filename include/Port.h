@@ -170,6 +170,4 @@ public: OutputPutUnavailableException(void) :
 		"samples") {};
 };
 
-#include "PortT.h"
-
 #endif
