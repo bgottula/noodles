@@ -233,6 +233,9 @@
     <ClCompile Include="src\Block.cpp" />
     <ClCompile Include="src\debug.cpp" />
     <ClCompile Include="src\Graph.cpp" />
+    <ClCompile Include="src\IContainsBlocks.cpp" />
+    <ClCompile Include="src\IContainsNoodles.cpp" />
+    <ClCompile Include="src\IContainsPorts.cpp" />
     <ClCompile Include="src\main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugTest|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugTest|x64'">true</ExcludedFromBuild>
@@ -286,6 +289,12 @@
     <ClInclude Include="include\debug.h" />
     <ClInclude Include="include\Endpoint.h" />
     <ClInclude Include="include\Graph.h" />
+    <ClInclude Include="include\IContainsBlocks.h" />
+    <ClInclude Include="include\IContainsNoodles.h" />
+    <ClInclude Include="include\IContainsPorts.h" />
+    <ClInclude Include="include\IHasOwner.h" />
+    <ClInclude Include="include\IHasOwnerT.h" />
+    <ClInclude Include="include\Interfaces.h" />
     <ClInclude Include="include\Noodle.h" />
     <ClInclude Include="include\NoodleT.h" />
     <ClInclude Include="include\Port.h" />
