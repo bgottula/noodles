@@ -38,20 +38,19 @@ private:
 
 class GraphModifiedAfterSetupException : public runtime_error
 {
-public: GraphModifiedAfterSetupException() :
-	runtime_error("Graphs can only be modified when they are in the SETUP "
-		"state") {}
+public: GraphModifiedAfterSetupException() : runtime_error(
+	"Graphs can only be modified when they are in the SETUP state") {}
 };
 
 class GraphNoBlocksException : public runtime_error
 {
-public: GraphNoBlocksException() :
-	runtime_error("Graphs must contain at least one block") {}
+public: GraphNoBlocksException() : runtime_error(
+	"Graphs must contain at least one block") {}
 };
 class GraphNoNoodlesException : public runtime_error
 {
-public: GraphNoNoodlesException() :
-	runtime_error("Graphs must contain at least one noodle") {}
+public: GraphNoNoodlesException() : runtime_error(
+	"Graphs must contain at least one noodle") {}
 };
 
 #endif

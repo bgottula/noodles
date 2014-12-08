@@ -138,35 +138,35 @@ private:
 
 class NoodleAlreadyOwnedException : public runtime_error
 {
-public: NoodleAlreadyOwnedException() :
-	runtime_error("Noodle has already had an owner assigned") {}
+public: NoodleAlreadyOwnedException() : runtime_error(
+	"Noodle has already had an owner assigned") {}
 };
 class NoodleNotOwnedException : public runtime_error
 {
-public: NoodleNotOwnedException() :
-	runtime_error("Noodle does not yet have an owner assigned") {}
+public: NoodleNotOwnedException() : runtime_error(
+	"Noodle does not yet have an owner assigned") {}
 };
 
 class NoodleFromPortNotOutputException : public runtime_error
 {
-public: NoodleFromPortNotOutputException() :
-	runtime_error("Noodle's from-port must be an output port") {}
+public: NoodleFromPortNotOutputException() : runtime_error(
+	"Noodle's from-port must be an output port") {}
 };
 class NoodleToPortNotInputException : public runtime_error
 {
-public: NoodleToPortNotInputException() :
-	runtime_error("Noodle's to-port must be an input port") {}
+public: NoodleToPortNotInputException() : runtime_error(
+	"Noodle's to-port must be an input port") {}
 };
 
 class NoodleFromPortWrongTypeException : public runtime_error
 {
-public: NoodleFromPortWrongTypeException() :
-	runtime_error("Noodle's from-port type parameter does not match") {}
+public: NoodleFromPortWrongTypeException() : runtime_error(
+	"Noodle's from-port type parameter does not match") {}
 };
 class NoodleToPortWrongTypeException : public runtime_error
 {
-public: NoodleToPortWrongTypeException() :
-	runtime_error("Noodle's to-port type parameter does not match") {}
+public: NoodleToPortWrongTypeException() : runtime_error(
+	"Noodle's to-port type parameter does not match") {}
 };
 
 #endif

@@ -38,8 +38,8 @@ private:
 
 class DuplicateNoodleException : public runtime_error
 {
-public: DuplicateNoodleException() :
-	runtime_error("Noodle instances may only be registered once") {}
+public: DuplicateNoodleException() : runtime_error(
+	"Noodle instances may only be registered once") {}
 };
 
 #define ADD_QNOODLE(_type, _max, _b_from, _p_from, _b_to, _p_to) \

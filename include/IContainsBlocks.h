@@ -35,18 +35,18 @@ private:
 
 class NonexistentBlockException : public runtime_error
 {
-public: NonexistentBlockException() :
-	runtime_error("Block with that name has not been registered") {}
+public: NonexistentBlockException() : runtime_error(
+	"Block with that name has not been registered") {}
 };
 class DuplicateBlockException : public runtime_error
 {
-public: DuplicateBlockException() :
-	runtime_error("Block instances may only be registered once") {}
+public: DuplicateBlockException() : runtime_error(
+	"Block instances may only be registered once") {}
 };
 class DuplicateBlockNameException : public runtime_error
 {
-public: DuplicateBlockNameException() :
-	runtime_error("Block instances must be registered with unique names") {}
+public: DuplicateBlockNameException() : runtime_error(
+	"Block instances must be registered with unique names") {}
 };
 
 #define REGISTER_BLOCK(_b) register_block(#_b, &_b)

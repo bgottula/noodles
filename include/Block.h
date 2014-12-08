@@ -38,13 +38,13 @@ struct NamedBlock
 
 class BlockAlreadyOwnedException : public runtime_error
 {
-public: BlockAlreadyOwnedException() :
-	runtime_error("Block has already had an owner assigned") {}
+public: BlockAlreadyOwnedException() : runtime_error(
+	"Block has already had an owner assigned") {}
 };
 class BlockNotOwnedException : public runtime_error
 {
-public: BlockNotOwnedException() :
-	runtime_error("Block does not yet have an owner assigned") {}
+public: BlockNotOwnedException() : runtime_error(
+	"Block does not yet have an owner assigned") {}
 };
 
 #endif
