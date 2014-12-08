@@ -86,6 +86,7 @@ public:
 	/* NEEDS LOCK: peek one sample from a given position in the queue */
 	T peek(size_t where);
 	
+	/* manually inherit Noodle<T>::type */
 	typedef typename Noodle<T>::type type;
 	
 private:
@@ -125,6 +126,7 @@ public:
 	/* peek the sample register (explicitly ignore the where parameter) */
 	T peek(size_t where) { (void)where; return m_reg; }
 	
+	/* manually inherit Noodle<T>::type */
 	typedef typename Noodle<T>::type type;
 	
 private:
