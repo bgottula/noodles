@@ -1,10 +1,5 @@
 #include "all.h"
 
-Graph::~Graph(void)
-{
-	debug(AT_BLD "%s dtor" AT_RST "\n", name());
-}
-
 void Graph::check(void)
 {
 	debug(AT_BLD "%s::check" AT_RST "\n", name());

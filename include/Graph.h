@@ -14,7 +14,7 @@ class Graph :
 	public IContainsBlocks
 {
 public:
-	virtual ~Graph();
+	virtual ~Graph() {}
 	
 	void check(void);
 	void dump(bool blocks = true, bool noodles = true) const;
