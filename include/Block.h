@@ -4,7 +4,7 @@
 /* forward declarations */
 class IContainsBlocks;
 
-/* base for block implementations */
+/* abstract base class for block implementations */
 class Block :
 	public IKnowsSubclassName,
 	public IContainsPorts

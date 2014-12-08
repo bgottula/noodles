@@ -7,7 +7,7 @@ enum class GraphState
 	RUN,
 };
 
-/* base for graph implementations */
+/* abstract base class for graph implementations */
 class Graph :
 	public IKnowsSubclassName,
 	public IContainsNoodles,
