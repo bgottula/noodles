@@ -24,14 +24,14 @@ private:
 	typedef vector<Named<BlockGroup>>::size_type      v_size;
 	
 public:
-	v_iter groups_begin() { return m_groups.begin(); }
-	v_iter groups_end()   { return m_groups.end(); }
+	v_iter groups_begin()         { return m_groups.begin(); }
+	v_iter groups_end()           { return m_groups.end(); }
 	
 	v_citer groups_cbegin() const { return m_groups.cbegin(); }
 	v_citer groups_cend()   const { return m_groups.cend(); }
 	
-	v_size groups_size()   const { return m_groups.size(); }
-	bool   groups_empty()  const { return m_groups.empty(); }
+	v_size groups_size()    const { return m_groups.size(); }
+	bool   groups_empty()   const { return m_groups.empty(); }
 };
 
 class NonexistentBlockGroupException : public runtime_error

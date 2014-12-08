@@ -24,14 +24,14 @@ private:
 	typedef vector<Named<Port>>::size_type      v_size;
 	
 public:
-	v_iter ports_begin() { return m_ports.begin(); }
-	v_iter ports_end()   { return m_ports.end(); }
+	v_iter ports_begin()         { return m_ports.begin(); }
+	v_iter ports_end()           { return m_ports.end(); }
 	
 	v_citer ports_cbegin() const { return m_ports.cbegin(); }
 	v_citer ports_cend()   const { return m_ports.cend(); }
 	
-	v_size ports_size()   const { return m_ports.size(); }
-	bool   ports_empty()  const { return m_ports.empty(); }
+	v_size ports_size()    const { return m_ports.size(); }
+	bool   ports_empty()   const { return m_ports.empty(); }
 };
 
 class NonexistentPortException : public runtime_error

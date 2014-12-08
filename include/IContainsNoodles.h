@@ -27,14 +27,14 @@ private:
 	typedef vector<NoodleBase *>::size_type      v_size;
 	
 public:
-	v_iter noodles_begin() { return m_noodles.begin(); }
-	v_iter noodles_end()   { return m_noodles.end(); }
+	v_iter noodles_begin()         { return m_noodles.begin(); }
+	v_iter noodles_end()           { return m_noodles.end(); }
 	
 	v_citer noodles_cbegin() const { return m_noodles.cbegin(); }
 	v_citer noodles_cend()   const { return m_noodles.cend(); }
 	
-	v_size noodles_size()   const { return m_noodles.size(); }
-	bool   noodles_empty()  const { return m_noodles.empty(); }
+	v_size noodles_size()    const { return m_noodles.size(); }
+	bool   noodles_empty()   const { return m_noodles.empty(); }
 };
 
 class DuplicateNoodleException : public runtime_error
