@@ -32,8 +32,7 @@ void IContainsPorts::register_port(const char *p_name, Port *p)
 		throw DuplicatePortNameException();
 	}
 	
-#warning IContainsPorts::register_port needs to call p->set_owner(this)!
-	//p->set_owner(this);
+	p->set_owner(this);
 	
 	NamedPort np { p_name, p };
 	m_ports.push_back(np);

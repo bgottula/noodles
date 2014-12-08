@@ -2,7 +2,7 @@
 #define PORT_H
 
 /* forward declarations */
-class Block;
+class IContainsPorts;
 
 /* base for all ports */
 class Port
@@ -14,14 +14,14 @@ public:
 	
 	virtual void check(void) const = 0;
 	
-	void set_owner(Block *b);
-	Block *get_owner(void);
+	virtual void set_owner(IContainsPorts *owner);
+	virtual IContainsPorts *get_owner(void);
 	
 protected:
 	Port() {}
 	
 private:
-	Block *m_owner = nullptr;
+	IContainsPorts *m_owner = nullptr;
 };
 
 /* non-template base for InputPort<T> */
@@ -100,12 +100,12 @@ struct NamedPort
 class PortAlreadyOwnedException : public runtime_error
 {
 public: PortAlreadyOwnedException(void) :
-	runtime_error("Port has already had a block assigned as its owner") {}
+	runtime_error("Port has already had an owner assigned") {}
 };
 class PortNotOwnedException : public runtime_error
 {
 public: PortNotOwnedException(void) :
-	runtime_error("Port does not yet have a block assigned as its owner") {}
+	runtime_error("Port does not yet have an owner assigned") {}
 };
 
 class InputMultipleNoodleException : public runtime_error
