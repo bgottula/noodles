@@ -10,12 +10,12 @@ class Port
 public:
 	virtual ~Port() {}
 	
-	virtual size_t available(void) const = 0;
-	
 	virtual void check(void) const;
 	
 	virtual void set_owner(IContainsPorts *owner);
 	virtual IContainsPorts *get_owner(void);
+	
+	virtual size_t available(void) const = 0;
 	
 protected:
 	Port() {}
