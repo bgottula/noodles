@@ -14,7 +14,7 @@ public:
 	virtual bool can_work(void) = 0;
 	virtual void work(void) = 0;
 	
-	void check(void) const;
+	virtual void check(void) const;
 	
 protected:
 	Block() {}
