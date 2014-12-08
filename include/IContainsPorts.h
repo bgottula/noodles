@@ -6,23 +6,20 @@ class IContainsPorts
 public:
 	virtual ~IContainsPorts() {}
 	
-	virtual vector<NamedPort>::const_iterator ports_cbegin(void)
-	{
-		return m_ports.cbegin();
-	}
-	virtual vector<NamedPort>::const_iterator ports_cend(void)
-	{
-		return m_ports.cend();
-	}
+	vector<NamedPort>::iterator ports_begin(void)
+	{ return m_ports.begin(); }
+	vector<NamedPort>::iterator ports_end(void)
+	{ return m_ports.end(); }
 	
-	virtual vector<NamedPort>::const_iterator ports_begin(void)
-	{
-		return m_ports.begin();
-	}
-	virtual vector<NamedPort>::const_iterator ports_end(void)
-	{
-		return m_ports.end();
-	}
+	vector<NamedPort>::const_iterator ports_cbegin(void) const
+	{ return m_ports.cbegin(); }
+	vector<NamedPort>::const_iterator ports_cend(void) const
+	{ return m_ports.cend(); }
+	
+	vector<NamedPort>::size_type ports_size(void) const
+	{ return m_ports.size(); }
+	bool ports_empty(void) const
+	{ return m_ports.empty(); }
 	
 	virtual Port *find_port(const char *p_name);
 	

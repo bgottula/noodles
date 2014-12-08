@@ -6,23 +6,20 @@ class IContainsNoodles
 public:
 	virtual ~IContainsNoodles();
 	
-	virtual vector<NoodleBase *>::const_iterator noodles_cbegin(void)
-	{
-		return m_noodles.cbegin();
-	}
-	virtual vector<NoodleBase *>::const_iterator noodles_cend(void)
-	{
-		return m_noodles.cend();
-	}
+	vector<NoodleBase *>::iterator noodles_begin(void)
+	{ return m_noodles.begin(); }
+	vector<NoodleBase *>::iterator noodles_end(void)
+	{ return m_noodles.end(); }
 	
-	virtual vector<NoodleBase *>::const_iterator noodles_begin(void)
-	{
-		return m_noodles.begin();
-	}
-	virtual vector<NoodleBase *>::const_iterator noodles_end(void)
-	{
-		return m_noodles.end();
-	}
+	vector<NoodleBase *>::const_iterator noodles_cbegin(void) const
+	{ return m_noodles.cbegin(); }
+	vector<NoodleBase *>::const_iterator noodles_cend(void) const
+	{ return m_noodles.cend(); }
+	
+	vector<NoodleBase *>::size_type noodles_size(void) const
+	{ return m_noodles.size(); }
+	bool noodles_empty(void) const
+	{ return m_noodles.empty(); }
 	
 protected:
 	IContainsNoodles() {}

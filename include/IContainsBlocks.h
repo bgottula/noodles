@@ -6,23 +6,20 @@ class IContainsBlocks
 public:
 	virtual ~IContainsBlocks() {}
 	
-	virtual vector<NamedBlock>::const_iterator blocks_cbegin(void)
-	{
-		return m_blocks.cbegin();
-	}
-	virtual vector<NamedBlock>::const_iterator blocks_cend(void)
-	{
-		return m_blocks.cend();
-	}
+	vector<NamedBlock>::iterator blocks_begin(void)
+	{ return m_blocks.begin(); }
+	vector<NamedBlock>::iterator blocks_end(void)
+	{ return m_blocks.end(); }
 	
-	virtual vector<NamedBlock>::const_iterator blocks_begin(void)
-	{
-		return m_blocks.begin();
-	}
-	virtual vector<NamedBlock>::const_iterator blocks_end(void)
-	{
-		return m_blocks.end();
-	}
+	vector<NamedBlock>::const_iterator blocks_cbegin(void) const
+	{ return m_blocks.cbegin(); }
+	vector<NamedBlock>::const_iterator blocks_cend(void) const
+	{ return m_blocks.cend(); }
+	
+	vector<NamedBlock>::size_type blocks_size(void) const
+	{ return m_blocks.size(); }
+	bool blocks_empty(void) const
+	{ return m_blocks.empty(); }
 	
 	virtual Block *find_block(const char *b_name);
 	
