@@ -54,6 +54,7 @@ void IContainsBlocks::register_block(const char *b_name, Block *b)
 	}
 	
 	b->set_owner(this);
+	b->set_name(b_name);
 	
 	Named<Block> nb = { b_name, b };
 	m_blocks.push_back(nb);

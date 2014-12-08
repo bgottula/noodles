@@ -6,7 +6,8 @@ class IContainsPorts;
 
 /* base for all ports */
 class Port :
-	public IHasOwner<IContainsPorts>
+	public IHasOwner<IContainsPorts>,
+	public IHasName
 {
 public:
 	virtual ~Port() {}

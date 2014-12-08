@@ -7,6 +7,7 @@ void Port::check() const
 	// TODO
 	
 	IHasOwner::check();
+	IHasName::check();
 }
 
 void Port::dump(int level) const

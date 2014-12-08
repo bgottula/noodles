@@ -51,6 +51,7 @@ void IContainsPorts::register_port(const char *p_name, Port *p)
 	}
 	
 	p->set_owner(this);
+	p->set_name(p_name);
 	
 	Named<Port> np { p_name, p };
 	m_ports.push_back(np);

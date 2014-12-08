@@ -13,6 +13,7 @@ using namespace std;
 #include "Interfaces.h"
 #include "IHasOwner.h"
 #include "IHasOwnerT.h"
+#include "IHasName.h"
 #include "Noodle.h"
 #include "NoodleT.h"
 #include "IContainsNoodles.h"

@@ -7,6 +7,7 @@ void Block::check() const
 	// TODO
 	
 	IHasOwner::check();
+	IHasName::check();
 	IContainsPorts::check();
 }
 

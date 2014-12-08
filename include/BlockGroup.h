@@ -7,6 +7,7 @@ class IContainsBlockGroups;
 /* abstract base class for block group implementations */
 class BlockGroup :
 	public IHasOwner<IContainsBlockGroups>,
+	public IHasName,
 	public IKnowsSubclassName,
 	public IContainsBlocks,
 	public IContainsPorts,

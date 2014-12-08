@@ -7,6 +7,7 @@ class IContainsBlocks;
 /* abstract base class for block implementations */
 class Block :
 	public IHasOwner<IContainsBlocks>,
+	public IHasName,
 	public IKnowsSubclassName,
 	public IContainsPorts
 {

@@ -7,6 +7,7 @@ void BlockGroup::check() const
 	// TODO
 	
 	IHasOwner::check();
+	IHasName::check();
 	IContainsNoodles::check();
 	IContainsPorts::check();
 	IContainsBlocks::check();
