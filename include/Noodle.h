@@ -2,6 +2,7 @@
 #define NOODLE_H
 
 /* forward declarations */
+class IContainsNoodles;
 class Port;
 class IPort;
 class OPort;
@@ -23,8 +24,14 @@ public:
 	
 	virtual void check(void) const = 0;
 	
+	virtual void set_owner(IContainsNoodles *owner);
+	virtual IContainsNoodles *get_owner(void);
+	
 protected:
 	NoodleBase() {}
+	
+private:
+	IContainsNoodles *m_owner = nullptr;
 };
 
 /* generic base for QNoodle<T> and RNoodle<T> */
@@ -124,6 +131,17 @@ private:
 	
 	/* register containing the current sample value */
 	T m_reg;
+};
+
+class NoodleAlreadyOwnedException : public runtime_error
+{
+public: NoodleAlreadyOwnedException(void) :
+	runtime_error("Noodle has already had an owner assigned") {}
+};
+class NoodleNotOwnedException : public runtime_error
+{
+public: NoodleNotOwnedException(void) :
+	runtime_error("Noodle does not yet have an owner assigned") {}
 };
 
 class NoodleFromPortNotOutputException : public runtime_error

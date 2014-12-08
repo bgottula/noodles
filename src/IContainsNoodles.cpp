@@ -18,5 +18,7 @@ void IContainsNoodles::add_noodle(NoodleBase *n)
 		throw DuplicateNoodleException();
 	}
 	
+	n->set_owner(this);
+	
 	m_noodles.push_back(n);
 }
