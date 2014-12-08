@@ -4,12 +4,14 @@
 class Scheduler
 {
 public:
-	Scheduler(Graph *graph) :
-		m_graph(graph) {}
+	virtual ~Scheduler() {}
 	
 	virtual void run(void) = 0;
 	
 protected:
+	Scheduler(Graph *graph) :
+		m_graph(graph) {}
+	
 	Graph *m_graph;
 };
 
