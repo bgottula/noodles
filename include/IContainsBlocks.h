@@ -17,11 +17,11 @@ protected:
 	//virtual void list_blocks();
 	
 private:
-	vector<Named<Block> > m_blocks;
+	vector<Named<Block>> m_blocks;
 	
-	typedef vector<Named<Block> >::iterator       v_iter;
-	typedef vector<Named<Block> >::const_iterator v_citer;
-	typedef vector<Named<Block> >::size_type      v_size;
+	typedef vector<Named<Block>>::iterator       v_iter;
+	typedef vector<Named<Block>>::const_iterator v_citer;
+	typedef vector<Named<Block>>::size_type      v_size;
 	
 public:
 	v_iter blocks_begin() { return m_blocks.begin(); }
