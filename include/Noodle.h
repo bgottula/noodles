@@ -14,6 +14,13 @@ class NoodleBase
 public:
 	virtual ~NoodleBase() {}
 	
+	virtual size_t max(void) const = 0;
+	virtual size_t count(void) const = 0;
+	virtual size_t free(void) const = 0;
+	
+	virtual bool is_qnoodle(void) const = 0;
+	virtual void lock(unique_lock<mutex>& mgr) = 0;
+	
 	virtual void check(void) const = 0;
 	
 protected:
@@ -26,13 +33,6 @@ class Noodle : public NoodleBase
 {
 public:
 	virtual ~Noodle() {}
-	
-	virtual bool is_qnoodle(void) const = 0;
-	virtual void lock(unique_lock<mutex>& mgr) = 0;
-	
-	virtual size_t max(void) const = 0;
-	virtual size_t count(void) const = 0;
-	virtual size_t free(void) const = 0;
 	
 	virtual void push(const T& sample) = 0;
 	virtual T pop(void) = 0;
