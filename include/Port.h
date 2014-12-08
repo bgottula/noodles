@@ -88,7 +88,6 @@ public:
 	
 protected:
 	vector<Noodle<T> *> m_noodles;
-	Block *m_owner = nullptr;
 };
 
 /* associates a name with a port */
