@@ -21,6 +21,8 @@ using namespace std;
 #include "IContainsPorts.h"
 #include "Block.h"
 #include "IContainsBlocks.h"
+#include "BlockGroup.h"
+#include "IContainsBlockGroups.h"
 #include "Graph.h"
 #include "Scheduler.h"
 

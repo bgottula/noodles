@@ -13,6 +13,7 @@ void Graph::check() const
 	
 	IContainsNoodles::check();
 	IContainsBlocks::check();
+	IContainsBlockGroups::check();
 	
 	//m_state = GraphState::RUN;
 }

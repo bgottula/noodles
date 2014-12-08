@@ -11,7 +11,8 @@ enum class GraphState
 class Graph :
 	public IKnowsSubclassName,
 	public IContainsNoodles,
-	public IContainsBlocks
+	public IContainsBlocks,
+	public IContainsBlockGroups
 {
 public:
 	virtual ~Graph() {}
