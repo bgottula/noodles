@@ -8,13 +8,13 @@ public:
 	
 	virtual void check() const;
 	
-	virtual Port *find_port(const char *p_name);
+	virtual Port *find_port(const char *p_name) final;
 	
 protected:
 	IContainsPorts() {}
 	
-	virtual void register_port(const char *p_name, Port *p);
-	//virtual void list_ports();
+	virtual void register_port(const char *p_name, Port *p) final;
+	//virtual void list_ports() final;
 	
 private:
 	vector<Named<Port>> m_ports;

@@ -17,7 +17,7 @@ public:
 protected:
 	IContainsNoodles() {}
 	
-	virtual void add_noodle(NoodleBase *n);
+	virtual void add_noodle(NoodleBase *n) final;
 	
 private:
 	vector<NoodleBase *> m_noodles;

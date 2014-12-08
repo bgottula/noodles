@@ -13,7 +13,7 @@ class Block :
 public:
 	virtual ~Block() {}
 	
-	virtual void check() const;
+	virtual void check() const final;
 	
 	virtual void reset() = 0;
 	

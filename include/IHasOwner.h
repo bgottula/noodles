@@ -9,8 +9,8 @@ public:
 	
 	virtual void check() const;
 	
-	virtual const T *get_owner() const;
-	virtual void set_owner(const T *owner);
+	virtual const T *get_owner() const final;
+	virtual void set_owner(const T *owner) final;
 	
 protected:
 	IHasOwner() {}

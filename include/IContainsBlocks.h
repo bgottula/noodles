@@ -8,13 +8,13 @@ public:
 	
 	virtual void check() const;
 	
-	virtual Block *find_block(const char *b_name);
+	virtual Block *find_block(const char *b_name) final;
 	
 protected:
 	IContainsBlocks() {}
 	
-	virtual void register_block(const char *b_name, Block *b);
-	//virtual void list_blocks();
+	virtual void register_block(const char *b_name, Block *b) final;
+	//virtual void list_blocks() final;
 	
 private:
 	vector<Named<Block>> m_blocks;

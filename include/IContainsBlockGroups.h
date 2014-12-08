@@ -8,13 +8,13 @@ public:
 	
 	virtual void check() const;
 	
-	virtual BlockGroup *find_group(const char *g_name);
+	virtual BlockGroup *find_group(const char *g_name) final;
 	
 protected:
 	IContainsBlockGroups() {}
 	
-	virtual void register_group(const char *g_name, BlockGroup *g);
-	//virtual void list_groups();
+	virtual void register_group(const char *g_name, BlockGroup *g) final;
+	//virtual void list_groups() final;
 	
 private:
 	vector<Named<BlockGroup>> m_groups;

@@ -56,7 +56,7 @@ protected:
 
 /* queue noodle: buffers a certain number of samples */
 template <typename T>
-class QNoodle : public Noodle<T>
+class QNoodle final : public Noodle<T>
 {
 public:
 	QNoodle(size_t max, Port *from, Port *to)
@@ -96,7 +96,7 @@ private:
 
 /* register noodle: holds only one sample, has init value, never blocks */
 template <typename T>
-class RNoodle : public Noodle<T>
+class RNoodle final : public Noodle<T>
 {
 public:
 	RNoodle(T init, Port *from, Port *to)

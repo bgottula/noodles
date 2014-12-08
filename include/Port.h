@@ -41,7 +41,7 @@ protected:
 
 /* generic InputPort class */
 template <typename T>
-class InputPort : public IPort
+class InputPort final : public IPort
 {
 public:
 	InputPort() {}
@@ -65,7 +65,7 @@ protected:
 
 /* generic OutputPort class */
 template <typename T>
-class OutputPort : public OPort
+class OutputPort final : public OPort
 {
 public:
 	OutputPort() {}

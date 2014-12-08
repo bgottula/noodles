@@ -15,7 +15,7 @@ class BlockGroup :
 public:
 	virtual ~BlockGroup() {}
 	
-	virtual void check() const;
+	virtual void check() const final;
 	
 protected:
 	BlockGroup() {}

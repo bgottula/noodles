@@ -15,7 +15,7 @@ protected:
 	Graph *m_graph;
 };
 
-class RoundRobinScheduler : public Scheduler
+class RoundRobinScheduler final : public Scheduler
 {
 public:
 	RoundRobinScheduler(Graph *graph) :
@@ -27,7 +27,7 @@ private:
 	void run_once();
 };
 
-class ThreadedScheduler : public Scheduler
+class ThreadedScheduler final : public Scheduler
 {
 public:
 	ThreadedScheduler(Graph *graph) :
@@ -36,7 +36,7 @@ public:
 	void run();
 };
 
-class InteractiveScheduler : public Scheduler
+class InteractiveScheduler final : public Scheduler
 {
 public:
 	InteractiveScheduler(Graph *graph) :
