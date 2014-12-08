@@ -129,23 +129,23 @@ private:
 class NoodleFromPortNotOutputException : public runtime_error
 {
 public: NoodleFromPortNotOutputException(void) :
-	runtime_error("Noodle's from-port must be an output port") {};
+	runtime_error("Noodle's from-port must be an output port") {}
 };
 class NoodleToPortNotInputException : public runtime_error
 {
 public: NoodleToPortNotInputException(void) :
-	runtime_error("Noodle's to-port must be an input port") {};
+	runtime_error("Noodle's to-port must be an input port") {}
 };
 
 class NoodleFromPortWrongTypeException : public runtime_error
 {
 public: NoodleFromPortWrongTypeException(void) :
-	runtime_error("Noodle's from-port type parameter does not match") {};
+	runtime_error("Noodle's from-port type parameter does not match") {}
 };
 class NoodleToPortWrongTypeException : public runtime_error
 {
 public: NoodleToPortWrongTypeException(void) :
-	runtime_error("Noodle's to-port type parameter does not match") {};
+	runtime_error("Noodle's to-port type parameter does not match") {}
 };
 
 #endif

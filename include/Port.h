@@ -101,73 +101,73 @@ struct NamedPort
 class PortAlreadyOwnedException : public runtime_error
 {
 public: PortAlreadyOwnedException(void) :
-	runtime_error("Port has already had a block assigned as its owner") {};
+	runtime_error("Port has already had a block assigned as its owner") {}
 };
 class PortNotOwnedException : public runtime_error
 {
 public: PortNotOwnedException(void) :
-	runtime_error("Port does not yet have a block assigned as its owner") {};
+	runtime_error("Port does not yet have a block assigned as its owner") {}
 };
 
 class InputMultipleNoodleException : public runtime_error
 {
 public: InputMultipleNoodleException(void) :
-	runtime_error("Input ports cannot be connected to multiple noodles") {};
+	runtime_error("Input ports cannot be connected to multiple noodles") {}
 };
 class OutputDuplicateNoodleException : public runtime_error
 {
 public: OutputDuplicateNoodleException(void) :
-	runtime_error("Output port is already connected to this noodle") {};
+	runtime_error("Output port is already connected to this noodle") {}
 };
 
 class InputNotConnectedException : public runtime_error
 {
 public: InputNotConnectedException(void) :
-	runtime_error("Input port is not connected to a noodle") {};
+	runtime_error("Input port is not connected to a noodle") {}
 };
 class OutputNotConnectedException : public runtime_error
 {
 public: OutputNotConnectedException(void) :
-	runtime_error("Output port is not connected to any noodles") {};
+	runtime_error("Output port is not connected to any noodles") {}
 };
 
 class InputGetImpossibleException : public runtime_error
 {
 public: InputGetImpossibleException(void) :
 	runtime_error("Input port could not possibly have that many samples "
-		"available") {};
+		"available") {}
 };
 class InputGetUnavailableException : public runtime_error
 {
 public: InputGetUnavailableException(void) :
 	runtime_error("Input port does not currently have that many samples "
-		"available") {};
+		"available") {}
 };
 
 class InputPeekImpossibleException : public runtime_error
 {
 public: InputPeekImpossibleException(void) :
 	runtime_error("Input port could not possibly have that many samples "
-		"available") {};
+		"available") {}
 };
 class InputPeekUnavailableException : public runtime_error
 {
 public: InputPeekUnavailableException(void) :
 	runtime_error("Input port does not currently have that many samples "
-		"available") {};
+		"available") {}
 };
 
 class OutputPutImpossibleException : public runtime_error
 {
 public: OutputPutImpossibleException(void) :
 	runtime_error("Output port could not possibly have space for that many "
-		"samples") {};
+		"samples") {}
 };
 class OutputPutUnavailableException : public runtime_error
 {
 public: OutputPutUnavailableException(void) :
 	runtime_error("Output port does not currently have space for that many "
-		"samples") {};
+		"samples") {}
 };
 
 #endif

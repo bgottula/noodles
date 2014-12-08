@@ -46,12 +46,12 @@ public: GraphModifiedAfterSetupException(void) :
 class GraphNoBlocksException : public runtime_error
 {
 public: GraphNoBlocksException(void) :
-	runtime_error("Graphs must contain at least one block") {};
+	runtime_error("Graphs must contain at least one block") {}
 };
 class GraphNoNoodlesException : public runtime_error
 {
 public: GraphNoNoodlesException(void) :
-	runtime_error("Graphs must contain at least one noodle") {};
+	runtime_error("Graphs must contain at least one noodle") {}
 };
 
 #endif
