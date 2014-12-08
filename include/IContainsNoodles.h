@@ -4,7 +4,13 @@
 class IContainsNoodles
 {
 public:
-	virtual ~IContainsNoodles();
+	virtual ~IContainsNoodles()
+	{
+		for_each(m_noodles.cbegin(), m_noodles.cend(),
+			[](const NoodleBase *n) {
+				delete n;
+			});
+	}
 	
 	vector<NoodleBase *>::iterator noodles_begin()
 	{ return m_noodles.begin(); }

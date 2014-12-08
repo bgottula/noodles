@@ -1,13 +1,5 @@
 #include "all.h"
 
-IContainsNoodles::~IContainsNoodles(void)
-{
-	for_each(m_noodles.cbegin(), m_noodles.cend(),
-		[](const NoodleBase *n) {
-			delete n;
-		});
-}
-
 void IContainsNoodles::add_noodle(NoodleBase *n)
 {
 #warning Graph needs a way to tell IContainsNoodles to lock up after GraphState goes to RUN
