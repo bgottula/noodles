@@ -11,14 +11,12 @@ template <typename T> class OutputPort;
 
 /* non-template base for all noodles */
 class NoodleBase
+	: public IHasOwner<IContainsNoodles>
 {
 public:
 	virtual ~NoodleBase() {}
 	
 	virtual void check() const;
-	
-	virtual void set_owner(IContainsNoodles *owner);
-	virtual IContainsNoodles *get_owner() const;
 	
 	virtual bool is_qnoodle() const = 0;
 	virtual void lock(unique_lock<mutex>& mgr) = 0;
@@ -29,9 +27,6 @@ public:
 	
 protected:
 	NoodleBase() {}
-	
-private:
-	IContainsNoodles *m_owner = nullptr;
 };
 
 /* generic base for QNoodle<T> and RNoodle<T> */
@@ -134,17 +129,6 @@ private:
 	T m_reg;
 	/* mutex to ensure atomic loading/storing of the register value */
 	mutex m_mutex;
-};
-
-class NoodleAlreadyOwnedException : public runtime_error
-{
-public: NoodleAlreadyOwnedException() : runtime_error(
-	"Noodle has already had an owner assigned") {}
-};
-class NoodleNotOwnedException : public runtime_error
-{
-public: NoodleNotOwnedException() : runtime_error(
-	"Noodle does not yet have an owner assigned") {}
 };
 
 class NoodleFromPortNotOutputException : public runtime_error

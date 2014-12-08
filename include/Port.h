@@ -5,15 +5,13 @@
 class IContainsPorts;
 
 /* base for all ports */
-class Port
+class Port :
+	public IHasOwner<IContainsPorts>
 {
 public:
 	virtual ~Port() {}
 	
 	virtual void check() const;
-	
-	virtual void set_owner(IContainsPorts *owner);
-	virtual IContainsPorts *get_owner() const;
 	
 	virtual size_t available() const = 0;
 	
@@ -97,17 +95,6 @@ struct NamedPort
 {
 	const char *name;
 	Port *port;
-};
-
-class PortAlreadyOwnedException : public runtime_error
-{
-public: PortAlreadyOwnedException() : runtime_error(
-	"Port has already had an owner assigned") {}
-};
-class PortNotOwnedException : public runtime_error
-{
-public: PortNotOwnedException() : runtime_error(
-	"Port does not yet have an owner assigned") {}
 };
 
 class InputMultipleNoodleException : public runtime_error
