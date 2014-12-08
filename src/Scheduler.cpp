@@ -44,10 +44,10 @@ void RoundRobinScheduler::run_once(void)
 
 void ThreadedScheduler::run(void)
 {
-	
+	debug(AT_BLD "ThreadedScheduler::run" AT_RST "\n");
 }
 
 void InteractiveScheduler::run(void)
 {
-	
+	debug(AT_BLD "InteractiveScheduler::run" AT_RST "\n");
 }
