@@ -18,7 +18,7 @@ public:
 	virtual void check() const;
 	
 	virtual void set_owner(IContainsNoodles *owner);
-	virtual IContainsNoodles *get_owner();
+	virtual IContainsNoodles *get_owner() const;
 	
 	virtual bool is_qnoodle() const = 0;
 	virtual void lock(unique_lock<mutex>& mgr) = 0;

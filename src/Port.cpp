@@ -14,7 +14,7 @@ void Port::set_owner(IContainsPorts *owner)
 	m_owner = owner;
 }
 
-IContainsPorts *Port::get_owner()
+IContainsPorts *Port::get_owner() const
 {
 	if (m_owner == nullptr) throw PortNotOwnedException();
 	

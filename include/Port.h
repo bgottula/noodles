@@ -13,7 +13,7 @@ public:
 	virtual void check() const;
 	
 	virtual void set_owner(IContainsPorts *owner);
-	virtual IContainsPorts *get_owner();
+	virtual IContainsPorts *get_owner() const;
 	
 	virtual size_t available() const = 0;
 	

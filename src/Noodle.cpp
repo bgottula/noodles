@@ -14,7 +14,7 @@ void NoodleBase::set_owner(IContainsNoodles *owner)
 	m_owner = owner;
 }
 
-IContainsNoodles *NoodleBase::get_owner()
+IContainsNoodles *NoodleBase::get_owner() const
 {
 	if (m_owner == nullptr) throw NoodleNotOwnedException();
 	

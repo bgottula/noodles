@@ -15,7 +15,7 @@ public:
 	virtual void check() const;
 	
 	virtual void set_owner(IContainsBlocks *owner);
-	virtual IContainsBlocks *get_owner();
+	virtual IContainsBlocks *get_owner() const;
 	
 	virtual void reset() = 0;
 	
