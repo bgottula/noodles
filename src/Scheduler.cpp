@@ -17,9 +17,11 @@ void RoundRobinScheduler::run_once(void)
 {
 	debug(AT_BLD "RoundRobinScheduler::run_once" AT_RST "\n");
 	
+	auto it_begin = m_graph->blocks_begin();
+	auto it_end   = m_graph->blocks_end();
+	
 	/* call work on all blocks */
-	auto m_blocks = m_graph->m_blocks;
-	for (auto it = m_blocks.begin(); it != m_blocks.end(); ++it)
+	for (auto it = it_begin; it != it_end; ++it)
 	{
 		NamedBlock nb = *it;
 		Block *b = nb.block;
