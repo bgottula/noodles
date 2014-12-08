@@ -29,12 +29,12 @@ void RoundRobinScheduler::run_once()
 		bool can_work = b->can_work();
 		debug(AT_BLD "RoundRobinScheduler::run_once:" AT_RST
 			" block %s(%p) can%s do work\n",
-			b->name(), b, (can_work ? "" : "not"));
+			b->sub_name(), b, (can_work ? "" : "not"));
 		
 		if (can_work)
 		{
 			debug(AT_BLD "RoundRobinScheduler::run_once:" AT_RST
-			" calling work on block %s(%p)\n", b->name(), b);
+			" calling work on block %s(%p)\n", b->sub_name(), b);
 			b->work();
 		}
 		

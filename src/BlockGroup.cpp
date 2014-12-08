@@ -2,7 +2,7 @@
 
 void BlockGroup::check() const
 {
-	debug(AT_BLD "%s::check" AT_RST "\n", name());
+	debug(AT_BLD "%s::check" AT_RST "\n", sub_name());
 	
 	// TODO
 	
@@ -15,7 +15,7 @@ void BlockGroup::check() const
 void BlockGroup::dump(int level) const
 {
 	debug("%*sBlockGroup " AT_BLD "%s" AT_RST "\n",
-		(level * 2), "", name());
+		(level * 2), "", sub_name());
 	
 	IContainsPorts::dump(level + 1);
 	IContainsBlocks::dump(level + 1);
