@@ -3,8 +3,8 @@
 
 class MockBlock : public Block
 {
-	void reset(void) {}
-	void work(void) {}
+	void reset() {}
+	void work() {}
 };
 
 BOOST_AUTO_TEST_CASE( blockTest )

@@ -4,14 +4,14 @@
 class MockBlock : public Block
 {
 public:
-	MockBlock(void)
+	MockBlock()
 	{
 		inputs.add("in");
 		outputs.add("out");
 	}
 	
-	void reset(void) {}
-	void work(void) {}
+	void reset() {}
+	void work() {}
 };
 
 BOOST_AUTO_TEST_CASE( graphTest )
