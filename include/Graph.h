@@ -16,9 +16,14 @@ enum class GraphState
 	RUN,
 };
 
+// REMOVE ME
+class RoundRobinScheduler;
+
 /* base for graphs (protected ctor prevents direct instantiation) */
 class Graph
 {
+	friend class RoundRobinScheduler;
+	
 public:
 	virtual ~Graph();
 	

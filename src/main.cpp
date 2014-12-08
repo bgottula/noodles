@@ -243,7 +243,9 @@ int main(int argc, char **argv)
 	}
 	
 	MyGraph graph;
+	
 	RoundRobinScheduler sch(&graph);
+	sch.run();
 	
 #if 0
 	Source source;
