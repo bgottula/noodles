@@ -22,9 +22,6 @@ public:
 	
 protected:
 	Block() {}
-	
-private:
-	IContainsBlocks *m_owner = nullptr;
 };
 
 #endif

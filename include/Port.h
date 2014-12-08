@@ -17,9 +17,6 @@ public:
 	
 protected:
 	Port() {}
-	
-private:
-	IContainsPorts *m_owner = nullptr;
 };
 
 /* non-template base for InputPort<T> */
